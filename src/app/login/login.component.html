@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="container-login lexend">
+    <img src="../../assets/img/logo.png"class="img">
+    <form #loginForm="ngForm" class="form">
+      <input required placeholder="E-mail" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input lexend" name="email" type="email" [(ngModel)]="_email" #emailInput>
+      <input required placeholder="Hasło" type="password" class="input lexend" name="password" [(ngModel)]="_password" #passwordInput>
+    </form>
+    <label class="label" routerLink="/remind-password">Zapomniałem hasła</label>
+    <button class="btn audiowide" [disabled]="!loginForm.valid" (click)="signIn()">Zaloguj</button>
+  </div>
+  <div class="container-nav">
+    <label class="label" routerLink="/give-password">Nadaj hasło</label>
+    <label class="separator"></label>
+    <label class="label" routerLink="/register">Rejestracja parafii</label>
+  </div>
+</div>

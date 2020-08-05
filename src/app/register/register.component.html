@@ -1,0 +1,53 @@
+<div class="container">
+  <label class="title audiowide">Rejestracja parafii</label>
+  <div class="container-white">
+    <div class="input-object">
+      <label class="input-object-title audiowide">Wezwanie parafii</label>
+      <div class="input-object-description parish-name">
+        <label class="pw" id="pw">pw.</label>
+        <input class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" [(ngModel)]="_parishName" (ngModelChange)="changeParishName()">
+      </div>
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">Rodzaj parafii</label>
+      <input class="input-object-description lexend" placeholder="Wybierz rodzaj parafii">
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">Diecezja</label>
+      <select class="input-object-description lexend select" (change)="select()">
+        <option class="lexend">Wybierz diecezje</option>
+        <option *ngFor="let diocese of dioceses" [value]="diocese" class="lexend">{{diocese}}</option>
+      </select>
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">Miasto</label>
+      <input class="input-object-description lexend" placeholder="Wpisz miasto">
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">Imię</label>
+      <input class="input-object-description lexend" placeholder="Wpisz swoje imię">
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">Nazwisko</label>
+      <input class="input-object-description lexend" placeholder="Wpisz swoje nazwisko">
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">Stopień</label>
+      <input class="input-object-description lexend" placeholder="Wybierz stopień">
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+    <div class="input-object">
+      <label class="input-object-title audiowide">E-Mail</label>
+      <input class="input-object-description lexend" placeholder="Wpisz swój e-mail">
+      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+    </div>
+  </div>
+  <button class="navigation-button back audiowide" (click)="backNavigation()">Anuluj</button>
+  <button class="navigation-button confirm audiowide">Kontynuuj</button>
+</div>
