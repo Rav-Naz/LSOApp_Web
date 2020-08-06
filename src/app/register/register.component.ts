@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Location} from '@angular/common';
+import {dioceses, monasteries} from '../models/lists.model';
 
 @Component({
   selector: 'app-register',
@@ -8,17 +8,22 @@ import {Location} from '@angular/common';
 })
 export class RegisterComponent implements OnInit {
 
-  public _parishName: string = null;
-  // public _email: string = null;
-  public dioceses = ['białostocka', 'bielsko-żywiecka', 'bydgoska', 'częstochowska', 'drohiczyńska', 'elbląska', 'ełcka', 'gdańska', 'gliwicka', 'gnieźnieńska', 'kaliska', 'katowicka', 'kielecka', 'koszalińsko-kołobrzeska', 'krakowska', 'legnicka', 'lubelska', 'łomżyńska', 'łowicka', 'łódzka', 'opolska', 'Ordynariat Polowy WP', 'pelplińska', 'płocka', 'Polska Misja Katolicka', 'poznańska', 'Prałatura Opus Dei', 'przemyska', 'radomska', 'rzeszowska', 'sandomierska', 'siedlecka', 'sosnowiecka', 'szczecińsko-kamieńska', 'świdnicka', 'tarnowska', 'toruńska', 'warmińska', 'warszawska' ,'warszawsko-praska', 'włocławska', 'wrocławska', 'zamojsko-lubaczowska', 'zielonogórsko-gorzowska'];
+  public ranks = ['Ceremoniarz', 'Szafarz', 'Ksiądz', 'Opiekun'];
+  public dioceses = dioceses;
+  public monasteries = monasteries;
 
-  constructor(private location: Location) {}
+  public _parishName: string = null;
+  public _diocese = 'Wybierz diecezję';
+  public _monastery = 'Wybierz rodzaj parafii';
+  public _rank = 'Wybierz stopień';
+  public _city: string = null;
+  public _name: string = null;
+  public _lastName: string = null;
+  public _email: string = null;
+
+  constructor() {}
 
   ngOnInit(): void {
-  }
-
-  backNavigation() {
-    this.location.back();
   }
 
   setPWColor(color: string) {
@@ -34,8 +39,50 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  select() {
-    console.log('asd');
+  getFocus(name: string) {
+    document.getElementById(`selection${name}`).style.color = '#ffffff';
   }
+
+  lostFocus(name: string) {
+    let grey = '#7c7c7c';
+    let white = '#ffffff';
+    switch (name) {
+      case '1':
+        if (this.isMonasteryNotNull) {
+          document.getElementById('selection1').style.color = white;
+        } else {
+          document.getElementById('selection1').style.color = grey;
+        }
+        break;
+      case '2':
+        if (this.isDioceseNotNull) {
+          document.getElementById('selection2').style.color = white;
+        } else {
+          document.getElementById('selection2').style.color = grey;
+        }
+        break;
+
+      case '3':
+        if (this.isRankNotNull) {
+          document.getElementById('selection3').style.color = white;
+        } else {
+          document.getElementById('selection3').style.color = grey;
+        }
+        break;
+    }
+  }
+
+  get isMonasteryNotNull() {
+    return this._monastery !== 'Wybierz rodzaj parafii';
+  }
+
+  get isDioceseNotNull() {
+    return this._diocese !== 'Wybierz diecezję';
+  }
+
+  get isRankNotNull() {
+    return this._rank !== 'Wybierz stopień';
+  }
+
 
 }

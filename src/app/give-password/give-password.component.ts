@@ -18,10 +18,6 @@ export class GivePasswordComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  backNavigation() {
-    this.location.back();
-  }
-
   get isPasswordSame() {
     return this._password === this._cofirmPassword ? true : false;
   }

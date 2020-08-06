@@ -8,14 +8,10 @@ import {Location} from '@angular/common';
 })
 export class RemindPasswordComponent implements OnInit {
 
-  constructor(private location: Location) { }
+  constructor() { }
 
   _email: string;
 
   ngOnInit(): void {
-  }
-
-  backNavigation() {
-    this.location.back();
   }
 }

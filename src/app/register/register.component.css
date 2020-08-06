@@ -194,3 +194,11 @@
 {
   color: white;
 }
+
+.alert
+{
+  color: #e71e25;
+  text-align: left;
+  font-size: 1.2rem;
+  transform: translateY(-1rem);
+}

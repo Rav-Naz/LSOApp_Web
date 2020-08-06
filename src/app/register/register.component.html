@@ -1,53 +1,68 @@
 <div class="container">
   <label class="title audiowide">Rejestracja parafii</label>
-  <div class="container-white">
+  <form  #newRegisterForm="ngForm" class="container-white">
+
     <div class="input-object">
       <label class="input-object-title audiowide">Wezwanie parafii</label>
       <div class="input-object-description parish-name">
         <label class="pw" id="pw">pw.</label>
-        <input class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" [(ngModel)]="_parishName" (ngModelChange)="changeParishName()">
+        <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .]{2,30})" class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" [(ngModel)]="_parishName" (ngModelChange)="changeParishName()" [ngModelOptions]="{standalone: false}" name="parish">
       </div>
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <label class="alert" *ngIf="!parishName.valid && parishName.touched">Wezwanie musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">Rodzaj parafii</label>
-      <input class="input-object-description lexend" placeholder="Wybierz rodzaj parafii">
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <select class="input-object-description lexend select" (focus)="getFocus('1')" (blur)="lostFocus('1')" id="selection1" [(ngModel)]="_monastery" [ngModelOptions]="{standalone: true}" #monastery="ngModel">
+        <option class="lexend">Wybierz rodzaj parafii</option>
+        <option *ngFor="let monastery of monasteries" [value]="monastery" class="lexend">{{monastery}}</option>
+      </select>
+      <label class="alert" *ngIf="monastery.touched && !isMonasteryNotNull">Wybierz rodzaj parafii</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">Diecezja</label>
-      <select class="input-object-description lexend select" (change)="select()">
-        <option class="lexend">Wybierz diecezje</option>
+      <select class="input-object-description lexend select" (focus)="getFocus('2')" (blur)="lostFocus('2')" id="selection2"  [(ngModel)]="_diocese" [ngModelOptions]="{standalone: true}" #diocese="ngModel">
+        <option class="lexend">Wybierz diecezję</option>
         <option *ngFor="let diocese of dioceses" [value]="diocese" class="lexend">{{diocese}}</option>
       </select>
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <label class="alert" *ngIf="diocese.touched && !isDioceseNotNull">Wybierz rodzaj parafii</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">Miasto</label>
-      <input class="input-object-description lexend" placeholder="Wpisz miasto">
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{2,30})" class="input-object-description lexend" placeholder="Wpisz miasto" [(ngModel)]="_city" [ngModelOptions]="{standalone: false}" #city="ngModel" name="city">
+      <label class="alert" *ngIf="!city.valid && city.touched">Miasto musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">Imię</label>
-      <input class="input-object-description lexend" placeholder="Wpisz swoje imię">
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje imię" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+      <label class="alert" *ngIf="!name.valid && name.touched">Imię musi być krótsze od 20 znaków oraz składać się z polskiego alfabetu</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">Nazwisko</label>
-      <input class="input-object-description lexend" placeholder="Wpisz swoje nazwisko">
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń-]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje nazwisko" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+      <label class="alert" *ngIf="!lastName.valid && lastName.touched">Nazwisko musi być którsze od 20 znaków oraz składać się z polskiego alfabetu</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">Stopień</label>
-      <input class="input-object-description lexend" placeholder="Wybierz stopień">
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <select class="input-object-description lexend select" (focus)="getFocus('3')" (blur)="lostFocus('3')" id="selection3"  [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel">
+        <option class="lexend">Wybierz stopień</option>
+        <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
+      </select>
+      <label class="alert" *ngIf="rank.touched && !isRankNotNull">Wybierz stopień</label>
     </div>
+
     <div class="input-object">
       <label class="input-object-title audiowide">E-Mail</label>
-      <input class="input-object-description lexend" placeholder="Wpisz swój e-mail">
-      <!-- <label class="alert" *ngIf="!code.valid && code.touched">Kod aktywacyjny nie jest poprawny</label> -->
+      <input required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input-object-description lexend" placeholder="Wpisz swój e-mail" [(ngModel)]="_email" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email">
+      <label class="alert" *ngIf="!email.valid && email.touched">Wpisz poprawny adres e-mail</label>
     </div>
-  </div>
-  <button class="navigation-button back audiowide" (click)="backNavigation()">Anuluj</button>
-  <button class="navigation-button confirm audiowide">Kontynuuj</button>
+
+  </form>
+  <button class="navigation-button back audiowide" routerLink="/login">Anuluj</button>
+  <button class="navigation-button confirm audiowide" [disabled]="!newRegisterForm.valid || !isRankNotNull || !isMonasteryNotNull || !isDioceseNotNull">Kontynuuj</button>
 </div>
