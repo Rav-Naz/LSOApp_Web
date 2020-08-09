@@ -6,7 +6,7 @@
       <input required placeholder="Hasło" type="password" class="input lexend" name="password" [(ngModel)]="_password" #passwordInput>
     </form>
     <label class="label" routerLink="/remind-password">Zapomniałem hasła</label>
-    <button class="btn audiowide" [disabled]="!loginForm.valid" (click)="signIn()">Zaloguj</button>
+    <button class="btn audiowide" [disabled]="!loginForm.valid" (click)="signIn()" type="submit">Zaloguj</button>
   </div>
   <div class="container-nav">
     <label class="label" routerLink="/give-password">Nadaj hasło</label>
