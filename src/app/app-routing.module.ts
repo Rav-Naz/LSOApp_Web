@@ -9,7 +9,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/remind-password', pathMatch: 'full'},
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'remind-password', component: RemindPasswordComponent},
@@ -17,6 +17,7 @@ const routes: Routes = [
   {path: 'admin-view', component: AdminViewComponent, children: [
     {path: 'mass', component: MassComponent, outlet: 'main'},
     {path: 'acolythes-messages', component: AcolythesMessagesComponent, outlet: 'main'},
+    // {path: '**', redirectTo: '/mass'},
   ]},
   {path: '**', redirectTo: '/login'},
 ];

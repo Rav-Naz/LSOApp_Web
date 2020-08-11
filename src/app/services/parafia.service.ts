@@ -20,7 +20,7 @@ export class ParafiaService {
 
   kalendarzSpecjalne: Array<any>;
 
-  constructor(private http: HttpService){}
+  constructor(private http: HttpService) { }
 
   private ministranciLista: Array<User> = [];
 
@@ -29,32 +29,55 @@ export class ParafiaService {
   private ministranci = new BehaviorSubject<Array<User>>(null);
   private dyzuryWydarzenia = new BehaviorSubject<Array<User>>(null);
   private dyzuryMinistranta = new BehaviorSubject<Array<Wydarzenie>>(null);
-  private obecnosciWydarzenia =  new BehaviorSubject<Array<Obecnosc>>(null);
-  private podgladanyMinistrant =  new BehaviorSubject<User>(null);
+  private obecnosciWydarzenia = new BehaviorSubject<Array<Obecnosc>>(null);
+  private podgladanyMinistrant = new BehaviorSubject<User>(null);
 
   get nazwaParafii() {
     return this.parafia ? this.parafia.nazwa_parafii : null;
+  }
+
+  get Ministranci() { //Wykorzystanie: ministranci
+    return this.ministranci.asObservable();
 }
 
-  async pobierzParafie()
-    {
-        return new Promise<number>(resolve => {
-            this.http.pobierzParafie().then(async res => {
-              console.log(res);
-              if (res === 'blad')
-                {
-                    resolve(0);
-                }
-                else if (res === 'jwt')
-                {
-                    resolve(404);
-                }
-                else
-                {
-                    this.parafia = JSON.parse(JSON.stringify(res));
-                    resolve(1);
-                }
-            });
-        });
-    }
+  async pobierzParafie() { //wykorzystanie: acolythes-messages
+    return new Promise<number>(resolve => {
+      this.http.pobierzParafie().then(async res => {
+        if (res === 'blad') {
+          resolve(0);
+        }
+        else if (res === 'jwt') {
+          resolve(404);
+        }
+        else {
+          this.parafia = JSON.parse(JSON.stringify(res));
+          resolve(1);
+        }
+      });
+    });
+  }
+
+  async pobierzMinistrantow() { //wykorzystanie: acolythes-messages
+    return new Promise<Array<User>>(resolve => {
+      this.http.pobierzMinistrantow().then(async res => {
+        if (res !== null) {
+          this.ministranciLista = res;
+          await this.odswiezListeMinistrantow();
+          resolve(res);
+        }
+        else {
+          resolve(res);
+        }
+      });
+    });
+  }
+
+  odswiezListeMinistrantow() { //wykorzystanie: acolythes-messages
+    return new Promise<void>((resolve) => {
+      let lista = new Array<User>();
+      lista = this.ministranciLista;
+      this.ministranci.next(lista);
+      resolve();
+    });
+  }
 }

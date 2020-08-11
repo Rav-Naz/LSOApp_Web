@@ -6,25 +6,33 @@
     box-sizing: inherit;
 }
 
-html
-{
-  font-size: 62.5%;
+html {
+    font-size: 62.5%;
 }
 
 body {
-  box-sizing: border-box;
-  font-family: 'Lexend Deca', sans-serif;
-  width: 100vw;
-  height: 100vh;
-  color: white;
+    box-sizing: border-box;
+    font-family: 'Lexend Deca', sans-serif;
+    width: 100vw;
+    height: 100vh;
+    color: white;
 }
 
-.audiowide
-{
-  font-family: 'Audiowide', cursive;
+.audiowide {
+    font-family: 'Audiowide', cursive;
 }
 
-.lexend
-{
-  font-family: 'Lexend Deca', sans-serif;
+.lexend {
+    font-family: 'Lexend Deca', sans-serif;
+}
+
+.icon {
+    font-family: 'iconmonstr-iconic-font';
+}
+
+@font-face {
+    font-family: 'iconmonstr-iconic-font';
+    src: url('./assets/fonts/iconmonstr-iconic-font.woff2') format('woff2'), url('./assets/fonts/iconmonstr-iconic-font.woff') format('woff'), url('./assets/fonts/iconmonstr-iconic-font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }

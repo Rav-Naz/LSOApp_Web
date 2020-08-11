@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as sha512 from 'js-sha512';
+import { Wiadomosc } from '../models/wiadomosci.model';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,24 +20,21 @@ export class HttpService {
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'Access-Control-Allow-Origin': 'http://localhost:4200'
   });
 
-  nadajId_Parafii(id_parafii: number)
-  {
+  nadajId_Parafii(id_parafii: number) {
     this.id_parafii = id_parafii;
     localStorage.setItem('id_parafii', id_parafii.toString());
   }
 
-  nadajId_User(id_user: number)
-  {
+  nadajId_User(id_user: number) {
     this.id_user = id_user;
     localStorage.setItem('id_user', id_user.toString());
   }
 
-  nadajJWT(JWT: string)
-  {
+  nadajJWT(JWT: string) {
     this.JWT = JWT;
     localStorage.setItem('JWT', JWT.toString());
   }
@@ -44,77 +43,147 @@ export class HttpService {
     const id_par = parseInt(localStorage.getItem('id_parafii'));
     const id_use = parseInt(localStorage.getItem('id_user'));
     const JWT = localStorage.getItem('JWT');
-    if ( id_par !== null ) {
+    if (id_par !== null) {
       this.id_parafii = id_par;
     }
-    if ( id_use !== null ) {
+    if (id_use !== null) {
       this.id_user = id_use;
     }
-    if ( JWT !== null ) {
+    if (JWT !== null) {
       this.JWT = JWT;
     }
   }
 
   ////////////////// ZAPYTANIA BEZ JWT //////////////////
 
-    //LOGOWANIE
-    async logowanie(email: string, haslo: string) {
-      return new Promise<string>(resolve => {
-          this.http.post(this.url + '/login',
-          { email: email, haslo: sha512.sha512.hmac('mSf', haslo), smart: this.smart, urzadzenie_id: null, os: this.os },
-           { headers: this.headers }).subscribe(res => {
-              if(res === 'nieaktywne')
-              {
-                  resolve('nieaktywne');
-              }
-              else if(res === 'brak')
-              {
-                  resolve('brak');
-              }
-              else if(res === 'niepoprawne')
-              {
-                  resolve('niepoprawne');
-              }
-              else if(res[0].hasOwnProperty('id_parafii'))
-              {
-                  this.nadajJWT(res[1]);
-                  this.nadajId_User(res[0].id_user);
-                  this.nadajId_Parafii(res[0].id_parafii);
-                  resolve(JSON.parse(JSON.stringify(res[0])));
-              }
-              else
-              {
-                  resolve('blad');
-              }
-          }, err => {
-              resolve('blad');
-          });
-      });
+  // LOGOWANIE
+  async logowanie(email: string, haslo: string) {
+    return new Promise<string>(resolve => {
+      this.http.post(this.url + '/login',
+        { email, haslo: sha512.sha512.hmac('mSf', haslo), smart: this.smart, urzadzenie_id: null, os: this.os },
+        { headers: this.headers }).subscribe(res => {
+          if (res === 'nieaktywne') {
+            resolve('nieaktywne');
+          }
+          else if (res === 'brak') {
+            resolve('brak');
+          }
+          else if (res === 'niepoprawne') {
+            resolve('niepoprawne');
+          }
+          else if (res[0].hasOwnProperty('id_parafii')) {
+            this.nadajJWT(res[1]);
+            this.nadajId_User(res[0].id_user);
+            this.nadajId_Parafii(res[0].id_parafii);
+            resolve(JSON.parse(JSON.stringify(res[0])));
+          }
+          else {
+            resolve('blad');
+          }
+        }, err => {
+          resolve('blad');
+        });
+    });
   }
 
   ////////////////// ZAPYTANIA Z JWT //////////////////
 
-  //POBIERANIE DANCYH PARAFII
+  // POBIERANIE DANCYH PARAFII
   async pobierzParafie() {
     return new Promise<string>(resolve => {
 
-        this.http.post(this.url + '/parish', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
+      this.http.post(this.url + '/parish', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
         { headers: this.headers }).subscribe(res => {
-            if (res.hasOwnProperty('id_parafii'))
-            {
-                resolve(JSON.parse(JSON.stringify(res)));
-            }
-            else if (res === 'You have not permission to get the data')
-            {
-                resolve('jwt');
-            }
-            else
-            {
-                resolve('blad');
-            }
-        }, err => {
+          if (res.hasOwnProperty('id_parafii')) {
+            resolve(JSON.parse(JSON.stringify(res)));
+          }
+          else if (res === 'You have not permission to get the data') {
+            resolve('jwt');
+          }
+          else {
             resolve('blad');
+          }
+        }, err => {
+          resolve('blad');
         });
     });
-}
+  }
+
+  // POBIERANIE WIADOMOŚCI
+  async pobierzWidaomosci(do_opiekuna: number, limit: number) {
+    return new Promise<Array<Wiadomosc>>(resolve => {
+
+      this.http.post(this.url + '/messages', {
+        id_parafii: this.id_parafii, do_opiekuna,
+        smart: this.smart, limit, jwt: this.JWT
+      }, { headers: this.headers }).subscribe(res => {
+        if (res === 'You have not permission to get the data') {
+          resolve(JSON.parse(JSON.stringify(null)));
+        }
+        resolve(JSON.parse(JSON.stringify(res)));
+      });
+    });
+  }
+
+  // USUWANIE WIADOMOŚCI
+  async usunWiadomosc(id_wiadomosci: number) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/delete_message', { id_wiadomosci, smart: this.smart, jwt: this.JWT }
+        , { headers: this.headers }).subscribe(res => {
+          if (res.hasOwnProperty('insertId')) {
+            resolve(1);
+          }
+          else if (res === 'You have not permission to get the data') {
+            resolve(404);
+          }
+          else {
+            resolve(0);
+          }
+        }, err => {
+          resolve(0);
+        });
+    });
+  }
+
+  // WYSYŁANIE WIADOMOŚCI
+  async wyslijWidaomosc(tresc: string) {
+    return new Promise<number>(resolve => {
+      this.http.post(this.url + '/new_message', {
+        autor_id: this.id_parafii, odbiorca_id: this.id_parafii,
+        tresc: encodeURI(tresc), linkobrazu: null, smart: this.smart, jwt: this.JWT, id_user: this.id_user
+      },
+        { headers: this.headers }).subscribe(res => {
+          if (res === 'wyslano') {
+            resolve(1);
+          }
+          else if (res === 'You have not permission to get the data') {
+            resolve(404);
+          }
+          else {
+            resolve(0);
+          }
+        }, err => {
+          resolve(0);
+        });
+    });
+  }
+
+  // POBIERANIE MINISTRANTÓW
+  async pobierzMinistrantow() {
+    return new Promise<Array<User>>(resolve => {
+
+      this.http.post(this.url + '/ministranci', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
+        { headers: this.headers }).subscribe(res => {
+          if (res === 'You have not permission to get the data') {
+            resolve(null);
+          }
+          else {
+            resolve(JSON.parse(JSON.stringify(res)));
+          }
+        }), err => {
+          resolve([]);
+        };
+    });
+  }
 }

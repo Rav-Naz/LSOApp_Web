@@ -1,6 +1,7 @@
 import { ParafiaService } from './../services/parafia.service';
 import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-view',
@@ -9,10 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminViewComponent implements OnInit {
 
-  constructor(public userService: UserService, public parafiaService: ParafiaService) { }
+  constructor(public userService: UserService, public parafiaService: ParafiaService, private router: Router) { }
 
   ngOnInit(): void {
     this.parafiaService.pobierzParafie().then(res => {
+      this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
     });
   }
 

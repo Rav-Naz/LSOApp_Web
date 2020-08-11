@@ -1,58 +1,58 @@
 <div class="container">
 
-  <div class="title-bar">
-    <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
-  </div>
-
-  <router-outlet name="main" class="router"></router-outlet>
-
-  <div class="navigation-panel">
-    <div class="navigation-flex">
-
-      <label class="options-name audiowide">p. pw. {{parafiaService.nazwaParafii}}</label>
-
-      <div class="navigation-section">
-        <label class="options-name">Zarządzanie</label>
-        <div class="navigation-section-options">
-          <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['mass']}}]">Sprawdź obecność</label>
-          <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['acolythes-messages']}}]">Ministranci i wiadomości</label>
-        </div>
-      </div>
-
-      <div class="navigation-section">
-        <label class="options-name">Punkty</label>
-        <div class="navigation-section-options">
-          <label class="navigation-button audiowide">Zmień punktację</label>
-          <label class="navigation-button audiowide">Wyzeruj punkty</label>
-          <label class="navigation-button audiowide">Generuj raport</label>
-        </div>
-      </div>
-
-      <div class="navigation-section">
-        <label class="options-name">Wydarzenia</label>
-        <div class="navigation-section-options">
-          <label class="navigation-button audiowide">Edytuj wydarzenia</label>
-          <label class="navigation-button audiowide">Usuń wszystkie dyżury</label>
-        </div>
-      </div>
-
-      <div class="navigation-section">
-        <label class="options-name">Konto parafii</label>
-        <div class="navigation-section-options">
-          <label class="navigation-button audiowide">Usuń konto</label>
-          <label class="navigation-button audiowide">Zmień dane parafii</label>
-          <label class="navigation-button audiowide">Wyloguj się</label>
-        </div>
-      </div>
-
+    <div class="title-bar">
+        <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
     </div>
 
-    <div class="navigation-info">
-      <label class="version row1">LSOApp {{userService.wersja}}</label>
-      <label class="navigation-button audiowide row1" >Kontakt</label>
-      <label class="navigation-button audiowide row2">Informacje o aplikacji</label>
-      <label class="navigation-button audiowide row3">Regulamin i polityka prywatności</label>
-    </div>
+    <router-outlet name="main" class="router"></router-outlet>
 
-  </div>
+    <div class="navigation-panel">
+        <div class="navigation-flex">
+
+            <label class="options-name audiowide" *ngIf="parafiaService.nazwaParafii">p. pw. {{parafiaService.nazwaParafii}}</label>
+
+            <div class="navigation-section">
+                <label class="options-name">Zarządzanie</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['mass']}}]">Sprawdź obecność</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['acolythes-messages']}}]">Ministranci i wiadomości</label>
+                </div>
+            </div>
+
+            <div class="navigation-section">
+                <label class="options-name">Punkty</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide">Zmień punktację</label>
+                    <label class="navigation-button audiowide">Wyzeruj punkty</label>
+                    <label class="navigation-button audiowide">Generuj raport</label>
+                </div>
+            </div>
+
+            <div class="navigation-section">
+                <label class="options-name">Wydarzenia</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide">Edytuj wydarzenia</label>
+                    <label class="navigation-button audiowide">Usuń wszystkie dyżury</label>
+                </div>
+            </div>
+
+            <div class="navigation-section">
+                <label class="options-name">Konto parafii</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide">Usuń konto</label>
+                    <label class="navigation-button audiowide">Zmień dane parafii</label>
+                    <label class="navigation-button audiowide">Wyloguj się</label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="navigation-info">
+            <label class="version row1">LSOApp {{userService.wersja}}</label>
+            <label class="navigation-button audiowide row1">Kontakt</label>
+            <label class="navigation-button audiowide row2">Informacje o aplikacji</label>
+            <label class="navigation-button audiowide row3">Regulamin i polityka prywatności</label>
+        </div>
+
+    </div>
 </div>

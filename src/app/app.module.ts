@@ -14,6 +14,7 @@ import { RemindPasswordComponent } from './remind-password/remind-password.compo
 import { AdminViewComponent } from './admin-view/admin-view.component';
 import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
 import { MassComponent } from './admin-view/mass/mass.component';
+import { UriPipe } from './pipes/uri.pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { MassComponent } from './admin-view/mass/mass.component';
     RemindPasswordComponent,
     AdminViewComponent,
     AcolythesMessagesComponent,
-    MassComponent
+    MassComponent,
+    UriPipe
   ],
   imports: [
     BrowserModule,
