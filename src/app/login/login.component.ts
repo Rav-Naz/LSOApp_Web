@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
       }
       else {
           let user: User = JSON.parse(JSON.stringify(res));
-          this.userService.zmienUsera(user);
+          // this.userService.zmienUsera(user);
 
           if (user.admin === 1) {
               let result = 1;

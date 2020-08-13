@@ -1,9 +1,10 @@
+import { UserService } from './../../services/user.service';
 import { ParafiaService } from './../../services/parafia.service';
 import { UiService } from './../../services/ui.service';
 import { WiadomosciService } from './../../services/wiadomosci.service';
 import { Wiadomosc } from './../../models/wiadomosci.model';
 import { sortPolskich } from '../../../assets/sortPolskich';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 
@@ -12,7 +13,7 @@ import { User } from 'src/app/models/user.model';
   templateUrl: './acolythes-messages.component.html',
   styleUrls: ['./acolythes-messages.component.css']
 })
-export class AcolythesMessagesComponent implements OnInit {
+export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   wiadomosci: Array<Wiadomosc> = [];
   wiadomosciSub: Subscription;
@@ -25,21 +26,19 @@ export class AcolythesMessagesComponent implements OnInit {
 
   miniSub: Subscription;
 
-  sortujPoImieniu = false;
+  sortujPoImieniu = true;
 
   ladowanie = true;
 
   limit = 30;
 
-  constructor(private wiadosciService: WiadomosciService, public ui: UiService, private parafiaService: ParafiaService) { }
+  constructor(private wiadosciService: WiadomosciService, public ui: UiService, private parafiaService: ParafiaService,
+              private userService: UserService) { }
 
   @HostListener('scroll', ['$event'])
 
   ngOnInit(): void {
     this.wiadosciService.pobierzWiadomosci(1, this.limit).then((res) => { });
-    this.parafiaService.pobierzMinistrantow().then(res => {
-      // this.ui.zmienStan(1,false)
-    });
 
     this.wiadomosciSub = this.wiadosciService.Wiadomosci.subscribe(wiadomosci => {
       this.wiadomosci = [];
@@ -61,14 +60,17 @@ export class AcolythesMessagesComponent implements OnInit {
         this.ministranci = [];
         if (lista !== null) {
           lista.forEach(ministrant => {
-            this.ministranci.push({ id_user: ministrant.id_user, id_diecezji: ministrant.id_diecezji, id_parafii: ministrant.id_parafii,
-               punkty: ministrant.punkty, stopien: ministrant.stopien, imie: ministrant.imie, nazwisko: ministrant.nazwisko,
-                ulica: ministrant.ulica, kod_pocztowy: ministrant.kod_pocztowy, miasto: ministrant.miasto, email: ministrant.email,
-                 telefon: ministrant.telefon, aktywny: ministrant.aktywny, admin: ministrant.admin, ranking: ministrant.ranking });
+            this.ministranci.push({
+              id_user: ministrant.id_user, id_diecezji: ministrant.id_diecezji, id_parafii: ministrant.id_parafii,
+              punkty: ministrant.punkty, stopien: ministrant.stopien, imie: ministrant.imie, nazwisko: ministrant.nazwisko,
+              ulica: ministrant.ulica, kod_pocztowy: ministrant.kod_pocztowy, miasto: ministrant.miasto, email: ministrant.email,
+              telefon: ministrant.telefon, aktywny: ministrant.aktywny, admin: ministrant.admin, ranking: ministrant.ranking
+            });
           });
           this.ministranci = this.ministranci.filter(item => item.stopien !== 11);
+          // this.ministranci = this.ministranci.concat(this.ministranci);
           this.sortujListe();
-          console.log(this.ministranci);
+          // console.log(this.ministranci);
           // this.ui.zmienStan(1,false);
         }
       });
@@ -100,6 +102,17 @@ export class AcolythesMessagesComponent implements OnInit {
       // this.ui.zmienStan(1, false)
 
     }, 200);
+  }
+
+  zmianaSortu() {
+    // this.ui.zmienStan(1,true)
+    this.sortujPoImieniu = !this.sortujPoImieniu;
+    this.sortujListe();
+  }
+
+  nowyMinistrant() {
+    // this.tabIndexService.nowyOutlet(4, 'ministrant-nowy')
+    // this.router.navigate(['../ministrant-nowy'], {relativeTo: this.active, transition: { name: 'slideBottom' }});
   }
 
   async usunWiadomosc(wiadomosc: Wiadomosc) {
@@ -155,11 +168,39 @@ export class AcolythesMessagesComponent implements OnInit {
     });
   }
 
+  async usunMinistranta(ministrant: User, index: number) {
+
+    // !!!
+    if (ministrant.id_user === this.userService.UserID) {
+      this.ui.showFeedback('error', 'Nie możesz usunąć swojego konta z poziomu widoku opiekuna', 3);
+      return;
+    }
+
+    // await this.ui.pokazModalWyboru("Czy na pewno chcesz usunąć\n" + ministrant.nazwisko + " " + ministrant.imie + "\nz listy ministrantów?").then((kontynuowac) => {
+    // if(kontynuowac)
+    // {
+    // this.ui.zmienStan(1,true)
+    this.parafiaService.usunMinistranta(ministrant.id_user).then(res => {
+
+      // this.wydarzeniaService.dzisiejszeWydarzenia(this.wydarzeniaService.aktywnyDzien, null)
+      setTimeout(() => {
+        this.ui.showFeedback('succes', 'Usunięto ministranta ' + ministrant.nazwisko + ' ' + ministrant.imie, 3);
+      }, 400);
+    });
+    // }
+    // });
+  }
+
   onScroll(event: any) {
     // visible height + pixel scrolled >= total height
     if ((event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight * 0.75) && !this.doladowanie) {
       this.doladowanie = true;
       this.wiadosciService.pobierzWiadomosci(1, this.wiadomosci.length + this.limit);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.miniSub.unsubscribe();
+    this.wiadomosciSub.unsubscribe();
   }
 }

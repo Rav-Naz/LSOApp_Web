@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as sha512 from 'js-sha512';
 import { Wiadomosc } from '../models/wiadomosci.model';
 import { User } from '../models/user.model';
+import { Wydarzenie } from '../models/wydarzenie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -186,4 +187,99 @@ export class HttpService {
         };
     });
   }
+
+  //USUWANIE MINISTRANTA
+  async usunMinistranta(id_user: number) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/delete_user', { id_user: id_user, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
+        { headers: this.headers }).subscribe(res => {
+          if (res === 'zakonczono') {
+            resolve(1);
+          }
+          else if (res === 'You have not permission to get the data') {
+            resolve(404);
+          }
+          else {
+            resolve(0);
+          }
+        }, err => {
+          resolve(0);
+        });
+    });
+  }
+
+  //POBIERANIE DANYCH O MINISTRANCIE
+  async pobierzMinistranta(id_user: number) {
+    return new Promise<User>(resolve => {
+      this.http.post(this.url + '/ministrant', { id_user: id_user === -1 ? this.id_user : id_user, smart: this.smart, jwt: this.JWT },
+        { headers: this.headers }).subscribe(res => {
+          if (res === 'You have not permission to get the data') {
+            resolve(JSON.parse(JSON.stringify([])));
+          }
+          else {
+            resolve(JSON.parse(JSON.stringify(res)));
+          }
+        });
+    });
+  }
+
+  //POBIERANIE WYDARZEŃ NA DANY DZIEŃ
+  async pobierzWydarzeniaNaDanyDzien(dzien: number, data_dokladna: string) {
+    return new Promise<Array<Wydarzenie>>(resolve => {
+
+      this.http.post(this.url + '/events', {
+        id_parafii: this.id_parafii, dzien: dzien, smart: this.smart,
+        jwt: this.JWT, data_dokladna: data_dokladna
+      }, { headers: this.headers }).subscribe(res => {
+        if (res === 'You have not permission to get the data') {
+          resolve(null);
+          return;
+        }
+        resolve(JSON.parse(JSON.stringify(res)));
+      });
+    });
+  }
+
+  //POBIERANIE DYŻURÓW DO DANEGO WYDARZENIA
+  async pobierzDyzuryDoWydarzenia(id_wydarzenia: number) {
+    return new Promise<Array<User>>(resolve => {
+
+      this.http.post(this.url + '/event_duty', { id_wydarzenia: id_wydarzenia, id_parafii: this.id_parafii,
+         smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res === 'You have not permission to get the data') {
+          resolve(JSON.parse(JSON.stringify(null)));
+          return;
+        }
+        resolve(JSON.parse(JSON.stringify(res)));
+      });
+    });
+  }
+
+  //POBIERANIE OBECNOSCI DO DANEGO WYDARZENIA
+  async pobierzObecnosciDoWydarzenia(id_wydarzenia: number, data: Date) {
+    return new Promise<Array<User>>(resolve => {
+        let date = data;
+        date.setHours(2);
+
+        this.http.post(this.url + '/presence',{ id_wydarzenia: id_wydarzenia, data: date.toJSON(),
+          id_parafii: this.id_parafii, smart: this.smart , jwt: this.JWT}, { headers: this.headers }).subscribe(res => {
+            resolve(JSON.parse(JSON.stringify(res)));
+        });
+    });
+}
+
+  //POBIERANIE SPECJALNYCH WYDARZEŃ
+  async pobierzSpecjalneWydarzenia() {
+    return new Promise<string>(resolve => {
+      this.http.post(this.url + '/special_events', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
+        { headers: this.headers }).subscribe(res => {
+          resolve(JSON.stringify(res));
+        }, err => {
+          resolve('');
+        });
+    });
+  }
+
+
 }

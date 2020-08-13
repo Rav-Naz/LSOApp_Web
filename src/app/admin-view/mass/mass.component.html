@@ -1,4 +1,42 @@
-<p class="icon">&#xe11a;</p>
-<i class="im im-color-fan" color="white"></i>
-<p>mass works!</p>
-<p>mass works!</p>
+<div class="container">
+    <div class="navigation-panel">
+        <button class="arrow icon">&#xe002;</button>
+        <button class="header lexend">
+          <label class="icon space">&#xe01f;</label>
+          <label class="space">{{naglowek}}</label>
+          <label class="date">{{data}}</label>
+        </button>
+        <button class="arrow icon">&#xe001;</button>
+    </div>
+
+
+    <div class="acolythes-container">
+        <label *ngIf="dzisiejszeWydarzenia.length === 0" class="brak lexend">Brak dzisiejszych wydarzeń, aby je dodać przejdź do panelu ustawień</label>
+        <div class="event-name-container">
+            <label class="circle" [ngClass]="{'mass': aktywneWydarzenie.typ === 0,'unction': aktywneWydarzenie.typ === 1,'meeting': aktywneWydarzenie.typ === 2}"></label>
+            <label>{{nazwaWydarzenia}}</label>
+        </div>
+        <div class="event">
+            <label *ngIf="ministranciDoWydarzenia.length === 0 && dzisiejszeWydarzenia.length !== 0 && aktywneWydarzenie.typ !== 1" class="brak lexend">Brak obowiązkowych dyżurów, aby je dodać przejdź do panelu ministranta</label>
+            <div class="title">
+                <label class="pas"></label>
+                <label class="title-name">SŁUŻBA OBOWIĄZKOWA</label>
+            </div>
+            <div class="acolythes">
+                <div class="acolythe" *ngFor="let acolythe of ministranciDoWydarzenia; let i = index" [ngClass]="{'grey': i%2 === 0}">
+                    <label>{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
+                </div>
+            </div>
+            <div class="title">
+                <label class="pas"></label>
+                <label class="title-name">SŁUŻBA DODATKOWA {{pokazDodatkowa ? '-' : '+'}}</label>
+            </div>
+            <div class="acolythes">
+                <div class="acolythe" *ngFor="let acolythe of wszyscyAktualniMinistranci; let i = index" [ngClass]="{'grey': i%2 === 0}">
+                    <label>{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
+                </div>
+            </div>
+        </div>
+        <button class="save audiowide">Zapisz</button>
+    </div>
+</div>
