@@ -1,12 +1,13 @@
-<div class="container">
+<!-- widok dnia -->
+<div class="container" *ngIf="!kalendarz">
     <div class="navigation-panel">
-        <button class="arrow icon">&#xe002;</button>
-        <button class="header lexend">
+        <button class="arrow icon" (click)="indexZmiana(-1)">&#xe002;</button>
+        <button class="header lexend" (click)="naKalendarz(true)">
           <label class="icon space">&#xe01f;</label>
           <label class="space">{{naglowek}}</label>
           <label class="date">{{data}}</label>
         </button>
-        <button class="arrow icon">&#xe001;</button>
+        <button class="arrow icon" (click)="indexZmiana(1)" *ngIf="czyMoznaDoPrzodu()">&#xe001;</button>
     </div>
 
 
@@ -18,25 +19,33 @@
         </div>
         <div class="event">
             <label *ngIf="ministranciDoWydarzenia.length === 0 && dzisiejszeWydarzenia.length !== 0 && aktywneWydarzenie.typ !== 1" class="brak lexend">Brak obowiązkowych dyżurów, aby je dodać przejdź do panelu ministranta</label>
-            <div class="title">
+            <div class="title" *ngIf="ministranciDoWydarzenia.length !== 0 && dzisiejszeWydarzenia.length !== 0 && aktywneWydarzenie.typ !== 1">
                 <label class="pas"></label>
                 <label class="title-name">SŁUŻBA OBOWIĄZKOWA</label>
             </div>
-            <div class="acolythes">
+            <div class="acolythes" *ngIf="ministranciDoWydarzenia.length !== 0 && dzisiejszeWydarzenia.length !== 0 && aktywneWydarzenie.typ !== 1">
                 <div class="acolythe" *ngFor="let acolythe of ministranciDoWydarzenia; let i = index" [ngClass]="{'grey': i%2 === 0}">
-                    <label>{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
+                    <app-checkbox-status class="checkbox-status" (checkStatus)="zmienStatusObecnosci($event, acolythe.id_user, false)" *ngIf="moznaSprawdzac() && czyJestNaLiscie(acolythe)" [status]="aktualnyStatus(acolythe)"></app-checkbox-status>
+                    <label class="col-2" [ngClass]="{'col-1-2': !moznaSprawdzac()}">{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
                 </div>
             </div>
-            <div class="title">
+            <div class="title" *ngIf="wszyscyAktualniMinistranci.length > 0 && aktywneWydarzenie.typ !== 2">
                 <label class="pas"></label>
-                <label class="title-name">SŁUŻBA DODATKOWA {{pokazDodatkowa ? '-' : '+'}}</label>
+                <label class="title-name click" (click)="zmienPokazDodatkowa()">SŁUŻBA DODATKOWA {{aktywneWydarzenie.typ === 1 ? '' : pokazDodatkowa ? '-' : '+'}}</label>
             </div>
-            <div class="acolythes">
+            <div class="acolythes" *ngIf="aktywneWydarzenie.typ === 1 ? true : pokazDodatkowa && wszyscyAktualniMinistranci.length > 0 && aktywneWydarzenie.typ !== 2">
                 <div class="acolythe" *ngFor="let acolythe of wszyscyAktualniMinistranci; let i = index" [ngClass]="{'grey': i%2 === 0}">
-                    <label>{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
+                    <app-checkbox-status class="checkbox-status" *ngIf="moznaSprawdzac()" (checkStatus)="zmienStatusObecnosci($event, acolythe.id_user,true)" [trzyStany]="false" [status]="aktualnyStatus(acolythe)"></app-checkbox-status>
+                    <label class="col-2" [ngClass]="{'col-1-2': !moznaSprawdzac()}">{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
                 </div>
             </div>
         </div>
-        <button class="save audiowide">Zapisz</button>
+        <button class="save audiowide" (click)="zapiszZmiany()" *ngIf="opoznienie" [disabled]="!zmiana">Zapisz</button>
     </div>
+</div>
+<div class="container" *ngIf="kalendarz">
+    <div class="calendar-container">
+        <mwl-calendar-month-view [locale]="'pl'" [viewDate]="aktywnyDzien" [refresh]="refresh" class="calendar"></mwl-calendar-month-view>
+    </div>
+    <button class="navigation-button back audiowide" (click)="naKalendarz(false)">Anuluj</button>
 </div>

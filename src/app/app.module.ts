@@ -15,6 +15,13 @@ import { AdminViewComponent } from './admin-view/admin-view.component';
 import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
 import { MassComponent } from './admin-view/mass/mass.component';
 import { UriPipe } from './pipes/uri.pipe';
+import { CheckboxStatusComponent } from './shared/checkbox-status/checkbox-status.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+import localePl from '@angular/common/locales/pl';
+import {registerLocaleData} from '@angular/common';
+registerLocaleData(localePl);
 
 @NgModule({
   declarations: [
@@ -26,7 +33,8 @@ import { UriPipe } from './pipes/uri.pipe';
     AdminViewComponent,
     AcolythesMessagesComponent,
     MassComponent,
-    UriPipe
+    UriPipe,
+    CheckboxStatusComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +42,8 @@ import { UriPipe } from './pipes/uri.pipe';
     AppRoutingModule,
     FormsModule,
     ToastrModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [],
   bootstrap: [AppComponent]

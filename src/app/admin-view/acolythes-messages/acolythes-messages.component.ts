@@ -192,7 +192,6 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
   }
 
   onScroll(event: any) {
-    // visible height + pixel scrolled >= total height
     if ((event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight * 0.75) && !this.doladowanie) {
       this.doladowanie = true;
       this.wiadosciService.pobierzWiadomosci(1, this.wiadomosci.length + this.limit);

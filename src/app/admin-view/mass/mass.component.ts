@@ -1,6 +1,7 @@
+import { UiService } from './../../services/ui.service';
 import { WydarzeniaService } from '../../services/wydarzenia.service';
 import { ParafiaService } from './../../services/parafia.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy,ChangeDetectionStrategy} from '@angular/core';
 import { rank } from '../../models/lists.model';
 import { Subscription } from 'rxjs';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
@@ -8,6 +9,9 @@ import { User } from 'src/app/models/user.model';
 import { Obecnosc } from 'src/app/models/obecnosc.model';
 import { DzienTyg } from 'src/app/models/dzien_tygodnia.model';
 import { sortPolskich } from 'src/assets/sortPolskich';
+
+// import { Component,  } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-mass',
@@ -49,7 +53,9 @@ export class MassComponent implements OnInit, OnDestroy {
   interval;
   zmiana = false;
 
-  constructor(private parafiaService: ParafiaService, private wydarzeniaService: WydarzeniaService) { }
+  refresh: Subject<any> = new Subject();
+
+  constructor(private parafiaService: ParafiaService, private wydarzeniaService: WydarzeniaService, private ui: UiService) { }
 
 
   ngOnInit(): void {
@@ -126,6 +132,8 @@ export class MassComponent implements OnInit, OnDestroy {
       lista !== [] && lista !== null ? this.ministranciDoWydarzenia = lista : this.ministranciDoWydarzenia = [];
       if ((this.aktywneWydarzenie.typ === 2 && this.aktywneWydarzenie.grupa !== -1) || this.aktywneWydarzenie.typ === 1) {
         this.ministranciDoWydarzenia = this.ministranciDoWydarzenia.filter(min => min.stopien === this.aktywneWydarzenie.grupa);
+      } else if (this.aktywneWydarzenie.typ === 2 && this.aktywneWydarzenie.grupa === -1) {
+        this.ministranciDoWydarzenia = this.ministranciDoWydarzenia.filter(min => min.stopien !== 11);
       }
       this.wszyscyAktualniMinistranci = [...this.wszyscyMinistranci].filter(item => item.stopien !== 11);
       this.ministranciDoWydarzenia.forEach(user => {
@@ -220,6 +228,43 @@ export class MassComponent implements OnInit, OnDestroy {
     }
   }
 
+  zmienStatusObecnosci(event, id_user: number, dodatkowa: boolean) {
+    const status = this.noweObecnosci.filter(obecnosc => obecnosc.id_user === id_user)[0];
+    if (status !== undefined && !dodatkowa) {
+      status.status = event;
+    }
+    else if (dodatkowa) {
+      if (event === null && !this.sprawdzane) {
+        const index = this.noweObecnosci.indexOf(this.noweObecnosci.filter(user => user.id_user === id_user)[0]);
+        this.noweObecnosci.splice(index, 1);
+      }
+      else if (status !== undefined) {
+        status.status = event;
+      }
+      else {
+        this.noweObecnosci.push(this.parafiaService.nowaObecnosc(this.aktywneWydarzenie.id, id_user, this.aktywnyDzien, 1, 1));
+      }
+    }
+    this.zmiana = true;
+  }
+
+  zapiszZmiany() {
+    // this.ui.zmienStan(0, true)
+    // this.ui.zmienStan(1, true)
+    this.parafiaService.zapiszObecnosci(this.noweObecnosci, this.sprawdzane, this.aktywneWydarzenie.typ).then(res => {
+      setTimeout(() => {
+        this.parafiaService.obecnosciDoWydarzenia(this.aktywneWydarzenie.id, this.aktywnyDzien).then(res => {
+          if (res === 1) {
+            this.ui.showFeedback('succes', 'Zapisano obecności', 2);
+          }
+          else {
+            this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+          }
+        });
+      }, 500);
+    });
+  }
+
   get nazwaWydarzenia() {
     let nazwa = '';
     if (this.specjalne !== null) {
@@ -246,8 +291,145 @@ export class MassComponent implements OnInit, OnDestroy {
     return nazwa;
   }
 
-  ngOnDestroy()
-  {
+  async indexZmiana(liczba: number) {
+
+    clearTimeout(this.odliczenie);
+
+    // this.czyKontynuowac().then((kontynuowac) => {
+      // if (kontynuowac) {
+    // this.ui.zmienStan(0, true);
+
+    if ((this.index + liczba) < 0 || (this.index + liczba) > (this.dzisiejszeWydarzenia.length - 1)) {
+          if ((this.index + liczba) < 0) {
+            this.cofam = true;
+          }
+          else {
+            this.cofam = false;
+          }
+          const dzien = new Date(this.aktywnyDzien.getFullYear(), this.aktywnyDzien.getMonth(), this.aktywnyDzien.getDate());
+          dzien.setDate(dzien.getDate() + liczba);
+          dzien.setHours(3);
+          this.ladujDzien(dzien);
+        }
+        else {
+          this.index += liczba;
+          this.aktywneWydarzenie = this.dzisiejszeWydarzenia[this.index];
+          this.parafiaService.aktualneWydarzenieId = this.aktywneWydarzenie.id;
+
+          this.odliczenie = setTimeout(async () => {
+            this.parafiaService.dyzurDoWydarzenia(this.aktywneWydarzenie.id, this.aktywneWydarzenie.typ);
+          }, this.sprawdzane && this.zmiana ? 50 : 250);
+
+          if (this.aktywneWydarzenie) {
+            this.header(this.aktywnyDzien, this.aktywneWydarzenie);
+          }
+        }
+      // }
+    // });
+
+  }
+
+  naKalendarz(bool: boolean) {
+    this.kalendarz = bool;
+}
+
+wybranyDzien() {
+    // this.ladujDzien(this._calendar.nativeElement.selectedDate).then(() => {
+    //     this.cofam = false;
+    // })
+}
+
+private async ladujDzien(dzien: Date)
+{
+    let date = new Date();
+    date.setHours(date.getHours() + 3);
+    if (dzien > date) {
+        this.ui.showFeedback('warning', 'Nie wybiegaj w przyszłość :)', 2);
+        return;
+    }
+
+    this.naKalendarz(false);
+
+    this.aktywnyDzien = dzien;
+
+    // this.ui.zmienStan(0,true)
+    this.specjalne = this.parafiaService.przeszukajKalendarzSpecjalne(this.aktywnyDzien.toJSON().slice(0, 10));
+    await this.wydarzeniaService.dzisiejszeWydarzenia(this.specjalne !== null ? 0 : this.aktywnyDzien.getDay(), this.aktywnyDzien.toJSON()).then(res => {
+        if (res === 404)
+        {
+            this.header(this.aktywnyDzien);
+            // this.ui.sesjaWygasla()
+        }
+    });
+
+}
+
+moznaSprawdzac() {
+    const teraz = new Date();
+
+    const zakres = new Date(2018, 10, 15, teraz.getHours(), teraz.getMinutes() + 15);
+    const wydarzenieGodz = new Date(this.aktywneWydarzenie.godzina);
+
+    if (this.aktywnyDzien.getDate() < teraz.getDate()) {
+        return true;
+    }
+    else if (this.aktywnyDzien.getDate() === teraz.getDate() &&
+    this.aktywnyDzien.getMonth() === teraz.getMonth() && this.aktywnyDzien.getFullYear() === teraz.getFullYear() &&
+    wydarzenieGodz > zakres)
+     {
+        this.zmiana = false;
+        return false;
+    }
+    return true;
+}
+
+zmienPokazDodatkowa()
+{
+    if (this.aktywneWydarzenie.typ === 1)
+    {
+        return;
+    }
+    if (!this.pokazDodatkowa)
+    {
+        this.ladowanieDodatkowych = true;
+        setTimeout(() => {
+            this.ladowanieDodatkowych = false;
+            this.pokazDodatkowa = true;
+        }, 500);
+    }
+    else
+    {
+        this.pokazDodatkowa = false;
+    }
+}
+
+czyJestNaLiscie(ministrant: User) {
+    const status = this.noweObecnosci.filter(obecnosc => obecnosc.id_user === ministrant.id_user)[0];
+    if (status !== undefined) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+aktualnyStatus(ministrant: User) {
+    const status = this.noweObecnosci.filter(obecnosc => obecnosc.id_user === ministrant.id_user)[0];
+    if (status !== undefined) {
+        return status.status;
+    }
+}
+
+czyMoznaDoPrzodu()
+{
+    if (this.aktywnyDzien.getDate() === this.dzis.getDate() && this.aktywnyDzien.getMonth() === this.dzis.getMonth() && this.aktywnyDzien.getFullYear() === this.dzis.getFullYear() && this.dzisiejszeWydarzenia[this.index + 1] === undefined)
+    {
+        return false;
+    }
+    return true;
+}
+
+  ngOnDestroy() {
     this.DyzurySub.unsubscribe();
     this.MinistranciSub.unsubscribe();
     this.ObecSub.unsubscribe();

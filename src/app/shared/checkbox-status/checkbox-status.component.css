@@ -1,0 +1,34 @@
+.checkbox,
+.checkbox:link,
+.checkbox:visited {
+    width: 100%;
+    height: 100%;
+    border: .2rem solid white;
+    color: white;
+    background: transparent;
+    border-radius: .5rem;
+    transition: all .2s;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+}
+
+.checkbox:focus {
+    outline: none;
+}
+
+.checkbox:active {
+    transform: translateY(2px);
+}
+
+.obecny {
+    background: linear-gradient(to bottom, rgb(49, 155, 49), rgb(28, 90, 28));
+    border: none;
+}
+
+.nieobecny {
+    background: linear-gradient(to bottom, #e71e25, #720e11);
+    border: none;
+}

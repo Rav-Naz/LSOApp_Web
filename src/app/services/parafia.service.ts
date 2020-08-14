@@ -121,9 +121,11 @@ export class ParafiaService {
 
   nowaObecnosc(id_wydarzenia: number, id_user: number, data: Date, start: number, typ: number) //Wykorzystanie: obecnosc
   {
-    let ob: Obecnosc = { id: 0, id_wydarzenia: id_wydarzenia, id_user: id_user,
-       data: new Date(data.getFullYear(), data.getMonth(), data.getDate(), data.getHours() + 2).toJSON(),
-        status: start === 0 ? null : 1, typ: typ }
+    let ob: Obecnosc = {
+      id: 0, id_wydarzenia: id_wydarzenia, id_user: id_user,
+      data: new Date(data.getFullYear(), data.getMonth(), data.getDate(), data.getHours() + 2).toJSON(),
+      status: start === 0 ? null : 1, typ: typ
+    };
     return ob;
   }
 
@@ -136,6 +138,34 @@ export class ParafiaService {
       });
     });
   }
+
+  async zapiszObecnosci(nowaLista: Array<Obecnosc>, czySprawdzanie: boolean, typ_wydarzenia: number) //Wykorzystanie: obecnosc
+  {
+    return new Promise<number>((resolve) => {
+
+      nowaLista.forEach(element => {
+        if (element.id === 0) {
+          this.http.nowaObecnosc(element, this.parafia.punkty_dod_sluzba, this.parafia.punkty_uj_sluzba, this.parafia.punkty_dodatkowe,
+            this.parafia.punkty_nabozenstwo, this.parafia.punkty_dod_zbiorka, this.parafia.punkty_uj_zbiorka, typ_wydarzenia);
+        }
+        else {
+          this.http.updateObecnosci(element, this.parafia.punkty_dod_sluzba, this.parafia.punkty_uj_sluzba, this.parafia.punkty_dodatkowe,
+            this.parafia.punkty_nabozenstwo, this.parafia.punkty_dod_zbiorka, this.parafia.punkty_uj_zbiorka, typ_wydarzenia);
+        }
+      });
+
+      setTimeout(() => {
+        this.pobierzMinistrantow().then(res => {
+          if (res === null) {
+            resolve(404);
+            return;
+          }
+          resolve(1);
+        });
+      }, 500);
+    });
+  }
+
   przeszukajKalendarzSpecjalne(dzien: string) {
     let szukane = this.kalendarzSpecjalne.filter(val => val.data_dokladna === dzien);
     return szukane.length === 0 ? null : szukane[0].nazwa;
