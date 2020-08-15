@@ -1,6 +1,6 @@
 import { RegisterComponent } from './register/register.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
@@ -45,7 +45,9 @@ registerLocaleData(localePl);
     HttpClientModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: "pl-PL" }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

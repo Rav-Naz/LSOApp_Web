@@ -43,9 +43,18 @@
         <button class="save audiowide" (click)="zapiszZmiany()" *ngIf="opoznienie" [disabled]="!zmiana">Zapisz</button>
     </div>
 </div>
+<!-- widok kalendarza -->
 <div class="container" *ngIf="kalendarz">
-    <div class="calendar-container">
-        <mwl-calendar-month-view [locale]="'pl'" [viewDate]="aktywnyDzien" [refresh]="refresh" class="calendar"></mwl-calendar-month-view>
+    <div class="navigation-panel">
+        <button class="arrow icon" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">&#xe002;</button>
+        <button class="header lexend" (click)="naKalendarz(false)">
+          <label class="icon space">&#xe0e7;</label>
+          <label>{{months[viewDate.getMonth()] + ' ' + viewDate.getFullYear()}}</label>
+      </button>
+        <button class="arrow icon" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate">&#xe001;</button>
     </div>
-    <button class="navigation-button back audiowide" (click)="naKalendarz(false)">Anuluj</button>
+    <div class="calendar-container">
+        <mwl-calendar-month-view [locale]="'pl'" [viewDate]="viewDate" [refresh]="refresh" class="calendar" (dayClicked)="wybranyDzien($event.day)"></mwl-calendar-month-view>
+    </div>
+    <button class="navigation-button back audiowide" mwlCalendarToday [(viewDate)]="viewDate">Centruj</button>
 </div>

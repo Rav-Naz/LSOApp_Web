@@ -2,7 +2,7 @@ import { UiService } from './../../services/ui.service';
 import { WydarzeniaService } from '../../services/wydarzenia.service';
 import { ParafiaService } from './../../services/parafia.service';
 import { Component, OnInit, OnDestroy,ChangeDetectionStrategy} from '@angular/core';
-import { rank } from '../../models/lists.model';
+import { rank, months } from '../../models/lists.model';
 import { Subscription } from 'rxjs';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
 import { User } from 'src/app/models/user.model';
@@ -12,6 +12,7 @@ import { sortPolskich } from 'src/assets/sortPolskich';
 
 // import { Component,  } from '@angular/core';
 import { Subject } from 'rxjs';
+import { CalendarView } from 'angular-calendar';
 
 @Component({
   selector: 'app-mass',
@@ -36,6 +37,7 @@ export class MassComponent implements OnInit, OnDestroy {
     dzien_tygodnia: 0, godzina: '2018-11-15T21:27:00.000Z', data_dokladna: null, grupa: null
   };
   aktywnyDzien: Date;
+  viewDate: Date;
   najblizszeWydarzenie: Wydarzenie;
   ministranciDoWydarzenia: Array<User>;
   naglowek: string;
@@ -52,7 +54,8 @@ export class MassComponent implements OnInit, OnDestroy {
   private odliczenie;
   interval;
   zmiana = false;
-
+  view: CalendarView = CalendarView.Month;
+  months = months;
   refresh: Subject<any> = new Subject();
 
   constructor(private parafiaService: ParafiaService, private wydarzeniaService: WydarzeniaService, private ui: UiService) { }
@@ -61,7 +64,7 @@ export class MassComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cofam = false;
 
-    this.dzis = new Date();
+    this.dzis = this.viewDate = new Date();
     this.interval = setInterval(() => {
       this.dzis = new Date();
     }, 60000);
@@ -333,10 +336,11 @@ export class MassComponent implements OnInit, OnDestroy {
     this.kalendarz = bool;
 }
 
-wybranyDzien() {
-    // this.ladujDzien(this._calendar.nativeElement.selectedDate).then(() => {
-    //     this.cofam = false;
-    // })
+wybranyDzien(event) {
+    this.ladujDzien(event.date).then(() => {
+        this.cofam = false;
+        this.naKalendarz(false);
+    });
 }
 
 private async ladujDzien(dzien: Date)
@@ -350,11 +354,14 @@ private async ladujDzien(dzien: Date)
 
     this.naKalendarz(false);
 
+
+    dzien.setHours(3)
     this.aktywnyDzien = dzien;
 
     // this.ui.zmienStan(0,true)
     this.specjalne = this.parafiaService.przeszukajKalendarzSpecjalne(this.aktywnyDzien.toJSON().slice(0, 10));
-    await this.wydarzeniaService.dzisiejszeWydarzenia(this.specjalne !== null ? 0 : this.aktywnyDzien.getDay(), this.aktywnyDzien.toJSON()).then(res => {
+    await this.wydarzeniaService.dzisiejszeWydarzenia(this.specjalne !== null ? 0 : this.aktywnyDzien.getDay(),
+     this.aktywnyDzien.toJSON()).then(res => {
         if (res === 404)
         {
             this.header(this.aktywnyDzien);

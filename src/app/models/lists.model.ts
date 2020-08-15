@@ -17,3 +17,6 @@ export const monasteries = ['Diecezjalni', 'Albertyni', 'Augustianie', 'Barnabic
 
 export const rank = ['Kandydat', 'Ministrant Ołtarza', 'Choralista', 'Ministrant Światła', 'Ministrant Krzyża',
  'Ministrant Księgi', 'Ministrant Kadzidła', 'Ministrant Wody', 'Lektor', 'Ceremoniarz', 'Szafarz', 'Opiekun'];
+
+export const months = ['STYCZEŃ', 'LUTY', 'MARZEC', 'KWIECIEŃ', 'MAJ', 'CZERWIEC',
+ 'LIPIEC', 'SIERPIEŃ', 'WRZESIEŃ', 'PAŹDZIERNIK', 'LISTOPAD', 'GRUDZIEŃ'];
