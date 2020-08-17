@@ -1,3 +1,6 @@
+import { rank } from './../models/lists.model';
+import { HttpService } from './../services/http.service';
+import { UiService } from './../services/ui.service';
 import { Component, OnInit } from '@angular/core';
 import {dioceses, monasteries} from '../models/lists.model';
 
@@ -20,8 +23,11 @@ export class RegisterComponent implements OnInit {
   public _name: string = null;
   public _lastName: string = null;
   public _email: string = null;
+  public _terms = false;
+  public udanaRejP = false;
+  public ladowanie = false;
 
-  constructor() {}
+  constructor(private ui: UiService, private httpService: HttpService) {}
 
   ngOnInit(): void {
   }
@@ -31,7 +37,7 @@ export class RegisterComponent implements OnInit {
   }
 
   changeParishName() {
-    if(this._parishName.length > 0) {
+    if (this._parishName.length > 0) {
       this.setPWColor('#ffffff');
     }
     else{
@@ -44,8 +50,8 @@ export class RegisterComponent implements OnInit {
   }
 
   lostFocus(name: string) {
-    let grey = '#7c7c7c';
-    let white = '#ffffff';
+    const grey = '#7c7c7c';
+    const white = '#ffffff';
     switch (name) {
       case '1':
         if (this.isMonasteryNotNull) {
@@ -72,6 +78,40 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  zarejestruj()
+  {
+    let diocese_id = dioceses.indexOf(this._diocese);
+    let monastery_id = monasteries.indexOf(this._monastery);
+    const rankx = this.ranks.indexOf(this._rank) + 9;
+    this.httpService.rejestracja(this._parishName, diocese_id, this._city,
+      monastery_id, rankx, this._name, this._lastName, this._email/*, this._hasloP*/).then((res) => {
+      switch (res) {
+          case 0:
+              this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+              this.ladowanie = false;
+              break;
+
+          case 1:
+              this.udanaRejP = true;
+              this.ladowanie = false;
+              break;
+
+          case 2:
+              this.ui.showFeedback('warning', 'Ten adres e-mail jest już przypisany do innego konta!', 3);
+              this.ladowanie = false;
+              break;
+          case 3:
+              this.ui.showFeedback('warning', 'Ten adres e-mail jest już przypisany do innego konta, które jeszcze nie zostało aktywowane. Aby ponownie wysłać kod aktywacji przejdź do widoku logowanie -> "ZAPOMNIAŁEM HASŁA"', 8);
+              this.ladowanie = false;
+              break;
+          default:
+              this.ui.showFeedback('error','Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+              this.ladowanie = false;
+              break;
+      }
+  });
+  }
+
   get isMonasteryNotNull() {
     return this._monastery !== 'Wybierz rodzaj parafii';
   }
@@ -84,5 +124,17 @@ export class RegisterComponent implements OnInit {
     return this._rank !== 'Wybierz stopień';
   }
 
+  get isTermsAccepted() {
+    return this._terms;
+  }
 
+  changeCheckbox(event)
+  {
+    this._terms = event;
+  }
+
+  openTerms()
+  {
+    window.open('https://lsoapp.pl/polityka-prywatnosci/', '_blank');
+  }
 }

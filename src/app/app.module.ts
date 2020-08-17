@@ -21,6 +21,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import localePl from '@angular/common/locales/pl';
 import {registerLocaleData} from '@angular/common';
+import { CheckboxComponent } from './shared/checkbox/checkbox.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -34,7 +35,8 @@ registerLocaleData(localePl);
     AcolythesMessagesComponent,
     MassComponent,
     UriPipe,
-    CheckboxStatusComponent
+    CheckboxStatusComponent,
+    CheckboxComponent
   ],
   imports: [
     BrowserModule,

@@ -88,6 +88,86 @@ export class HttpService {
     });
   }
 
+  // AKTYWACJA USERA
+  async aktywacjaUsera(email: string, kod_aktywacyjny: string, haslo: string) {
+    return new Promise<string>(resolve => {
+
+      this.http.post(this.url + '/activate', { email, kod_aktywacyjny, haslo: sha512.sha512.hmac('mSf', haslo), smart: this.smart }, { headers: this.headers }).subscribe(res => {
+        if (res === 'nieistnieje') {
+          resolve('nieistnieje');
+        }
+        else if (res === 'niepoprawny') {
+          resolve('niepoprawny');
+        }
+        else if (res === 'niemakodu') {
+          resolve('niemakodu');
+        }
+        else if (res === 'wygaslo') {
+          resolve('wygaslo');
+        }
+        else if (res.hasOwnProperty('changedRows')) {
+          resolve(JSON.parse(JSON.stringify(res)));
+        }
+        else {
+          resolve('blad');
+        }
+      }, err => {
+        resolve('blad');
+      });
+    });
+  }
+
+  // UTWORZENIE NOWEJ PARAFII
+  async rejestracja(nazwa_parafii: string, id_diecezji: number, miasto: string,
+    id_typu: number, stopien: number, imie: string, nazwisko: string, email: string) {
+
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/register', {
+        nazwa_parafii, id_diecezji,
+        miasto, id_typu, stopien, imie, nazwisko,
+        email, smart: this.smart
+      }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(1);
+        }
+        else if (res.hasOwnProperty('code')) {
+          const code = JSON.parse(JSON.stringify(res));
+          if (code.code === 'ER_DUP_ENTRY') {
+            resolve(2);
+          }
+          else {
+            resolve(0);
+          }
+        }
+        else if (res === 'istnieje') {
+          resolve(2);
+        }
+        else if (res === 'ponowne') {
+          resolve(3);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
+  //PRZYPOMNIENIE HASŁA
+  async przypomnij(email: string) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/remind', { email: email, smart: this.smart }, { headers: this.headers }).subscribe(res => {
+        let response = JSON.parse(JSON.stringify(res));
+        resolve(response.changedRows);
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
   ////////////////// ZAPYTANIA Z JWT //////////////////
 
   // POBIERANIE DANCYH PARAFII
@@ -189,11 +269,11 @@ export class HttpService {
     });
   }
 
-  //USUWANIE MINISTRANTA
+  // USUWANIE MINISTRANTA
   async usunMinistranta(id_user: number) {
     return new Promise<number>(resolve => {
 
-      this.http.post(this.url + '/delete_user', { id_user: id_user, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
+      this.http.post(this.url + '/delete_user', { id_user, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
         { headers: this.headers }).subscribe(res => {
           if (res === 'zakonczono') {
             resolve(1);
@@ -210,7 +290,7 @@ export class HttpService {
     });
   }
 
-  //POBIERANIE DANYCH O MINISTRANCIE
+  // POBIERANIE DANYCH O MINISTRANCIE
   async pobierzMinistranta(id_user: number) {
     return new Promise<User>(resolve => {
       this.http.post(this.url + '/ministrant', { id_user: id_user === -1 ? this.id_user : id_user, smart: this.smart, jwt: this.JWT },
@@ -225,13 +305,13 @@ export class HttpService {
     });
   }
 
-  //POBIERANIE WYDARZEŃ NA DANY DZIEŃ
+  // POBIERANIE WYDARZEŃ NA DANY DZIEŃ
   async pobierzWydarzeniaNaDanyDzien(dzien: number, data_dokladna: string) {
     return new Promise<Array<Wydarzenie>>(resolve => {
 
       this.http.post(this.url + '/events', {
-        id_parafii: this.id_parafii, dzien: dzien, smart: this.smart,
-        jwt: this.JWT, data_dokladna: data_dokladna
+        id_parafii: this.id_parafii, dzien, smart: this.smart,
+        jwt: this.JWT, data_dokladna
       }, { headers: this.headers }).subscribe(res => {
         if (res === 'You have not permission to get the data') {
           resolve(null);
@@ -242,12 +322,12 @@ export class HttpService {
     });
   }
 
-  //POBIERANIE DYŻURÓW DO DANEGO WYDARZENIA
+  // POBIERANIE DYŻURÓW DO DANEGO WYDARZENIA
   async pobierzDyzuryDoWydarzenia(id_wydarzenia: number) {
     return new Promise<Array<User>>(resolve => {
 
       this.http.post(this.url + '/event_duty', {
-        id_wydarzenia: id_wydarzenia, id_parafii: this.id_parafii,
+        id_wydarzenia, id_parafii: this.id_parafii,
         smart: this.smart, jwt: this.JWT
       }, { headers: this.headers }).subscribe(res => {
         if (res === 'You have not permission to get the data') {
@@ -259,14 +339,14 @@ export class HttpService {
     });
   }
 
-  //POBIERANIE OBECNOSCI DO DANEGO WYDARZENIA
+  // POBIERANIE OBECNOSCI DO DANEGO WYDARZENIA
   async pobierzObecnosciDoWydarzenia(id_wydarzenia: number, data: Date) {
     return new Promise<Array<User>>(resolve => {
-      let date = data;
+      const date = data;
       date.setHours(2);
 
       this.http.post(this.url + '/presence', {
-        id_wydarzenia: id_wydarzenia, data: date.toJSON(),
+        id_wydarzenia, data: date.toJSON(),
         id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT
       }, { headers: this.headers }).subscribe(res => {
         resolve(JSON.parse(JSON.stringify(res)));
@@ -274,7 +354,7 @@ export class HttpService {
     });
   }
 
-  //POBIERANIE SPECJALNYCH WYDARZEŃ
+  // POBIERANIE SPECJALNYCH WYDARZEŃ
   async pobierzSpecjalneWydarzenia() {
     return new Promise<string>(resolve => {
       this.http.post(this.url + '/special_events', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT },
@@ -286,20 +366,20 @@ export class HttpService {
     });
   }
 
-  //AKTUALIZOWANIE ISTNIEJĄCEJ OBECNOŚCI
+  // AKTUALIZOWANIE ISTNIEJĄCEJ OBECNOŚCI
   async updateObecnosci(obecnosc: Obecnosc, punkty_dod_sluzba: number, punkty_uj_sluzba: number, punkty_dodatkowe: number, punkty_nabozenstwo: number,
     punkty_dod_zbiorka: number, punkty_uj_zbiorka: number, typ_wydarzenia: number) {
     return new Promise<number>(resolve => {
       this.http.post(this.url + '/update_presence', {
-        id_obecnosci: obecnosc.id, status: obecnosc.status, punkty_dod_sluzba: punkty_dod_sluzba,
-        punkty_uj_sluzba: punkty_uj_sluzba, punkty_dodatkowe: punkty_dodatkowe, punkty_nabozenstwo: punkty_nabozenstwo, punkty_dod_zbiorka: punkty_dod_zbiorka,
-        punkty_uj_zbiorka: punkty_uj_zbiorka, id_user: obecnosc.id_user, typ_wydarzenia: typ_wydarzenia, typ: obecnosc.typ, id_parafii: this.id_parafii,
+        id_obecnosci: obecnosc.id, status: obecnosc.status, punkty_dod_sluzba,
+        punkty_uj_sluzba, punkty_dodatkowe, punkty_nabozenstwo, punkty_dod_zbiorka,
+        punkty_uj_zbiorka, id_user: obecnosc.id_user, typ_wydarzenia, typ: obecnosc.typ, id_parafii: this.id_parafii,
         smart: this.smart, jwt: this.JWT
       }, { headers: this.headers }).subscribe(res => {
         if (res === 'brak') {
           resolve(0);
         }
-        else if (res === "You have not permission to get the data") {
+        else if (res === 'You have not permission to get the data') {
           resolve(404);
         }
         else {
@@ -311,15 +391,15 @@ export class HttpService {
     });
   }
 
-  //DODAWANIE NOWEJ OBECNOŚCI
+  // DODAWANIE NOWEJ OBECNOŚCI
   async nowaObecnosc(obecnosc: Obecnosc, punkty_dod_sluzba: number, punkty_uj_sluzba: number, punkty_dodatkowe: number, punkty_nabozenstwo: number, punkty_dod_zbiorka: number, punkty_uj_zbiorka: number, typ_wydarzenia: number) {
     return new Promise<number>(resolve => {
 
       this.http.post(this.url + '/add_presence', {
         id_wydarzenia: obecnosc.id_wydarzenia, id_user: obecnosc.id_user,
-        data: obecnosc.data, status: obecnosc.status, punkty_dod_sluzba: punkty_dod_sluzba, punkty_uj_sluzba: punkty_uj_sluzba,
-        punkty_dodatkowe: punkty_dodatkowe, punkty_nabozenstwo: punkty_nabozenstwo, punkty_dod_zbiorka: punkty_dod_zbiorka,
-        punkty_uj_zbiorka: punkty_uj_zbiorka, typ: obecnosc.typ, typ_wydarzenia: typ_wydarzenia, id_parafii: this.id_parafii,
+        data: obecnosc.data, status: obecnosc.status, punkty_dod_sluzba, punkty_uj_sluzba,
+        punkty_dodatkowe, punkty_nabozenstwo, punkty_dod_zbiorka,
+        punkty_uj_zbiorka, typ: obecnosc.typ, typ_wydarzenia, id_parafii: this.id_parafii,
         smart: this.smart, jwt: this.JWT
       }, { headers: this.headers }).subscribe(res => {
         resolve(1);

@@ -32,9 +32,6 @@ export class CheckboxStatusComponent {
     {
       this.status = CheckboxStatus.Obecny;
     }
-
-    console.log('asd')
-
     this.checkStatus.emit(this.status);
   }
 }
