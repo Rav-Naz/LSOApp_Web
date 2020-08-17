@@ -191,6 +191,27 @@ export class HttpService {
     });
   }
 
+  //AKTUALIZACJA PUNKTÓW
+  async aktualizacjaPunktow(punkty_dod_sluzba: number, punkty_uj_sluzba: number, punkty_dodatkowe: number, punkty_nabozenstwo: number, punkty_dod_zbiorka: number, punkty_uj_zbiorka: number) {
+    return new Promise<any>(resolve => {
+      this.http.post(this.url + '/update_points', { punkty_dod_sluzba: punkty_dod_sluzba, punkty_uj_sluzba: punkty_uj_sluzba, punkty_dodatkowe: punkty_dodatkowe, punkty_nabozenstwo: punkty_nabozenstwo, punkty_dod_zbiorka: punkty_dod_zbiorka, punkty_uj_zbiorka: punkty_uj_zbiorka, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          this.pobierzParafie().then(res => {
+            resolve(res);
+          });
+        }
+        else if (res === "You have not permission to get the data") {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
   // POBIERANIE WIADOMOŚCI
   async pobierzWidaomosci(do_opiekuna: number, limit: number) {
     return new Promise<Array<Wiadomosc>>(resolve => {
@@ -287,6 +308,32 @@ export class HttpService {
         }, err => {
           resolve(0);
         });
+    });
+  }
+
+  //DODAWANIE NOWEGO MINISTRANTA
+  async nowyMinistrant(stopien: number, imie: string, nazwisko: string, email: string) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/new_user', { id_parafii: this.id_parafii, stopien: stopien, imie: imie, nazwisko: nazwisko, email: email, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(1);
+        }
+        else if (res === "You have not permission to get the data") {
+          resolve(404);
+        }
+        else if (res.hasOwnProperty('code')) {
+          let code = JSON.parse(JSON.stringify(res));
+          if (code.code === 'ER_DUP_ENTRY') {
+            resolve(2);
+          }
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
     });
   }
 

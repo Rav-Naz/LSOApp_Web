@@ -1,3 +1,5 @@
+import { PunctationComponent } from './admin-view/punctation/punctation.component';
+import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.component';
 import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
 import { MassComponent } from './admin-view/mass/mass.component';
 import { AdminViewComponent } from './admin-view/admin-view.component';
@@ -17,6 +19,8 @@ const routes: Routes = [
   {path: 'admin-view', component: AdminViewComponent, children: [
     {path: 'mass', component: MassComponent, outlet: 'main'},
     {path: 'acolythes-messages', component: AcolythesMessagesComponent, outlet: 'main'},
+    {path: 'new-acolythe', component: NewAcolytheComponent, outlet: 'main'},
+    {path: 'punctation', component: PunctationComponent, outlet: 'main'},
     // {path: '**', redirectTo: '/mass'},
   ]},
   {path: '**', redirectTo: '/login'},

@@ -40,29 +40,29 @@ export class ParafiaService {
     return this.parafia;
   }
 
-  get Obecnosci() //Wykorzystanie: obecnosc
+  get Obecnosci() // Wykorzystanie: obecnosc
   {
     return this.obecnosciWydarzenia.asObservable();
   }
 
-  get Dyzury() { //Wykorzystanie: obecnosc
+  get Dyzury() { // Wykorzystanie: obecnosc
     return this.dyzuryWydarzenia.asObservable();
   }
 
-  get DyzuryMinistranta() { //Wykorzystanie: ministranci-szczegoly
+  get DyzuryMinistranta() { // Wykorzystanie: ministranci-szczegoly
     return this.dyzuryMinistranta.asObservable();
   }
 
-  get Ministranci() { //Wykorzystanie: ministranci
+  get Ministranci() { // Wykorzystanie: ministranci
     return this.ministranci.asObservable();
   }
 
-  get PodgladMinistranta() //Wykorzystanie: ministranci-szczegoly
+  get PodgladMinistranta() // Wykorzystanie: ministranci-szczegoly
   {
     return this.podgladanyMinistrant.asObservable();
   }
 
-  async pobierzParafie() { //wykorzystanie: acolythes-messages
+  async pobierzParafie() { // wykorzystanie: acolythes-messages
     return new Promise<number>(resolve => {
       this.http.pobierzParafie().then(async res => {
         if (res === 'blad') {
@@ -79,7 +79,7 @@ export class ParafiaService {
     });
   }
 
-  async pobierzMinistrantow() { //wykorzystanie: acolythes-messages
+  async pobierzMinistrantow() { // wykorzystanie: acolythes-messages
     return new Promise<Array<User>>(resolve => {
       this.http.pobierzMinistrantow().then(async res => {
         if (res !== null) {
@@ -94,7 +94,7 @@ export class ParafiaService {
     });
   }
 
-  odswiezListeMinistrantow() { //wykorzystanie: acolythes-messages
+  odswiezListeMinistrantow() { // wykorzystanie: acolythes-messages
     return new Promise<void>((resolve) => {
       let lista = new Array<User>();
       lista = this.ministranciLista;
@@ -104,7 +104,7 @@ export class ParafiaService {
   }
 
 
-  async usunMinistranta(id_user: number) //Wykorzystanie: ministranci
+  async usunMinistranta(id_user: number) // Wykorzystanie: ministranci
   {
     return new Promise<number>(resolve => {
       this.http.usunMinistranta(id_user).then(res => {
@@ -119,17 +119,27 @@ export class ParafiaService {
     });
   }
 
-  nowaObecnosc(id_wydarzenia: number, id_user: number, data: Date, start: number, typ: number) //Wykorzystanie: obecnosc
+  async nowyMinistrant(stopien: number, imie: string, nazwisko: string, email: string) // Wykorzystanie: ministrant-nowy
+    {
+        return new Promise<number>(resolve => {
+            this.http.nowyMinistrant(stopien, imie, nazwisko, email).then(res =>
+            {
+                resolve(res);
+            });
+        });
+    }
+
+  nowaObecnosc(id_wydarzenia: number, id_user: number, data: Date, start: number, typ: number) // Wykorzystanie: obecnosc
   {
-    let ob: Obecnosc = {
-      id: 0, id_wydarzenia: id_wydarzenia, id_user: id_user,
+    const ob: Obecnosc = {
+      id: 0, id_wydarzenia, id_user,
       data: new Date(data.getFullYear(), data.getMonth(), data.getDate(), data.getHours() + 2).toJSON(),
-      status: start === 0 ? null : 1, typ: typ
+      status: start === 0 ? null : 1, typ
     };
     return ob;
   }
 
-  obecnosciDoWydarzenia(id_wydarzenia: number, data: Date) //Wykorzystanie: obecnosc
+  obecnosciDoWydarzenia(id_wydarzenia: number, data: Date) // Wykorzystanie: obecnosc
   {
     return new Promise<number>((resolve) => {
       this.http.pobierzObecnosciDoWydarzenia(id_wydarzenia, data).then(res => {
@@ -139,7 +149,7 @@ export class ParafiaService {
     });
   }
 
-  async zapiszObecnosci(nowaLista: Array<Obecnosc>, czySprawdzanie: boolean, typ_wydarzenia: number) //Wykorzystanie: obecnosc
+  async zapiszObecnosci(nowaLista: Array<Obecnosc>, czySprawdzanie: boolean, typ_wydarzenia: number) // Wykorzystanie: obecnosc
   {
     return new Promise<number>((resolve) => {
 
@@ -167,7 +177,7 @@ export class ParafiaService {
   }
 
   przeszukajKalendarzSpecjalne(dzien: string) {
-    let szukane = this.kalendarzSpecjalne.filter(val => val.data_dokladna === dzien);
+    const szukane = this.kalendarzSpecjalne.filter(val => val.data_dokladna === dzien);
     return szukane.length === 0 ? null : szukane[0].nazwa;
   }
 
@@ -176,7 +186,7 @@ export class ParafiaService {
       this.http.pobierzSpecjalneWydarzenia().then(async res => {
         if (res !== null) {
           this.kalendarzSpecjalne = JSON.parse(res).map(val => {
-            let date = new Date(val.data_dokladna);
+            const date = new Date(val.data_dokladna);
             date.setHours(3);
             return { nazwa: val.nazwa, data_dokladna: date.toJSON().slice(0, 10) };
           });
@@ -189,7 +199,7 @@ export class ParafiaService {
     });
   }
 
-  dyzurDoWydarzenia(id_wydarzenia: number, typ?: number) { //Wykorzystanie: obecnosc
+  dyzurDoWydarzenia(id_wydarzenia: number, typ?: number) { // Wykorzystanie: obecnosc
     return new Promise<number>((resolve) => {
       if (typ !== undefined && typ !== null && typ === 0) {
         this.http.pobierzDyzuryDoWydarzenia(id_wydarzenia).then(res => {

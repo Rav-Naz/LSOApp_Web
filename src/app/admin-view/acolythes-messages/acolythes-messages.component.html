@@ -6,7 +6,7 @@
                 <label class="grey pointer">Sortuj: </label>
                 <label class="pointer">{{sortujPoImieniu ? 'Alfabetycznie' : 'Ranking'}}</label>
             </button>
-            <button class="delete-message icon" (tap)="nowyMinistrant()">&#xe072;</button>
+            <button class="delete-message icon" (click)="nowyMinistrant()">&#xe072;</button>
         </div>
 
         <div class="acolythe" *ngFor="let acolythe of ministranci; let i = index" [ngClass]="{'even':i%2===0}">

@@ -16,14 +16,14 @@
                 <div class="navigation-section-options">
                     <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['mass']}}]">Sprawdź obecność</label>
                     <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['acolythes-messages']}}]">Ministranci i wiadomości</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['acolythes-messages']}}]">Dodaj ministranta</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['new-acolythe']}}]">Dodaj ministranta</label>
                 </div>
             </div>
 
             <div class="navigation-section">
                 <label class="options-name">Punkty</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide">Zmień punktację</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['punctation']}}]">Zmień punktację</label>
                     <label class="navigation-button audiowide">Wyzeruj punkty</label>
                     <label class="navigation-button audiowide">Generuj raport</label>
                 </div>

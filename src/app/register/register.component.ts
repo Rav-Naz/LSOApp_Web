@@ -9,7 +9,7 @@ import {dioceses, monasteries} from '../models/lists.model';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   public ranks = ['Ceremoniarz', 'Szafarz', 'Ksiądz', 'Opiekun'];
   public dioceses = dioceses;
@@ -28,9 +28,6 @@ export class RegisterComponent implements OnInit {
   public ladowanie = false;
 
   constructor(private ui: UiService, private httpService: HttpService) {}
-
-  ngOnInit(): void {
-  }
 
   setPWColor(color: string) {
     document.getElementById('pw').style.color = color;

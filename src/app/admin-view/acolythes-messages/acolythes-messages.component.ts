@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { UserService } from './../../services/user.service';
 import { ParafiaService } from './../../services/parafia.service';
 import { UiService } from './../../services/ui.service';
@@ -33,7 +34,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
   limit = 30;
 
   constructor(private wiadosciService: WiadomosciService, public ui: UiService, private parafiaService: ParafiaService,
-              private userService: UserService) { }
+              private userService: UserService, private router: Router) { }
 
   @HostListener('scroll', ['$event'])
 
@@ -112,7 +113,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   nowyMinistrant() {
     // this.tabIndexService.nowyOutlet(4, 'ministrant-nowy')
-    // this.router.navigate(['../ministrant-nowy'], {relativeTo: this.active, transition: { name: 'slideBottom' }});
+    this.router.navigateByUrl('/admin-view/(main:new-acolythe)');
   }
 
   async usunWiadomosc(wiadomosc: Wiadomosc) {
