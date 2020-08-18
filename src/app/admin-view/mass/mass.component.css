@@ -83,7 +83,9 @@
     font-weight: 300;
     text-wrap: true;
     text-align: center;
-    font-size: 15;
+    justify-self: center;
+    align-self: center;
+    font-size: 1.5rem;
     width: 90%;
 }
 

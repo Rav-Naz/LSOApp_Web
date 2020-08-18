@@ -13,7 +13,7 @@
             <button class="delete-message icon col1" (click)="usunMinistranta(acolythe, i)">&#xe08e;</button>
             <label class="col2">{{sortujPoImieniu? i+1 : acolythe.ranking}}. {{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
             <label class="col3 audiowide">{{acolythe.punkty}} pkt</label>
-            <button class="details audiowide col4">Szczegóły</button>
+            <button class="details audiowide col4" (click)="szczegolyMinistranta(acolythe.id_user, i)">Szczegóły</button>
         </div>
     </div>
 

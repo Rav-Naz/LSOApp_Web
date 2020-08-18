@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
                               }
                               else {
                                   this.ladowanie = false;
-                                  this.ui.showFeedback('error', 'Wystąpił problem z połączeniem. Sprawdź czy posiadasz najnowszą wersję aplikacji oraz dobre połączenie z internetem', 5);
+                                  this.ui.showFeedback('error', 'Wystąpił problem z połączeniem. Sprawdź czy posiadasz dobre połączenie z internetem', 5);
                               }
                           });
                       }
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
                               }
                               else {
                                   this.ladowanie = false;
-                                  this.ui.showFeedback('error', 'Wystąpił problem z połączeniem. Sprawdź czy posiadasz najnowszą wersję aplikacji oraz dobre połączenie z internetem', 5);
+                                  this.ui.showFeedback('error', 'Wystąpił problem z połączeniem. Sprawdź czy posiadasz dobre połączenie z internetem', 5);
                               }
                           });
 

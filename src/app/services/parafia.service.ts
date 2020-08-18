@@ -94,6 +94,20 @@ export class ParafiaService {
     });
   }
 
+  WybranyMinistrant(id: number) { //Wykorzystanie: ministranci-szczegoly
+    return new Promise<number>((resolve) => {
+      this.http.pobierzMinistranta(id).then(res => {
+        if (JSON.stringify(res) === '[]') {
+          resolve(0);
+        }
+        else {
+          this.podgladanyMinistrant.next(res);
+          resolve(1);
+        }
+      });
+    });
+  }
+
   odswiezListeMinistrantow() { // wykorzystanie: acolythes-messages
     return new Promise<void>((resolve) => {
       let lista = new Array<User>();
@@ -120,14 +134,13 @@ export class ParafiaService {
   }
 
   async nowyMinistrant(stopien: number, imie: string, nazwisko: string, email: string) // Wykorzystanie: ministrant-nowy
-    {
-        return new Promise<number>(resolve => {
-            this.http.nowyMinistrant(stopien, imie, nazwisko, email).then(res =>
-            {
-                resolve(res);
-            });
-        });
-    }
+  {
+    return new Promise<number>(resolve => {
+      this.http.nowyMinistrant(stopien, imie, nazwisko, email).then(res => {
+        resolve(res);
+      });
+    });
+  }
 
   nowaObecnosc(id_wydarzenia: number, id_user: number, data: Date, start: number, typ: number) // Wykorzystanie: obecnosc
   {

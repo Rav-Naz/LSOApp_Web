@@ -113,7 +113,8 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   nowyMinistrant() {
     // this.tabIndexService.nowyOutlet(4, 'ministrant-nowy')
-    this.router.navigateByUrl('/admin-view/(main:new-acolythe)');
+    // this.router.navigateByUrl('/admin-view/(main:new-acolythe)');
+    this.router.navigate(['/admin-view', { outlets: {'main': ['new-acolythe']}}]);
   }
 
   async usunWiadomosc(wiadomosc: Wiadomosc) {
@@ -169,7 +170,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
     });
   }
 
-  async usunMinistranta(ministrant: User, index: number) {
+  async usunMinistranta(ministrant: User) {
 
     // !!!
     if (ministrant.id_user === this.userService.UserID) {
@@ -191,6 +192,12 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
     // }
     // });
   }
+
+  szczegolyMinistranta(id: number) {
+    this.parafiaService.aktualnyMinistrantId = id;
+    this.router.navigateByUrl(`/admin-view/(main:acolythe-details/${id})`);
+    // this.router.navigate(['/admin-view', { outlets: {'main': ['acolythe-details']}}]);
+}
 
   onScroll(event: any) {
     if ((event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight * 0.75) && !this.doladowanie) {

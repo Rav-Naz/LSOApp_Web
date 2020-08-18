@@ -1,0 +1,43 @@
+<div class="container">
+    <form #newDetailsForm="ngForm" class="details">
+        <div class="user-name">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+            <label *ngIf="!name.valid && name.touched">To pole jest wypełnione nieprawidłowo</label>
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+            <label *ngIf="!lastName.valid && lastName.touched">To pole jest wypełnione nieprawidłowo</label>
+        </div>
+        <div class="user-details">
+            <!-- Punkty -->
+            <div class="detail-box">
+                <label class="description">Punkty</label>
+                <div class="point-box">
+                    <button class="point-btn icon" (click)="zmienPunkty(1)">&#xe072;</button>
+                    <input type="number" class="points lexend" [(ngModel)]="ministrant.punkty" [ngModelOptions]="{standalone: false}" #points="ngModel" name="points">
+                    <button class="point-btn icon" (click)="zmienPunkty(-1)">&#xe073;</button>
+                </div>
+            </div>
+
+            <!-- Stopień -->
+            <div class="detail-box">
+                <label class="description">Stopień</label>
+                <select class="points lexend width-25" (focus)="getFocus('1')" (blur)="lostFocus()" id="selection1" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
+                  <option class="lexend">Wybierz stopień</option>
+                  <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
+                </select>
+            </div>
+
+            <!-- Konto -->
+            <div class="detail-box flex-column">
+                <div class="flex-row">
+                    <label class="description">Podpięte konto</label>
+                    <input pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="points lexend width-25" [(ngModel)]="ministrant.email" [ngModelOptions]="{standalone: true}" #email="ngModel" name="email" *ngIf="ministrant.email">
+                    <button class="email-set audiowide" *ngIf="!ministrant.email">Przypisz</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <div class="duties">
+
+    </div>
+</div>

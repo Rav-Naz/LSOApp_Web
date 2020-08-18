@@ -24,6 +24,7 @@ import {registerLocaleData} from '@angular/common';
 import { CheckboxComponent } from './shared/checkbox/checkbox.component';
 import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.component';
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
+import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe-details.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -40,7 +41,8 @@ registerLocaleData(localePl);
     CheckboxStatusComponent,
     CheckboxComponent,
     NewAcolytheComponent,
-    PunctationComponent
+    PunctationComponent,
+    AcolytheDetailsComponent
   ],
   imports: [
     BrowserModule,

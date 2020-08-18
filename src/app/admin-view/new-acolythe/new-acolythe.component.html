@@ -17,9 +17,9 @@
         <div class="input-object">
             <label class="input-object-title audiowide">Stopień</label>
             <select class="input-object-description lexend select" (focus)="getFocus('3')" (blur)="lostFocus()" id="selection3" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel">
-      <option class="lexend">Wybierz stopień</option>
-      <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
-    </select>
+          <option class="lexend">Wybierz stopień</option>
+          <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
+        </select>
             <label class="alert" *ngIf="rank.touched && !isRankNotNull">Wybierz stopień</label>
         </div>
 

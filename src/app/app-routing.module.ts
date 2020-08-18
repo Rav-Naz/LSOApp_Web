@@ -1,3 +1,4 @@
+import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe-details.component';
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
 import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.component';
 import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path: 'acolythes-messages', component: AcolythesMessagesComponent, outlet: 'main'},
     {path: 'new-acolythe', component: NewAcolytheComponent, outlet: 'main'},
     {path: 'punctation', component: PunctationComponent, outlet: 'main'},
+    {path: 'acolythe-details/:id', component: AcolytheDetailsComponent, outlet: 'main'},
     // {path: '**', redirectTo: '/mass'},
   ]},
   {path: '**', redirectTo: '/login'},
