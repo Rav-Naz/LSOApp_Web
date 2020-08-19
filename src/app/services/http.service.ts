@@ -155,12 +155,12 @@ export class HttpService {
     });
   }
 
-  //PRZYPOMNIENIE HASŁA
+  // PRZYPOMNIENIE HASŁA
   async przypomnij(email: string) {
     return new Promise<number>(resolve => {
 
-      this.http.post(this.url + '/remind', { email: email, smart: this.smart }, { headers: this.headers }).subscribe(res => {
-        let response = JSON.parse(JSON.stringify(res));
+      this.http.post(this.url + '/remind', { email, smart: this.smart }, { headers: this.headers }).subscribe(res => {
+        const response = JSON.parse(JSON.stringify(res));
         resolve(response.changedRows);
       }, err => {
         resolve(0);
@@ -191,16 +191,16 @@ export class HttpService {
     });
   }
 
-  //AKTUALIZACJA PUNKTÓW
+  // AKTUALIZACJA PUNKTÓW
   async aktualizacjaPunktow(punkty_dod_sluzba: number, punkty_uj_sluzba: number, punkty_dodatkowe: number, punkty_nabozenstwo: number, punkty_dod_zbiorka: number, punkty_uj_zbiorka: number) {
     return new Promise<any>(resolve => {
-      this.http.post(this.url + '/update_points', { punkty_dod_sluzba: punkty_dod_sluzba, punkty_uj_sluzba: punkty_uj_sluzba, punkty_dodatkowe: punkty_dodatkowe, punkty_nabozenstwo: punkty_nabozenstwo, punkty_dod_zbiorka: punkty_dod_zbiorka, punkty_uj_zbiorka: punkty_uj_zbiorka, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+      this.http.post(this.url + '/update_points', { punkty_dod_sluzba, punkty_uj_sluzba, punkty_dodatkowe, punkty_nabozenstwo, punkty_dod_zbiorka, punkty_uj_zbiorka, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
         if (res.hasOwnProperty('insertId')) {
           this.pobierzParafie().then(res => {
             resolve(res);
           });
         }
-        else if (res === "You have not permission to get the data") {
+        else if (res === 'You have not permission to get the data') {
           resolve(404);
         }
         else {
@@ -311,22 +311,74 @@ export class HttpService {
     });
   }
 
-  //DODAWANIE NOWEGO MINISTRANTA
+  // DODAWANIE NOWEGO MINISTRANTA
   async nowyMinistrant(stopien: number, imie: string, nazwisko: string, email: string) {
     return new Promise<number>(resolve => {
 
-      this.http.post(this.url + '/new_user', { id_parafii: this.id_parafii, stopien: stopien, imie: imie, nazwisko: nazwisko, email: email, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+      this.http.post(this.url + '/new_user', { id_parafii: this.id_parafii, stopien, imie, nazwisko, email, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
         if (res.hasOwnProperty('insertId')) {
           resolve(1);
         }
-        else if (res === "You have not permission to get the data") {
+        else if (res === 'You have not permission to get the data') {
           resolve(404);
         }
         else if (res.hasOwnProperty('code')) {
-          let code = JSON.parse(JSON.stringify(res));
+          const code = JSON.parse(JSON.stringify(res));
           if (code.code === 'ER_DUP_ENTRY') {
             resolve(2);
           }
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
+  // AKTYWACJA MINISTRANTA
+  async aktywacjaMinistranta(email: string, id_user: number) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/activate_user', {
+        email, id_user, id_parafii: this.id_parafii,
+        smart: this.smart, jwt: this.JWT
+      }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(1);
+        }
+        else if (res.hasOwnProperty('code')) {
+          const code = JSON.parse(JSON.stringify(res));
+          if (code.code === 'ER_DUP_ENTRY') {
+            resolve(2);
+          }
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
+  // USUWANIE KONTA MINISTRANTA
+  async usunKontoMinistranta(id_user: number) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/delete_user_account_admin', {
+        id_user, id_parafii: this.id_parafii, smart: this.smart,
+        jwt: this.JWT
+      }, { headers: this.headers }).subscribe(res => {
+        if (res === 'zakonczono') {
+          resolve(1);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
         }
         else {
           resolve(0);
@@ -352,6 +404,21 @@ export class HttpService {
     });
   }
 
+  //POBIERANIE DYŻURÓW DLA DANEGO MINISTRANTA
+  async pobierzDyzuryDlaMinistranta(id_user: number, stopien: number) {
+    return new Promise<Array<Wydarzenie>>(resolve => {
+
+      this.http.post(this.url + '/user_duty', { id_user: id_user, stopien: stopien, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res === "You have not permission to get the data") {
+          resolve(JSON.parse(JSON.stringify(null)));
+        }
+        else {
+          resolve(JSON.parse(JSON.stringify(res)));
+        }
+      });
+    });
+  }
+
   // POBIERANIE WYDARZEŃ NA DANY DZIEŃ
   async pobierzWydarzeniaNaDanyDzien(dzien: number, data_dokladna: string) {
     return new Promise<Array<Wydarzenie>>(resolve => {
@@ -362,6 +429,20 @@ export class HttpService {
       }, { headers: this.headers }).subscribe(res => {
         if (res === 'You have not permission to get the data') {
           resolve(null);
+          return;
+        }
+        resolve(JSON.parse(JSON.stringify(res)));
+      });
+    });
+  }
+
+  //POBIERANIE WSZYSTKICH WYDARZEŃ
+  async pobierzWszystkieWydarzenia() {
+    return new Promise<Array<Wydarzenie>>(resolve => {
+
+      this.http.post(this.url + '/all_events', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res === "You have not permission to get the data") {
+          resolve(JSON.parse(JSON.stringify(null)));
           return;
         }
         resolve(JSON.parse(JSON.stringify(res)));

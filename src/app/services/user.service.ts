@@ -26,7 +26,7 @@ export class UserService {
   }
 
   get UserID() {
-    return this.user.id_user;
+    return this.user ? this.user.id_user : null;
   }
 
   async zmianaOpiekuna(bool: boolean) {

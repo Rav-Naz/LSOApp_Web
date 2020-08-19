@@ -45,4 +45,16 @@ export class WydarzeniaService {
       });
     });
   }
+
+  wszystkieWydarzeniaWDyzurach() {
+    return new Promise<number>((resolve) => {
+      this.http.pobierzWszystkieWydarzenia().then(res => {
+        if (res === null) {
+          resolve(404);
+        }
+        this.wydarzeniaDyzury.next(res);
+        resolve(1);
+      });
+    });
+  }
 }

@@ -1,9 +1,9 @@
 <div class="container">
     <form #newDetailsForm="ngForm" class="details">
         <div class="user-name">
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
             <label *ngIf="!name.valid && name.touched">To pole jest wypełnione nieprawidłowo</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
             <label *ngIf="!lastName.valid && lastName.touched">To pole jest wypełnione nieprawidłowo</label>
         </div>
         <div class="user-details">
@@ -11,16 +11,16 @@
             <div class="detail-box">
                 <label class="description">Punkty</label>
                 <div class="point-box">
-                    <button class="point-btn icon" (click)="zmienPunkty(1)">&#xe072;</button>
-                    <input type="number" class="points lexend" [(ngModel)]="ministrant.punkty" [ngModelOptions]="{standalone: false}" #points="ngModel" name="points">
-                    <button class="point-btn icon" (click)="zmienPunkty(-1)">&#xe073;</button>
+                    <button class="point-btn icon" (click)="zmienPunkty(1)" [disabled]="ministrant.id_user === 0">&#xe072;</button>
+                    <input type="number" class="points lexend margin-0-1" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.punkty" [ngModelOptions]="{standalone: false}" #points="ngModel" name="points">
+                    <button class="point-btn icon" (click)="zmienPunkty(-1)" [disabled]="ministrant.id_user === 0">&#xe073;</button>
                 </div>
             </div>
 
             <!-- Stopień -->
             <div class="detail-box">
                 <label class="description">Stopień</label>
-                <select class="points lexend width-25" (focus)="getFocus('1')" (blur)="lostFocus()" id="selection1" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
+                <select class="points lexend width-25" [disabled]="ministrant.id_user === 0" (focus)="getFocus('1')" (blur)="lostFocus()" id="selection1" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
                   <option class="lexend">Wybierz stopień</option>
                   <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
                 </select>
@@ -30,14 +30,52 @@
             <div class="detail-box flex-column">
                 <div class="flex-row">
                     <label class="description">Podpięte konto</label>
-                    <input pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="points lexend width-25" [(ngModel)]="ministrant.email" [ngModelOptions]="{standalone: true}" #email="ngModel" name="email" *ngIf="ministrant.email">
-                    <button class="email-set audiowide" *ngIf="!ministrant.email">Przypisz</button>
+                    <div class="flex-column width-25" *ngIf="ministrant.email || przypisz">
+                        <ng-container *ngIf="przypisz">
+                            <input placeholder="Wpisz e-mail ministranta" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="points lexend width-25" [(ngModel)]="userEmail" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email">
+                            <label class="alert" *ngIf="email && !email.valid && email.touched">Wpisz poprawny adres e-mail</label>
+                            <div class="center">
+                                <button class="email-set audiowide margin-0-1" [disabled]="isEmailsSame || !email.valid" (click)="zapiszEmail()">Zapisz</button>
+                                <button class="email-set audiowide back" (click)="przypisz = false; userEmail = null">Anuluj</button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="ministrant.email && !przypisz">
+                            <label class="detail">{{ministrant.email}}</label>
+                            <button class="email-set audiowide" (click)="usun()" [disabled]="ministrant.id_user === 0">Usuń dostęp do konta</button>
+                        </ng-container>
+                        <label class="description" *ngIf="ministrant.email !== null && ministrant.aktywny === 0">Link aktywacyjny został wysłany na podany adres email. Jeśli przez dłuższy czas ministrant nie otrzymał wiadomości, należy sprawdzić zakładkę 'SPAM'.</label>
+                    </div>
+                    <button class="email-set audiowide margin0" [disabled]="ministrant.id_user === 0" *ngIf="!ministrant.email && !przypisz" (click)="przypisz = true">Przypisz</button>
                 </div>
+            </div>
+
+            <!-- Dane -->
+            <div class="detail-box" *ngIf="ministrant.ulica || (ministrant.kod_pocztowy && ministrant.miasto) || ministrant.telefon">
+                <label class="description">Dane personalne</label>
+                <div class="flex-column">
+                    <label class="detail" *ngIf="ministrant.ulica">ul. {{ministrant.ulica}}</label>
+                    <label class="detail" *ngIf="ministrant.kod_pocztowy && ministrant.miasto">{{ministrant.kod_pocztowy + ' ' + ministrant.miasto}}</label>
+                    <label class="detail" *ngIf="ministrant.telefon">{{ministrant.telefon}}</label>
+                </div>
+            </div>
+
+            <!-- Admin -->
+            <div class="detail-box" *ngIf="this.ministrant.id_user !== userService.UserID && this.ministrant.aktywny === 1">
+                <label class="description">Prawa administratora</label>
+                <app-checkbox [status]="ministrant.admin" class="checkbox" (checkStatus)="ministrant.admin = !ministrant.admin"></app-checkbox>
             </div>
 
         </div>
     </form>
     <div class="duties">
-
+        <div class="container-duty">
+            <label class="title audiowide">Dyżury</label>
+            <div class="container-white">
+                <div class="weekday-container" *ngFor="let weekday of nazwyDni, let i = index">
+                    <app-checkbox-status class="checkbox-status" [status]="dni[i]" [trzyStany]="false"></app-checkbox-status>
+                    <label>{{weekday}}</label>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

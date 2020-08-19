@@ -142,6 +142,22 @@ export class ParafiaService {
     });
   }
 
+  async usunKontoMinistanta(id_user:number)
+    {
+        return new Promise<number>((resolve) => {
+            this.http.usunKontoMinistranta(id_user).then(res => {
+                if(res === 404)
+                {
+                    resolve(404);
+                    return;
+                }
+                this.WybranyMinistrant(id_user).then(() => {
+                    resolve(res);
+                });
+            });
+        });
+    }
+
   nowaObecnosc(id_wydarzenia: number, id_user: number, data: Date, start: number, typ: number) // Wykorzystanie: obecnosc
   {
     const ob: Obecnosc = {
@@ -211,6 +227,20 @@ export class ParafiaService {
       });
     });
   }
+
+  wyszukajDyzury(id_user: number) { //Wykorzystanie: ministrant-dyzury, ministranci-szczegoly
+    return new Promise<number>(resolve => {
+        this.http.pobierzDyzuryDlaMinistranta(id_user, null).then(res => {
+            if(res === null)
+            {
+                resolve(404)
+                return
+            }
+            this.dyzuryMinistranta.next(res);
+            resolve(1);
+        })
+    })
+}
 
   dyzurDoWydarzenia(id_wydarzenia: number, typ?: number) { // Wykorzystanie: obecnosc
     return new Promise<number>((resolve) => {
