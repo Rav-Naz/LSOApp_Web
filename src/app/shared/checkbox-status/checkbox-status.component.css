@@ -3,7 +3,6 @@
 .checkbox:visited {
     width: 100%;
     height: 100%;
-    border: .2rem solid white;
     color: white;
     background: transparent;
     border-radius: .5rem;
@@ -13,6 +12,13 @@
     cursor: pointer;
     margin: 0;
     padding: 0;
+}
+
+.checkbox:disabled {
+    background: linear-gradient(to right bottom, #a0a0a0, #7c7c7c);
+    color: #505050;
+    border: none;
+    cursor: not-allowed;
 }
 
 .checkbox:focus {
@@ -31,4 +37,12 @@
 .nieobecny {
     background: linear-gradient(to bottom, #e71e25, #720e11);
     border: none;
+}
+
+.black-border {
+    border: .2rem solid black;
+}
+
+.white-border {
+    border: .2rem solid white;
 }

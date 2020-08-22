@@ -168,23 +168,6 @@
     padding: 1rem;
 }
 
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #282828;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #505050;
-    border-radius: .3rem;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #7c7c7c;
-}
-
 .acolythes {
     grid-column: 1;
     height: 100%;

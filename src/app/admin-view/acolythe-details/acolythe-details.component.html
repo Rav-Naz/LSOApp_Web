@@ -1,9 +1,9 @@
 <div class="container">
     <form #newDetailsForm="ngForm" class="details">
         <div class="user-name">
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
             <label *ngIf="!name.valid && name.touched">To pole jest wypełnione nieprawidłowo</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
             <label *ngIf="!lastName.valid && lastName.touched">To pole jest wypełnione nieprawidłowo</label>
         </div>
         <div class="user-details">
@@ -20,7 +20,7 @@
             <!-- Stopień -->
             <div class="detail-box">
                 <label class="description">Stopień</label>
-                <select class="points lexend width-25" [disabled]="ministrant.id_user === 0" (focus)="getFocus('1')" (blur)="lostFocus()" id="selection1" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
+                <select class="points lexend width-25" [disabled]="ministrant.id_user === 0" (focus)="getFocus()" (blur)="lostFocus()" id="selectionx" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
                   <option class="lexend">Wybierz stopień</option>
                   <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
                 </select>
@@ -71,11 +71,19 @@
         <div class="container-duty">
             <label class="title audiowide">Dyżury</label>
             <div class="container-white">
-                <div class="weekday-container" *ngFor="let weekday of nazwyDni, let i = index">
-                    <app-checkbox-status class="checkbox-status" [status]="dni[i]" [trzyStany]="false"></app-checkbox-status>
-                    <label>{{weekday}}</label>
-                </div>
+                <form class="weekday-container" *ngFor="let weekday of nazwyDni, let i = index">
+                    <app-checkbox-status [disabled]="wyborGodziny(i).length === 0" class="checkbox-status" [czarny]="true" [status]="dni[i] ? 1 : 2" [trzyStany]="false" (checkStatus)="zmianaCheckboxa(i,$event)"></app-checkbox-status>
+                    <label class="day-name">{{weekday}}</label>
+                    <select class="points lexend width-8" [id]="'selection'+i" [disabled]="!dni[i]" name="dayx" (change)="chooseEvent(i)">
+                      <option class="lexend" *ngIf="!dni[i]">--:--</option>
+                      <option *ngFor="let event of wyborGodziny(i)" [value]="event" class="lexend">{{event.godzina | date: 'HH:mm'}}</option>
+                    </select>
+                </form>
             </div>
         </div>
+    </div>
+    <div class="confirmation-panel">
+        <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
+        <button class="navigation-button audiowide" [disabled]="!zmiana" (click)="zapisz()">Zapisz</button>
     </div>
 </div>

@@ -14,6 +14,10 @@ export class CheckboxStatusComponent {
 
   @Input() trzyStany = true;
 
+  @Input() czarny = false;
+
+  @Input() disabled = false;
+
   zmien()
   {
     if (this.status === 1 && this.trzyStany)

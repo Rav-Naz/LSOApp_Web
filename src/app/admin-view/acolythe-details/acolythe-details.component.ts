@@ -4,19 +4,18 @@ import { HttpService } from './../../services/http.service';
 import { UiService } from './../../services/ui.service';
 import { rank } from './../../models/lists.model';
 import { ParafiaService } from './../../services/parafia.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
 import { User } from 'src/app/models/user.model';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-acolythe-details',
   templateUrl: './acolythe-details.component.html',
   styleUrls: ['./acolythe-details.component.css']
 })
-export class AcolytheDetailsComponent implements OnInit {
+export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
   public acolytheId = null;
   zmiana: boolean;
@@ -36,8 +35,8 @@ export class AcolytheDetailsComponent implements OnInit {
   nazwyDni = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
   dni = [false, false, false, false, false, false, false];
 
-  wydarzeniaMinistranta: Array<Wydarzenie>;
-  stareWydarzeniaMinistranta: Array<Wydarzenie>;
+  wydarzeniaMinistranta: Array<Wydarzenie> = [null, null, null, null, null, null, null];
+  stareWydarzeniaMinistranta: Array<Wydarzenie> = [null, null, null, null, null, null, null];
 
   wszystkieWydarzenia: Array<Wydarzenie> = [];
 
@@ -45,12 +44,12 @@ export class AcolytheDetailsComponent implements OnInit {
   wydarzeniaSub: Subscription;
 
   constructor(private route: ActivatedRoute, private parafiaService: ParafiaService,
-    private location: Location, private ui: UiService, private http: HttpService, public userService: UserService,
+    private router: Router, private ui: UiService, private http: HttpService, public userService: UserService,
     private wydarzeniaService: WydarzeniaService) { }
 
   ngOnInit(): void {
     this.acolytheId = this.route.snapshot.paramMap.get('id');
-
+    this.parafiaService.aktualnyMinistrantId = this.acolytheId;
     this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
       if (res === 0) {
         // this.ui.zmienStan(5,true)
@@ -61,7 +60,7 @@ export class AcolytheDetailsComponent implements OnInit {
         // this.ui.zmienStan(1,false)
         // },1000)
         // this.tabIndexService.nowyOutlet(4, 'ministranci')
-        this.location.back();
+        this.powrot();
         return;
       }
     });
@@ -78,7 +77,7 @@ export class AcolytheDetailsComponent implements OnInit {
     // Wydarzenia
     this.wydarzeniaService.wszystkieWydarzeniaWDyzurach().then(res => {
 
-      this.parafiaService.wyszukajDyzury(this.parafiaService.aktualnyMinistrantId);
+      this.parafiaService.wyszukajDyzury(this.acolytheId);
 
       this.wydarzeniaSub = this.wydarzeniaService.WydarzeniaDyzurySub.subscribe(lista => {
         if (lista !== null) {
@@ -98,11 +97,20 @@ export class AcolytheDetailsComponent implements OnInit {
         dyzury = lista_dyzurow;
 
         for (let index = 0; index < 7; index++) {
-          let c = dyzury.filter(dyzur => dyzur.dzien_tygodnia === index)[0];
+          const c = dyzury.filter(dyzur => dyzur.dzien_tygodnia === index)[0];
           if (c !== undefined) {
             this.wydarzeniaMinistranta[index] = c;
             this.stareWydarzeniaMinistranta[index] = c;
             this.dni[index] = true;
+
+            const h = this.godzina(index);
+            // console.log(this.wydarzeniaMinistranta)
+            if (h !== '--:--') {
+              const eventIndex = this.wyborGodziny(index).indexOf(this.wszystkieWydarzenia.filter(wyd =>
+                wyd.dzien_tygodnia === index && new Date(wyd.godzina).toString().slice(16, 21) === h)[0]);
+
+              this.setSelectionOption(index, eventIndex);
+            }
           }
         }
         // this.ui.zmienStan(6, false)
@@ -113,10 +121,6 @@ export class AcolytheDetailsComponent implements OnInit {
   zmienPunkty(punkty: number) {
     this.zmiana = true;
     this.ministrant.punkty += punkty;
-  }
-
-  getFocus(name: string) {
-    document.getElementById(`selection${name}`).style.color = '#ffffff';
   }
 
   zapiszEmail() {
@@ -179,37 +183,104 @@ export class AcolytheDetailsComponent implements OnInit {
 
   zmianaCheckboxa(index: number, event) {
     this.dni[index] = event;
-    if (event === false) {
+    if (event === null) {
       this.zmiana = true;
       this.wydarzeniaMinistranta[index] = null;
+      this.setSelectionOption(index, 0);
     }
   }
 
   wyborGodziny(dzien_tygodnia: number) {
-    return this.wszystkieWydarzenia.filter(dzien => dzien.dzien_tygodnia === dzien_tygodnia && dzien.typ === 0).sort((a,b) => {
-      if (new Date(a.godzina) < new Date(b.godzina)) {
+    return this.wszystkieWydarzenia.filter(dzien => dzien.dzien_tygodnia === dzien_tygodnia && dzien.typ === 0).sort((a, b) => {
+      if (new Date(a.godzina) > new Date(b.godzina)) {
         return 1;
       }
-      if (new Date(a.godzina) > new Date(b.godzina)) {
+      if (new Date(a.godzina) < new Date(b.godzina)) {
         return -1;
       }
       return 0;
     });
   }
 
+  godzina(index: number) {
+    if (this.wydarzeniaMinistranta[index] === null) {
+      return '--:--';
+    }
+    else {
+      return new Date(this.wydarzeniaMinistranta[index].godzina).toString().slice(16, 21);
+    }
+  }
+
+  setSelectionOption(id: number, optionId: number) {
+    const x = document.getElementById(`selection${id}`) as HTMLSelectElement;
+    setTimeout(() => {
+      x.options.selectedIndex = optionId;
+    }, 10);
+  }
+
+  getSelectionOptionId(id: number) {
+    const x = document.getElementById(`selection${id}`) as HTMLSelectElement;
+    return x.options.selectedIndex;
+  }
+
+  chooseEvent(index: number) {
+    this.wydarzeniaMinistranta[index] = this.wyborGodziny(index)[this.getSelectionOptionId(index)];
+    console.log(this.wydarzeniaMinistranta);
+  }
+
+  getFocus() {
+    document.getElementById(`selectionx`).style.color = '#ffffff';
+  }
+
   lostFocus() {
     const grey = '#7c7c7c';
     const white = '#ffffff';
+
     if (this.isRankNotNull) {
-      document.getElementById('selection1').style.color = white;
+      document.getElementById('selectionx').style.color = white;
     } else {
-      document.getElementById('selection1').style.color = grey;
+      document.getElementById('selectionx').style.color = grey;
     }
+  }
+
+  zapisz() {
+    // if (this.isRankNotNull)
+    // {
+    //   return;
+    // }
+    // console.log('asd
+    this.parafiaService.updateMinistranta(this.ministrant).then(res => {
+      if (res === 1) {
+        this.parafiaService.zapiszDyzury(this.wydarzeniaMinistranta, this.stareWydarzeniaMinistranta).then(res => {
+          if (res === 1) {
+            setTimeout(() => {
+              this.ui.showFeedback('succes', 'Zapisano dyżury', 2);
+            }, 400);
+            // this.ui.zmienStan(5,false)
+            // this.ui.zmienStan(4,false)
+            this.zmiana = false;
+          }
+          else {
+            // this.ui.zmienStan(4,false)
+            // this.ui.zmienStan(5,false)
+            this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+          }
+        });
+
+      }
+      else {
+        this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+        this.zmiana = true;
+      }
+
+    });
+    // this.ui.zmienStan(5, true);
+    // this.ui.zmienStan(4, true);
   }
 
   powrot() {
     // this.tabIndexService.nowyOutlet(4, 'ministrant-szczegoly');
-    this.location.back();
+    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
   }
 
   get isEmailsSame() {
@@ -218,5 +289,11 @@ export class AcolytheDetailsComponent implements OnInit {
 
   get isRankNotNull() {
     return this._rank !== 'Wybierz stopień';
+  }
+
+  ngOnDestroy(): void {
+    this.podgladMinistranta.unsubscribe();
+    this.dyzurSub.unsubscribe();
+    this.wydarzeniaSub.unsubscribe();
   }
 }
