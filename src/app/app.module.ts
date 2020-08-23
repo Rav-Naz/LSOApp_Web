@@ -25,6 +25,7 @@ import { CheckboxComponent } from './shared/checkbox/checkbox.component';
 import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.component';
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
 import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe-details.component';
+import { EditEventsComponent } from './admin-view/edit-events/edit-events.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -42,7 +43,8 @@ registerLocaleData(localePl);
     CheckboxComponent,
     NewAcolytheComponent,
     PunctationComponent,
-    AcolytheDetailsComponent
+    AcolytheDetailsComponent,
+    EditEventsComponent
   ],
   imports: [
     BrowserModule,

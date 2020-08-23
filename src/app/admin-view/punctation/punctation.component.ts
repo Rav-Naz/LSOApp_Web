@@ -16,7 +16,7 @@ export class PunctationComponent implements OnInit {
   zapisywanie = false;
 
   constructor(private router: Router, private parafiaService: ParafiaService,
-    private http: HttpService, private ui: UiService, private location: Location) { }
+    private http: HttpService, private ui: UiService) { }
 
   pktZaObecnoscSluzba = 0;
   pktZaNieobecnoscSluzba = 0;
@@ -79,7 +79,7 @@ export class PunctationComponent implements OnInit {
   }
 
   anuluj() {
-    this.location.back();
+    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
   }
 
   get czyZmienione() {

@@ -62,6 +62,16 @@ export class ParafiaService {
     return this.podgladanyMinistrant.asObservable();
   }
 
+  SetDyzuryMinistranta(list: Array<Wydarzenie>)
+  {
+    this.dyzuryMinistranta.next(list);
+  }
+
+  SetPodgladMinistranta(user: User)
+  {
+    this.podgladanyMinistrant.next(user);
+  }
+
   async pobierzParafie() { // wykorzystanie: acolythes-messages
     return new Promise<number>(resolve => {
       this.http.pobierzParafie().then(async res => {

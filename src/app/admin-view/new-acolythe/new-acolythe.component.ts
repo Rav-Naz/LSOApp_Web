@@ -1,9 +1,8 @@
+import { Router } from '@angular/router';
 import { UiService } from './../../services/ui.service';
 import { ParafiaService } from './../../services/parafia.service';
 import { rank } from './../../models/lists.model';
 import { Component } from '@angular/core';
-import {Location} from '@angular/common';
-
 @Component({
   selector: 'app-new-acolythe',
   templateUrl: './new-acolythe.component.html',
@@ -19,7 +18,7 @@ export class NewAcolytheComponent {
   public _rank = 'Wybierz stopień';
   public zapisywanie = false;
 
-  constructor(private parafiaService: ParafiaService, private ui: UiService, private location: Location) { }
+  constructor(private parafiaService: ParafiaService, private ui: UiService, private router: Router) { }
 
   getFocus(name: string) {
     document.getElementById(`selection${name}`).style.color = '#ffffff';
@@ -76,6 +75,6 @@ export class NewAcolytheComponent {
 
   anuluj()
   {
-    this.location.back();
+    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
   }
 }

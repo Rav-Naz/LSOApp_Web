@@ -1,9 +1,11 @@
 <div class="container">
     <form #newDetailsForm="ngForm" class="details">
         <div class="user-name">
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel"
+                name="name">
             <label *ngIf="!name.valid && name.touched">To pole jest wypełnione nieprawidłowo</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel"
+                name="lastName">
             <label *ngIf="!lastName.valid && lastName.touched">To pole jest wypełnione nieprawidłowo</label>
         </div>
         <div class="user-details">
@@ -12,7 +14,7 @@
                 <label class="description">Punkty</label>
                 <div class="point-box">
                     <button class="point-btn icon" (click)="zmienPunkty(1)" [disabled]="ministrant.id_user === 0">&#xe072;</button>
-                    <input type="number" class="points lexend margin-0-1" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.punkty" [ngModelOptions]="{standalone: false}" #points="ngModel" name="points">
+                    <input type="number" class="points lexend margin-0-1 width-8" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.punkty" [ngModelOptions]="{standalone: false}" #points="ngModel" name="points">
                     <button class="point-btn icon" (click)="zmienPunkty(-1)" [disabled]="ministrant.id_user === 0">&#xe073;</button>
                 </div>
             </div>
@@ -20,10 +22,13 @@
             <!-- Stopień -->
             <div class="detail-box">
                 <label class="description">Stopień</label>
-                <select class="points lexend width-25" [disabled]="ministrant.id_user === 0" (focus)="getFocus()" (blur)="lostFocus()" id="selectionx" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
-                  <option class="lexend">Wybierz stopień</option>
-                  <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
-                </select>
+                <div class="flex-column width-25">
+                    <select class="points lexend" [disabled]="ministrant.id_user === 0" (focus)="getFocus()" (blur)="lostFocus()" id="selectionx" (change)="zmiana = true" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
+                    <option class="lexend">Wybierz stopień</option>
+                    <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
+                  </select>
+                    <label class="alert" *ngIf="!isRankNotNull && rank.touched">Wybierz stopień</label>
+                </div>
             </div>
 
             <!-- Konto -->
@@ -62,7 +67,7 @@
             <!-- Admin -->
             <div class="detail-box" *ngIf="this.ministrant.id_user !== userService.UserID && this.ministrant.aktywny === 1">
                 <label class="description">Prawa administratora</label>
-                <app-checkbox [status]="ministrant.admin" class="checkbox" (checkStatus)="ministrant.admin = !ministrant.admin"></app-checkbox>
+                <app-checkbox [status]="ministrant.admin" class="checkbox" (checkStatus)="ministrant.admin = !ministrant.admin; zmiana = true"></app-checkbox>
             </div>
 
         </div>
@@ -84,6 +89,6 @@
     </div>
     <div class="confirmation-panel">
         <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
-        <button class="navigation-button audiowide" [disabled]="!zmiana" (click)="zapisz()">Zapisz</button>
+        <button class="navigation-button audiowide" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull" (click)="zapisz()">Zapisz</button>
     </div>
 </div>

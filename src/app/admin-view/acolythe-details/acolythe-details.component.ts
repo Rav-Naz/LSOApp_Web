@@ -18,7 +18,7 @@ import { User } from 'src/app/models/user.model';
 export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
   public acolytheId = null;
-  zmiana: boolean;
+  zmiana: boolean = false;
   public _rank = 'Wybierz stopień';
   public przypisz = false;
   ranks = rank;
@@ -48,6 +48,8 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     private wydarzeniaService: WydarzeniaService) { }
 
   ngOnInit(): void {
+    this.parafiaService.SetDyzuryMinistranta(null);
+    this.parafiaService.SetPodgladMinistranta(null);
     this.acolytheId = this.route.snapshot.paramMap.get('id');
     this.parafiaService.aktualnyMinistrantId = this.acolytheId;
     this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
@@ -76,18 +78,19 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
     // Wydarzenia
     this.wydarzeniaService.wszystkieWydarzeniaWDyzurach().then(res => {
-
       this.parafiaService.wyszukajDyzury(this.acolytheId);
 
       this.wydarzeniaSub = this.wydarzeniaService.WydarzeniaDyzurySub.subscribe(lista => {
         if (lista !== null) {
           this.wszystkieWydarzenia = lista;
         }
+        // console.log(this.wydarzeniaMinistranta, this.dni)
       });
 
 
       this.dyzurSub = this.parafiaService.DyzuryMinistranta.subscribe(lista_dyzurow => {
         let dyzury: Array<Wydarzenie> = [];
+        this.dni = [false, false, false, false, false, false, false];
         this.wydarzeniaMinistranta = [null, null, null, null, null, null, null];
         this.stareWydarzeniaMinistranta = [null, null, null, null, null, null, null];
         if (!lista_dyzurow || lista_dyzurow.length === 0) {
@@ -112,7 +115,11 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
               this.setSelectionOption(index, eventIndex);
             }
           }
+          else {
+            this.setSelectionOption(index, 0);
+          }
         }
+        // console.log(this.wydarzeniaMinistranta)
         // this.ui.zmienStan(6, false)
       });
     });
@@ -224,8 +231,8 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   chooseEvent(index: number) {
+    this.zmiana = true;
     this.wydarzeniaMinistranta[index] = this.wyborGodziny(index)[this.getSelectionOptionId(index)];
-    console.log(this.wydarzeniaMinistranta);
   }
 
   getFocus() {
@@ -248,7 +255,10 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     // {
     //   return;
     // }
-    // console.log('asd
+    let rankx = this.ranks.indexOf(this._rank);
+    if (rankx === 11) { rankx = 12; }
+    if (rankx < 0) { return; }
+    this.ministrant.stopien = rankx;
     this.parafiaService.updateMinistranta(this.ministrant).then(res => {
       if (res === 1) {
         this.parafiaService.zapiszDyzury(this.wydarzeniaMinistranta, this.stareWydarzeniaMinistranta).then(res => {

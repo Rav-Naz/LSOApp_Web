@@ -50,9 +50,9 @@
 
         <div class="navigation-info">
             <label class="version row1">LSOApp {{userService.wersja}}</label>
-            <label class="navigation-button audiowide row1">Kontakt</label>
-            <label class="navigation-button audiowide row2">Informacje o aplikacji</label>
-            <label class="navigation-button audiowide row3">Regulamin i polityka prywatności</label>
+            <label class="navigation-button audiowide row1" (click)="openURL('https://lsoapp.pl/faq/')">FAQ</label>
+            <label class="navigation-button audiowide row2" (click)="openURL('https://lsoapp.pl/#contact')">Kontakt</label>
+            <label class="navigation-button audiowide row3" (click)="openURL('https://lsoapp.pl/polityka-prywatnosci/')">Regulamin i polityka prywatności</label>
         </div>
 
     </div>

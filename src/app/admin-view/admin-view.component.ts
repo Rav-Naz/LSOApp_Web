@@ -23,4 +23,9 @@ export class AdminViewComponent implements OnInit {
     });
   }
 
+  openURL(url: string)
+  {
+    window.open(url, '_blank');
+  }
+
 }
