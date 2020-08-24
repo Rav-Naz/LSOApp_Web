@@ -260,6 +260,10 @@
     background-color: #282828
 }
 
+.margin-right-1 {
+    margin-right: 1rem;
+}
+
 .col1 {
     grid-column: 1;
     justify-self: left;

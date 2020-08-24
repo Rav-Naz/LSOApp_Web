@@ -3,8 +3,8 @@ import { HttpService } from './../../services/http.service';
 import { ParafiaService } from './../../services/parafia.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Parafia } from 'src/app/models/parafia.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-punctation',
@@ -18,6 +18,7 @@ export class PunctationComponent implements OnInit {
   constructor(private router: Router, private parafiaService: ParafiaService,
     private http: HttpService, private ui: UiService) { }
 
+  punktySub: Subscription;
   pktZaObecnoscSluzba = 0;
   pktZaNieobecnoscSluzba = 0;
   pktZaDodatkowa = 0;
@@ -33,24 +34,16 @@ export class PunctationComponent implements OnInit {
   poczNabozenstwo = 0;
 
   ngOnInit(): void {
-    const o = this.parafiaService.parafia.punkty_dod_sluzba;
-
-    const n = this.parafiaService.parafia.punkty_uj_sluzba;
-
-    const d = this.parafiaService.parafia.punkty_dodatkowe;
-
-    const b = this.parafiaService.parafia.punkty_dod_zbiorka;
-
-    const z = this.parafiaService.parafia.punkty_uj_zbiorka;
-
-    const c = this.parafiaService.parafia.punkty_nabozenstwo;
-
-    this.pktZaObecnoscSluzba = this.poczObecnoscSluzba = o ? o.valueOf() : 0;
-    this.pktZaNieobecnoscSluzba = this.poczNieobecnoscSluzba = n ? n.valueOf() : 0;
-    this.pktZaDodatkowa = this.poczDodatkowa = d ? d.valueOf() : 0;
-    this.pktZaObecnoscZbiorka = this.poczObecnoscZbiorka = b ? b.valueOf() : 0;
-    this.pktZaNieobecnoscZbiorka = this.poczNieobecnoscZbiorka = z ? z.valueOf() : 0;
-    this.pktZaNabozenstwo = this.poczNabozenstwo = c ? c.valueOf() : 0;
+    this.punktySub = this.parafiaService.ParafiaObs.subscribe((parish) => {
+      if (parish) {
+        this.pktZaObecnoscSluzba = this.poczObecnoscSluzba = parish.punkty_dod_sluzba ? parish.punkty_dod_sluzba.valueOf() : 0;
+        this.pktZaNieobecnoscSluzba = this.poczNieobecnoscSluzba = parish.punkty_uj_sluzba ? parish.punkty_uj_sluzba.valueOf() : 0;
+        this.pktZaDodatkowa = this.poczDodatkowa = parish.punkty_dodatkowe ? parish.punkty_dodatkowe.valueOf() : 0;
+        this.pktZaObecnoscZbiorka = this.poczObecnoscZbiorka = parish.punkty_dod_zbiorka ? parish.punkty_dod_zbiorka.valueOf() : 0;
+        this.pktZaNieobecnoscZbiorka = this.poczNieobecnoscZbiorka = parish.punkty_uj_zbiorka ? parish.punkty_uj_zbiorka.valueOf() : 0;
+        this.pktZaNabozenstwo = this.poczNabozenstwo = parish.punkty_nabozenstwo ? parish.punkty_nabozenstwo.valueOf() : 0;
+      }
+    });
   }
 
   zapisz() {

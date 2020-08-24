@@ -37,6 +37,7 @@ export class EditEventsComponent implements OnInit {
   edycja = false;
 
   ngOnInit(): void {
+    this.wydarzeniaService.setWydarzeniaEdycja(null);
     this.rangi = this.rangi.concat(rank);
     this.wydarzeniaSub = this.wydarzeniaService.WydarzeniaEdycjaSub.subscribe((lista) => {
       this.wydarzeniaDnia = [];

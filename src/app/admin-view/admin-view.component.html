@@ -40,8 +40,8 @@
             <div class="navigation-section">
                 <label class="options-name">Konto parafii</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide">Usuń konto</label>
-                    <label class="navigation-button audiowide">Zmień dane parafii</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['delete-parish']}}]">Usuń konto</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['edit-parish-details']}}]">Zmień dane parafii</label>
                     <label class="navigation-button audiowide">Wyloguj się</label>
                 </div>
             </div>

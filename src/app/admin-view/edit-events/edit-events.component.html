@@ -7,7 +7,7 @@
                     <div class="event-list">
                         <label *ngIf="wybranyDzien === undefined">Wybierz dzień</label>
                         <div class="event" *ngFor="let event of wydarzeniaDnia, let i = index" [ngClass]="{'grey': i%2===0,'grey2': i === edytowanyIndex}">
-                            <button class="delete-message icon">&#xe08e;</button>
+                            <button class="delete-message icon" (click)="usun(event)">&#xe08e;</button>
                             <label class="width-30">{{event.data_dokladna == null ? 'Cykliczne' : event.data_dokladna.toString().slice(0,10)}}</label>
                             <label>{{event.godzina.toString() | date: 'HH:mm'}}</label>
                             <label class="typ" [ngClass]="{'mass': event.typ === 0,'unction': event.typ === 1,'meeting': event.typ === 2}"></label>

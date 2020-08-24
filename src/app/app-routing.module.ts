@@ -1,3 +1,5 @@
+import { EditParishDetailsComponent } from './admin-view/edit-parish-details/edit-parish-details.component';
+import { DeleteParishComponent } from './admin-view/delete-parish/delete-parish.component';
 import { EditEventsComponent } from './admin-view/edit-events/edit-events.component';
 import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe-details.component';
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
@@ -25,6 +27,8 @@ const routes: Routes = [
     {path: 'punctation', component: PunctationComponent, outlet: 'main'},
     {path: 'acolythe-details/:id', component: AcolytheDetailsComponent, outlet: 'main'},
     {path: 'edit-events', component: EditEventsComponent, outlet: 'main'},
+    {path: 'delete-parish', component: DeleteParishComponent, outlet: 'main'},
+    {path: 'edit-parish-details', component: EditParishDetailsComponent, outlet: 'main'}
     // {path: '**', redirectTo: '/mass'},
   ]},
   {path: '**', redirectTo: '/login'},

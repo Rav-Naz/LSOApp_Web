@@ -77,8 +77,8 @@ export class RegisterComponent {
 
   zarejestruj()
   {
-    let diocese_id = dioceses.indexOf(this._diocese);
-    let monastery_id = monasteries.indexOf(this._monastery);
+    const diocese_id = dioceses.indexOf(this._diocese);
+    const monastery_id = monasteries.indexOf(this._monastery);
     const rankx = this.ranks.indexOf(this._rank) + 9;
     this.httpService.rejestracja(this._parishName, diocese_id, this._city,
       monastery_id, rankx, this._name, this._lastName, this._email/*, this._hasloP*/).then((res) => {

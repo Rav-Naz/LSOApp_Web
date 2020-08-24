@@ -26,6 +26,8 @@ import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.com
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
 import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe-details.component';
 import { EditEventsComponent } from './admin-view/edit-events/edit-events.component';
+import { DeleteParishComponent } from './admin-view/delete-parish/delete-parish.component';
+import { EditParishDetailsComponent } from './admin-view/edit-parish-details/edit-parish-details.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -44,7 +46,9 @@ registerLocaleData(localePl);
     NewAcolytheComponent,
     PunctationComponent,
     AcolytheDetailsComponent,
-    EditEventsComponent
+    EditEventsComponent,
+    DeleteParishComponent,
+    EditParishDetailsComponent
   ],
   imports: [
     BrowserModule,

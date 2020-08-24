@@ -32,6 +32,11 @@ export class WydarzeniaService {
     return this.wydarzeniaEdycja.asObservable();
   }
 
+  setWydarzeniaEdycja(lista: Array<Wydarzenie>)
+  {
+    this.wydarzeniaEdycja.next(lista);
+  }
+
   dzisiejszeWydarzenia(dzien: number, data_dokladna: string) {// Wykorzystanie: wydarzeniaService (wydarzeniaWEdycji)
     return new Promise<number>((resolve) => {
       this.aktywnyDzien = dzien;

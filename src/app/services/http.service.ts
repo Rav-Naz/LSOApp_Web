@@ -191,6 +191,34 @@ export class HttpService {
     });
   }
 
+  // USUWANIE PARAFII
+  async usuwanieParafii(haslo: string) {
+
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/delete_parish', { id_user: this.id_user, id_parafii: this.id_parafii, haslo: sha512.sha512.hmac('mSf', haslo), smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+
+        if (res === 'zakonczono') {
+          resolve(1);
+        }
+        else if (res === 'niepoprawne') {
+          resolve(2);
+        }
+        else if (res === 'nieistnieje') {
+          resolve(3);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
   // AKTUALIZACJA PUNKTÓW
   async aktualizacjaPunktow(punkty_dod_sluzba: number, punkty_uj_sluzba: number, punkty_dodatkowe: number, punkty_nabozenstwo: number, punkty_dod_zbiorka: number, punkty_uj_zbiorka: number) {
     return new Promise<any>(resolve => {
@@ -269,6 +297,23 @@ export class HttpService {
         }, err => {
           resolve(0);
         });
+    });
+  }
+
+  //AKTUALIZACJA DANYCH PARAFII
+  async aktualizacjaDanychParafii(nazwa_parafii: string, id_diecezji: number, miasto: string, id_typu: number) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/update_parish', { nazwa_parafii: nazwa_parafii, id_diecezji: id_diecezji, miasto: miasto, id_typu: id_typu, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(1);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
     });
   }
 
