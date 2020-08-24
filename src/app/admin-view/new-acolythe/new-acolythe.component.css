@@ -1,7 +1,6 @@
 .container {
     width: 100%;
     height: 100%;
-    background-color: rgb(0, 0, 0);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 2rem 2rem 1fr 6rem;
@@ -10,13 +9,13 @@
 }
 
 .container-white {
-    width: 96%;
+    width: 100%;
     height: 98%;
     background-color: rgb(245, 245, 245);
     grid-row: 2/4;
     grid-column: 2/4;
     border-radius: 2rem;
-    margin: 2rem;
+    /* margin: 2rem; */
     padding: 2rem;
     display: flex;
     flex-direction: column;

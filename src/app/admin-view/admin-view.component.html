@@ -32,7 +32,7 @@
             <div class="navigation-section">
                 <label class="options-name">Wydarzenia</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide">Edytuj wydarzenia</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'main': ['edit-events']}}]">Edytuj wydarzenia</label>
                     <label class="navigation-button audiowide">Usuń wszystkie dyżury</label>
                 </div>
             </div>

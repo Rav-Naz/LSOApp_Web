@@ -1,1 +1,87 @@
-<p>edit-events works!</p>
+<div class="container">
+    <div class="flex-row">
+        <div class="all-events">
+            <label class="title audiowide">Wydarzenia</label>
+            <div class="container-white">
+                <div class="events-grid">
+                    <div class="event-list">
+                        <label *ngIf="wybranyDzien === undefined">Wybierz dzień</label>
+                        <div class="event" *ngFor="let event of wydarzeniaDnia, let i = index" [ngClass]="{'grey': i%2===0,'grey2': i === edytowanyIndex}">
+                            <button class="delete-message icon">&#xe08e;</button>
+                            <label class="width-30">{{event.data_dokladna == null ? 'Cykliczne' : event.data_dokladna.toString().slice(0,10)}}</label>
+                            <label>{{event.godzina.toString() | date: 'HH:mm'}}</label>
+                            <label class="typ" [ngClass]="{'mass': event.typ === 0,'unction': event.typ === 1,'meeting': event.typ === 2}"></label>
+                            <button class="delete-message icon" (click)="edytujWydarzenie(event, i)">&#xe03b;</button>
+                        </div>
+                    </div>
+                    <div class="day-list">
+                        <button class="day audiowide" *ngFor="let day of DzienTygodnia" [ngClass]="{wybrany: wybranyDzien === day}" (click)="zmienDzien(day)">
+                        {{dzienTygodnia(day)}}
+                      </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="all-events width-30" *ngIf="wybranyDzien !== undefined">
+            <label class="title audiowide">{{edycja ? 'Edytuj' : 'Dodaj nowe'}}</label>
+            <div class="container-white">
+                <form class="new-event">
+                    <div class="new-event-type">
+                        <label class="audiowide col-1-2">Typ wydarzenia</label>
+                        <button class="typ-choose" (click)="nowyTyp = 0; grupa = 'Wybierz grupę'" [ngClass]="{'grey2': nowyTyp === 0, 'col-1-2': edycja}" *ngIf="!edycja || (edycja && nowyTyp === 0)">
+                          <label class="lexend typ-choose-label">Msza Święta</label>
+                          <label class="typ mass"></label>
+                        </button>
+                        <button class="typ-choose" (click)="nowyTyp = 1; grupa = 'Wybierz grupę'" [ngClass]="{'grey2': nowyTyp === 1, 'col-1-2': edycja}" *ngIf="!edycja || (edycja && nowyTyp === 1)">
+                        <label class="lexend typ-choose-label">Nabożeństwo</label>
+                        <label class="typ unction"></label>
+                        </button>
+                        <button class="typ-choose" (click)="nowyTyp = 2" [ngClass]="{'grey2': nowyTyp === 2, 'col-1-2': edycja}" *ngIf="!edycja || (edycja && nowyTyp === 2)">
+                      <label class="lexend typ-choose-label">Zbiórka</label>
+                      <label class="typ meeting"></label>
+                      </button>
+                    </div>
+
+                    <div class="option-container">
+                        <label class="typ-choose-label audiowide">Godzina</label>
+                        <input required type="time" class="select lexend" placeholder="--:--" (focus)="getFocus('1')" (blur)="lostFocus('1')" id="selection1" [(ngModel)]="noweWydGodz" [ngModelOptions]="{standalone: false}" #hour="ngModel" name="hourx">
+                        <label class="alert" *ngIf="!hour.valid && hour.touched">Wybierz godzinę</label>
+                    </div>
+
+                    <div class="option-container" *ngIf="nowyTyp === 2">
+                        <label class="typ-choose-label audiowide">Grupa</label>
+                        <select class="select lexend" (focus)="getFocus('2')" (blur)="lostFocus('2')" id="selection2" [(ngModel)]="grupa" [ngModelOptions]="{standalone: true}" #rank="ngModel" name="rankx">
+                        <option class="lexend">Wybierz grupę</option>
+                        <option *ngFor="let rank of rangi" [value]="rank" class="lexend">{{rank}}</option>
+                      </select>
+                        <label class="alert" *ngIf="!isRankNotNull && rank.touched">Wybierz grupę</label>
+                    </div>
+
+                    <div class="option-container">
+                        <label class="typ-choose-label audiowide">Jednorazowe</label>
+                        <app-checkbox [status]="jednorazowe" class="checkbox" (checkStatus)="jednorazowe = !jednorazowe; this.dataDokladna = 'Wybierz datę'"></app-checkbox>
+                    </div>
+
+                    <div class="option-container" *ngIf="jednorazowe">
+                        <label class="typ-choose-label audiowide">Data dokładna</label>
+                        <select class="select lexend" (focus)="getFocus('3')" (blur)="lostFocus('3')" id="selection3" [(ngModel)]="dataDokladna" [ngModelOptions]="{standalone: true}" #data="ngModel" name="datex">
+                        <option class="lexend">Wybierz datę</option>
+                        <option *ngFor="let date of mozliwe_daty" [value]="date" class="lexend">{{date}}</option>
+                      </select>
+                        <label class="alert" *ngIf="!isDateNotNull && data.touched">Wybierz datę</label>
+                    </div>
+
+                </form>
+                <div class="confirmation-panel-2">
+                    <button class="navigation-button-2 back-black audiowide" *ngIf="edycja" (click)="clear()">Anuluj</button>
+                    <button class="navigation-button-2 audiowide" [disabled]="!isTypeNotNull || !isHourNotNull || (jednorazowe ? !isDateNotNull : false) || (nowyTyp === 2 ? !isRankNotNull : false)" (click)="dodaj()">{{edycja ? 'Zapisz' : 'Dodaj'}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="confirmation-panel">
+        <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
+        <button class="navigation-button audiowide" [disabled]="!zmiana" (click)="zapisz()">Zapisz</button>
+    </div>
+</div>

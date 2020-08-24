@@ -1,3 +1,4 @@
+import { EditEventsComponent } from './admin-view/edit-events/edit-events.component';
 import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe-details.component';
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
 import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
     {path: 'new-acolythe', component: NewAcolytheComponent, outlet: 'main'},
     {path: 'punctation', component: PunctationComponent, outlet: 'main'},
     {path: 'acolythe-details/:id', component: AcolytheDetailsComponent, outlet: 'main'},
+    {path: 'edit-events', component: EditEventsComponent, outlet: 'main'},
     // {path: '**', redirectTo: '/mass'},
   ]},
   {path: '**', redirectTo: '/login'},

@@ -15,7 +15,10 @@ export class AdminViewComponent implements OnInit {
   ngOnInit(): void {
     this.userService.pobierzUsera().then(res => {
       this.parafiaService.pobierzParafie().then(res2 => {
-        // this.router.navigateByUrl('/admin-view/(main:acolythe-details/103)');
+        if(this.router.url === '/admin-view')
+        {
+          this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+        }
       });
     });
     this.parafiaService.pobierzMinistrantow().then(res => {
