@@ -1,0 +1,15 @@
+<div class="background" [style.visibility]="context ? 'visible' : 'hidden'">
+    <div class="grid-container">
+        <label class="warning-icon lexend">!</label>
+        <div class="context-grid-container">
+            <div class="context-container">
+                <label class="context">{{context}}</label>
+                <label class="context">Czy chcesz kontynuować?</label>
+            </div>
+            <div class="navigation-container">
+                <button class="navigation-button back audiowide" (click)="decide(false)">Anuluj</button>
+                <button class="navigation-button confirm audiowide" (click)="decide(true)">Kontynuuj</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="background" [style.visibility]="visible ? 'visible' : 'hidden'">
+    <div class="button-container">
+        <div class="title-container">
+            <label class="description audiowide">Zaloguj jako</label>
+            <button class="close-button icon" (click)="decide(undefined)">&#xe08c;</button>
+        </div>
+        <div class="flex-row">
+            <button class="choose-button" (click)="decide(false)">
+            <label class="icon fs-6">&#xe092;&#xA;</label>
+            <label class="audiowide">Ministrant</label>
+          </button>
+            <button class="choose-button" (click)="decide(true)">
+            <label class="icon fs-6">&#xe0fc;&#xA;</label>
+            <label class="audiowide">Opiekun</label>
+          </button>
+        </div>
+    </div>
+</div>

@@ -1,3 +1,4 @@
+import { ConfirmComponent } from './../shared/confirm/confirm.component';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -5,6 +6,11 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'
 })
 export class UiService {
+
+  private loading: Array<boolean> = [];
+
+  confirmComponent: ConfirmComponent;
+
 
   constructor(private toasterService: ToastrService) { }
 
@@ -24,5 +30,42 @@ export class UiService {
         this.toasterService.info(tresc, 'Sukces!', {timeOut: czas * 1000});
         break;
      }
+  }
+
+  setConfirmComponent(component: ConfirmComponent)
+  {
+    this.confirmComponent = component;
+  }
+
+  async wantToContinue(context: string)
+  {
+    return new Promise((resolve) => {
+      this.confirmComponent.awaitToDecision(context).then(res => {
+        resolve(res);
+      });
+    });
+  }
+
+  resetLoadingEvents()
+  {
+    this.loading = [];
+  }
+
+  addLoadingEvent()
+  {
+    this.loading.push(true);
+  }
+
+  removeLoadingEvent()
+  {
+    if (this.loading.length > 0)
+    {
+      this.loading.pop();
+    }
+  }
+
+  get isLoading()
+  {
+    return this.loading.length > 0;
   }
 }

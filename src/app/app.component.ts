@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { ConfirmComponent } from './shared/confirm/confirm.component';
+import { UiService } from 'src/app/services/ui.service';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'LSOAppWeb';
+export class AppComponent implements AfterViewInit {
+
+  constructor(public ui: UiService){}
+
+  @ViewChild(ConfirmComponent) confirm: ConfirmComponent;
+
+  ngAfterViewInit(): void {
+    this.ui.setConfirmComponent(this.confirm);
+  }
 }

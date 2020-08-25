@@ -1,0 +1,99 @@
+.background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.button-container {
+    width: auto;
+    height: auto;
+    background-color: white;
+    border-radius: 2rem;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2rem 1fr;
+}
+
+.title-container {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 3rem 1fr 3rem;
+}
+
+.flex-row {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.description {
+    justify-self: center;
+    font-size: 1.6rem;
+    color: black;
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.choose-button,
+.choose-button:link,
+.choose-button:visited {
+    color: white;
+    background-color: #282828;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: .8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    /* transition: all .2s; */
+    box-shadow: 0 .3rem 1.5rem #5e5d5b;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    width: 15rem;
+    height: 15rem;
+    margin: 1rem;
+}
+
+.close-button,
+.close-button:link,
+.close-button:visited {
+    grid-column: 3;
+    grid-row: 1;
+    color: #282828;
+    background-color: transparent;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: .2rem;
+    transition: all .2s;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.fs-6 {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+}
+
+.choose-button:focus,
+.close-button:focus {
+    outline: none;
+}
+
+.choose-button:active,
+.close-button:active {
+    transform: translateY(2px);
+}

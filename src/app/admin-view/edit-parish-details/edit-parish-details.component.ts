@@ -39,7 +39,7 @@ export class EditParishDetailsComponent implements OnInit {
   ngOnInit() {
     this.parafiaSub = this.parafiaService.ParafiaObs.subscribe((parish) => {
       if (parish === null || parish === undefined) { return; }
-      this.parafia = parish;
+      Object.assign(this.parafia, parish);
       this.changeParishName();
       this._monastery = monasteries[this.parafia.id_typu];
       this._diocese = dioceses[this.parafia.id_diecezji];

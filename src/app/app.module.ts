@@ -28,6 +28,9 @@ import { AcolytheDetailsComponent } from './admin-view/acolythe-details/acolythe
 import { EditEventsComponent } from './admin-view/edit-events/edit-events.component';
 import { DeleteParishComponent } from './admin-view/delete-parish/delete-parish.component';
 import { EditParishDetailsComponent } from './admin-view/edit-parish-details/edit-parish-details.component';
+import { LoadingComponent } from './shared/loading/loading.component';
+import { ConfirmComponent } from './shared/confirm/confirm.component';
+import { LoginAsComponent } from './shared/login-as/login-as.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -48,7 +51,10 @@ registerLocaleData(localePl);
     AcolytheDetailsComponent,
     EditEventsComponent,
     DeleteParishComponent,
-    EditParishDetailsComponent
+    EditParishDetailsComponent,
+    LoadingComponent,
+    ConfirmComponent,
+    LoginAsComponent
   ],
   imports: [
     BrowserModule,
