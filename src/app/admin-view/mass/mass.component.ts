@@ -56,6 +56,7 @@ export class MassComponent implements OnInit, OnDestroy {
   zmiana = false;
   view: CalendarView = CalendarView.Month;
   months = months;
+  lesad = false;
   refresh: Subject<any> = new Subject();
 
   constructor(private parafiaService: ParafiaService, private wydarzeniaService: WydarzeniaService, private ui: UiService) { }
@@ -145,7 +146,6 @@ export class MassComponent implements OnInit, OnDestroy {
       this.parafiaService.obecnosciDoWydarzenia(this.aktywneWydarzenie.id, this.aktywnyDzien);
       this.sortujListe(true);
       this.sortujListe(false);
-      this.zmiana = false;
     });
 
     this.ObecSub = this.parafiaService.Obecnosci.subscribe(lista => {
@@ -176,6 +176,7 @@ export class MassComponent implements OnInit, OnDestroy {
           this.zmiana = true;
         }
       }
+      console.log(this.noweObecnosci)
       // this.ui.zmienStan(0, false);
 
     });
@@ -297,9 +298,10 @@ export class MassComponent implements OnInit, OnDestroy {
   async indexZmiana(liczba: number) {
 
     clearTimeout(this.odliczenie);
-
-    // this.czyKontynuowac().then((kontynuowac) => {
-      // if (kontynuowac) {
+    console.log(this.zmiana)
+    this.ui.wantToContinue('Dane o obecności dla tego wydarzenia nie zostaną zapisane',
+    (this.zmiana && this.sprawdzane)).then((kontynuowac) => {
+      if (kontynuowac) {
     // this.ui.zmienStan(0, true);
 
     if ((this.index + liczba) < 0 || (this.index + liczba) > (this.dzisiejszeWydarzenia.length - 1)) {
@@ -327,8 +329,8 @@ export class MassComponent implements OnInit, OnDestroy {
             this.header(this.aktywnyDzien, this.aktywneWydarzenie);
           }
         }
-      // }
-    // });
+      }
+    });
 
   }
 
@@ -429,7 +431,10 @@ aktualnyStatus(ministrant: User) {
 
 czyMoznaDoPrzodu()
 {
-    if (this.aktywnyDzien.getDate() === this.dzis.getDate() && this.aktywnyDzien.getMonth() === this.dzis.getMonth() && this.aktywnyDzien.getFullYear() === this.dzis.getFullYear() && this.dzisiejszeWydarzenia[this.index + 1] === undefined)
+    if (this.aktywnyDzien.getDate() === this.dzis.getDate() &&
+        this.aktywnyDzien.getMonth() === this.dzis.getMonth() &&
+        this.aktywnyDzien.getFullYear() === this.dzis.getFullYear() &&
+        this.dzisiejszeWydarzenia[this.index + 1] === undefined)
     {
         return false;
     }

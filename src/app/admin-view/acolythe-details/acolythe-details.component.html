@@ -41,7 +41,7 @@
                             <label class="alert" *ngIf="email && !email.valid && email.touched">Wpisz poprawny adres e-mail</label>
                             <div class="center">
                                 <button class="email-set audiowide margin-0-1" [disabled]="isEmailsSame || !email.valid" (click)="zapiszEmail()">Zapisz</button>
-                                <button class="email-set audiowide back" (click)="przypisz = false; userEmail = null">Anuluj</button>
+                                <button class="email-set audiowide black-back" (click)="przypisz = false; userEmail = null">Anuluj</button>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="ministrant.email && !przypisz">

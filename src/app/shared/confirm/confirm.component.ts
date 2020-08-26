@@ -14,7 +14,7 @@ export class ConfirmComponent {
   async awaitToDecision(context: string)
   {
     this.context = context;
-    return new Promise((resolve) => {
+    return new Promise<boolean>((resolve) => {
       this.decision.subscribe(event => {
         this.context = null;
         resolve(event);

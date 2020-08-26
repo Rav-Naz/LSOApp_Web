@@ -31,12 +31,12 @@
 
 .obecny {
     background: linear-gradient(to bottom, rgb(49, 155, 49), rgb(28, 90, 28));
-    border: none;
+    border: none !important;
 }
 
 .nieobecny {
     background: linear-gradient(to bottom, #e71e25, #720e11);
-    border: none;
+    border: none !important;
 }
 
 .black-border {

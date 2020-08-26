@@ -19,14 +19,34 @@ export class UserService {
   private _czyOpiekun = new BehaviorSubject<boolean>(false);
   private userDyzurySub = new BehaviorSubject<Array<Wydarzenie>>(null);
   private userSub = new BehaviorSubject<User>(null);
-  private powiadomieniaODyzurach = new BehaviorSubject<boolean>(null);
 
   get czyOpiekun() {
     return this._czyOpiekun.asObservable();
   }
 
+  get UserImieINazwisko() { //Wykorzystanie: dyzury, dane-profilowe
+    return this.user.imie + ' ' + this.user.nazwisko;
+  }
+
+  get UserDyzurySub() //Wykorzystanie: dyzury
+  {
+    return this.userDyzurySub.asObservable();
+  }
+
   get UserID() {
     return this.user ? this.user.id_user : null;
+  }
+
+  get UserStopien() {
+    return this.user ? this.user.stopien : null;
+  }
+
+  get UserPerm() {
+    return this.user ? this.user.admin : null;
+  }
+
+  get UserEmail() {
+    return this.user ? this.user.email : null;
   }
 
   async zmianaOpiekuna(bool: boolean) {
@@ -42,7 +62,6 @@ export class UserService {
   zmienUsera(user: User) {
     this.user = user;
     this.userSub.next(user);
-    this.powiadomieniaODyzurach.next(user.powiadomienia === 1 ? true : false);
   }
 
   pobierzUsera() {

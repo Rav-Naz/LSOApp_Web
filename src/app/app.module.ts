@@ -31,6 +31,7 @@ import { EditParishDetailsComponent } from './admin-view/edit-parish-details/edi
 import { LoadingComponent } from './shared/loading/loading.component';
 import { ConfirmComponent } from './shared/confirm/confirm.component';
 import { LoginAsComponent } from './shared/login-as/login-as.component';
+import { ActivityIndicatorComponent } from './shared/activity-indicator/activity-indicator.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -54,7 +55,8 @@ registerLocaleData(localePl);
     EditParishDetailsComponent,
     LoadingComponent,
     ConfirmComponent,
-    LoginAsComponent
+    LoginAsComponent,
+    ActivityIndicatorComponent
   ],
   imports: [
     BrowserModule,

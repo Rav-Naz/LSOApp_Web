@@ -37,12 +37,19 @@ export class UiService {
     this.confirmComponent = component;
   }
 
-  async wantToContinue(context: string)
+  async wantToContinue(context: string, change?: boolean)
   {
-    return new Promise((resolve) => {
-      this.confirmComponent.awaitToDecision(context).then(res => {
-        resolve(res);
-      });
+    return new Promise<boolean>((resolve) => {
+      if (change === undefined || (change !== undefined && change === true))
+      {
+        this.confirmComponent.awaitToDecision(context).then(res => {
+          resolve(res);
+        });
+      }
+      else
+      {
+          resolve(true);
+      }
     });
   }
 

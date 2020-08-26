@@ -108,8 +108,8 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   async usunWiadomosc(wiadomosc: Wiadomosc) {
     if (wiadomosc.autor_id !== 0) {
-      // await this.ui.pokazModalWyboru("Wiadomość zostanie usunięta dla Ciebie i ministrantów.\nCzy chcesz kontynuować?").then((kontynuowac) => {
-      // if (kontynuowac) {
+      this.ui.wantToContinue("Wiadomość zostanie usunięta dla Ciebie i ministrantów.\nCzy chcesz kontynuować?").then((kontynuowac) => {
+      if (kontynuowac) {
       // this.ui.zmienStan(2, true)
       this.tresc = '';
       this.doladowanie = true;
@@ -122,8 +122,8 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
         }
         // this.ui.zmienStan(2, false)
       });
-      // }
-      // });
+      }
+      });
 
     }
     else {
@@ -167,9 +167,9 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // await this.ui.pokazModalWyboru("Czy na pewno chcesz usunąć\n" + ministrant.nazwisko + " " + ministrant.imie + "\nz listy ministrantów?").then((kontynuowac) => {
-    // if(kontynuowac)
-    // {
+    this.ui.wantToContinue("Czy na pewno chcesz usunąć\n" + ministrant.nazwisko + " " + ministrant.imie + "\nz listy ministrantów?").then((kontynuowac) => {
+    if (kontynuowac)
+    {
     // this.ui.zmienStan(1,true)
     this.parafiaService.usunMinistranta(ministrant.id_user).then(res => {
 
@@ -178,8 +178,8 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
         this.ui.showFeedback('succes', 'Usunięto ministranta ' + ministrant.nazwisko + ' ' + ministrant.imie, 3);
       }, 400);
     });
-    // }
-    // });
+    }
+    });
   }
 
   szczegolyMinistranta(id: number) {

@@ -315,3 +315,10 @@
     border-width: .2rem;
     border-style: solid;
 }
+
+.black-back {
+    background: transparent;
+    color: black;
+    border-color: rgb(245, 245, 245);
+    border: .2rem solid black
+}

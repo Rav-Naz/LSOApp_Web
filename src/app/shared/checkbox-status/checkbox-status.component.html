@@ -1,2 +1,2 @@
-<button class="checkbox icon" [disabled]="disabled" [ngClass]="{obecny: status === 1, nieobecny: status === 0}" (click)="zmien()" [ngClass]="{'black-border': czarny, 'white-border': !czarny}">
+<button class="checkbox icon" [disabled]="disabled" [ngClass]="{'black-border': czarny, 'white-border': !czarny,'obecny': status === 1, 'nieobecny': status === 0}" (click)="zmien()">
   {{disabled ? '' : status === 1 ? '&#xe072;' : status === 0 ? '&#xe073;' : ''}}</button>

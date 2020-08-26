@@ -170,6 +170,22 @@ export class HttpService {
 
   ////////////////// ZAPYTANIA Z JWT //////////////////
 
+  //WYLOGOWANIE
+  async wyloguj() {
+    return new Promise<number>(resolve => {
+      this.http.post(this.url + '/logout', { smart: this.smart, id_user: this.id_user, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res === 'wylogowano') {
+          resolve(1);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
   // POBIERANIE DANCYH PARAFII
   async pobierzParafie() {
     return new Promise<string>(resolve => {
@@ -206,6 +222,26 @@ export class HttpService {
         }
         else if (res === 'nieistnieje') {
           resolve(3);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
+  // WYZEREUJ PUNKTY
+  async wyzerujPunkty() {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/reset_points', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(1);
         }
         else if (res === 'You have not permission to get the data') {
           resolve(404);
@@ -300,11 +336,11 @@ export class HttpService {
     });
   }
 
-  //AKTUALIZACJA DANYCH PARAFII
+  // AKTUALIZACJA DANYCH PARAFII
   async aktualizacjaDanychParafii(nazwa_parafii: string, id_diecezji: number, miasto: string, id_typu: number) {
     return new Promise<number>(resolve => {
 
-      this.http.post(this.url + '/update_parish', { nazwa_parafii: nazwa_parafii, id_diecezji: id_diecezji, miasto: miasto, id_typu: id_typu, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+      this.http.post(this.url + '/update_parish', { nazwa_parafii, id_diecezji, miasto, id_typu, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
         if (res.hasOwnProperty('insertId')) {
           resolve(1);
         }
@@ -515,6 +551,18 @@ export class HttpService {
     });
   }
 
+  //WYGENERUJ RAPORT
+  async generujRaport(email: string) {
+    return new Promise<string>(resolve => {
+      this.http.post(this.url + '/raport_pdf', { id_parafii: this.id_parafii, email: email, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        resolve(res.toString());
+      }, err => {
+        console.log(err);
+        resolve('');
+      });
+    });
+  }
+
   // POBIERANIE SPECJALNYCH WYDARZEŃ
   async pobierzSpecjalneWydarzenia() {
     return new Promise<string>(resolve => {
@@ -649,6 +697,26 @@ export class HttpService {
         id_user, id_wydarzenia,
         smart: this.smart, jwt: this.JWT
       }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(1);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
+  // USUWANIE WSZYSTKICH DYŻURÓW
+  async usunWszystkieDyzury() {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/reset_duty', { id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
         if (res.hasOwnProperty('insertId')) {
           resolve(1);
         }

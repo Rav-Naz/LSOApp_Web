@@ -23,6 +23,7 @@
                 <label class="pas"></label>
                 <label class="title-name">SŁUŻBA OBOWIĄZKOWA</label>
             </div>
+            <!-- <div class="acolythes" *ngIf="lesad"> -->
             <div class="acolythes" *ngIf="ministranciDoWydarzenia.length !== 0 && dzisiejszeWydarzenia.length !== 0 && aktywneWydarzenie.typ !== 1">
                 <div class="acolythe" *ngFor="let acolythe of ministranciDoWydarzenia; let i = index" [ngClass]="{'grey': i%2 === 0}">
                     <app-checkbox-status class="checkbox-status" (checkStatus)="zmienStatusObecnosci($event, acolythe.id_user, false)" *ngIf="moznaSprawdzac() && czyJestNaLiscie(acolythe)" [status]="aktualnyStatus(acolythe)"></app-checkbox-status>

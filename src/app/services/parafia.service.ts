@@ -158,6 +158,22 @@ export class ParafiaService {
     });
   }
 
+  async usunWszystkieDyzury() {
+    return new Promise<number>(resolve => {
+      this.http.usunWszystkieDyzury().then(res => {
+        if (res === 404) {
+          resolve(res);
+          return;
+        }
+        if (this.aktualneWydarzenieId !== null) {
+          this.dyzurDoWydarzenia(this.aktualneWydarzenieId, 0).then(ress => {
+            resolve(1);
+          });
+        }
+      });
+    });
+  }
+
   async nowyMinistrant(stopien: number, imie: string, nazwisko: string, email: string) // Wykorzystanie: ministrant-nowy
   {
     return new Promise<number>(resolve => {
@@ -185,10 +201,10 @@ export class ParafiaService {
     return new Promise<number>(resolve => {
       this.http.aktualizacjaDanychParafii(nazwa_parafii, id_diecezji, miasto, id_typu).then(res => {
         this.pobierzParafie().then(res => {
-          resolve(res)
-        })
-      })
-    })
+          resolve(res);
+        });
+      });
+    });
   }
 
   nowaObecnosc(id_wydarzenia: number, id_user: number, data: Date, start: number, typ: number) // Wykorzystanie: obecnosc
@@ -290,6 +306,24 @@ export class ParafiaService {
         this.dyzuryWydarzenia.next(this.ministranciLista);
         resolve(1);
       }
+    });
+  }
+
+  async wyzerujPunkty() {
+    return new Promise<number>(resolve => {
+      this.http.wyzerujPunkty().then(async res => {
+        if (res === 1) {
+          this.pobierzMinistrantow().then(res => {
+            resolve(1);
+          });
+        }
+        else if (res === 404) {
+          resolve(res);
+        }
+        else {
+          resolve(0);
+        }
+      });
     });
   }
 

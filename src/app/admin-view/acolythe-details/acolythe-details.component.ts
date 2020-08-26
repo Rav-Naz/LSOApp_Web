@@ -18,7 +18,7 @@ import { User } from 'src/app/models/user.model';
 export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
   public acolytheId = null;
-  zmiana: boolean = false;
+  zmiana = false;
   public _rank = 'Wybierz stopień';
   public przypisz = false;
   ranks = rank;
@@ -44,8 +44,8 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   wydarzeniaSub: Subscription;
 
   constructor(private route: ActivatedRoute, private parafiaService: ParafiaService,
-    private router: Router, private ui: UiService, private http: HttpService, public userService: UserService,
-    private wydarzeniaService: WydarzeniaService) { }
+              private router: Router, private ui: UiService, private http: HttpService, public userService: UserService,
+              private wydarzeniaService: WydarzeniaService) { }
 
   ngOnInit(): void {
     this.parafiaService.SetDyzuryMinistranta(null);
@@ -84,7 +84,6 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
         if (lista !== null) {
           this.wszystkieWydarzenia = lista;
         }
-        // console.log(this.wydarzeniaMinistranta, this.dni)
       });
 
 
@@ -107,7 +106,6 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
             this.dni[index] = true;
 
             const h = this.godzina(index);
-            // console.log(this.wydarzeniaMinistranta)
             if (h !== '--:--') {
               const eventIndex = this.wyborGodziny(index).indexOf(this.wszystkieWydarzenia.filter(wyd =>
                 wyd.dzien_tygodnia === index && new Date(wyd.godzina).toString().slice(16, 21) === h)[0]);
@@ -119,7 +117,6 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
             this.setSelectionOption(index, 0);
           }
         }
-        // console.log(this.wydarzeniaMinistranta)
         // this.ui.zmienStan(6, false)
       });
     });
@@ -146,7 +143,10 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
         case 1:
           this.parafiaService.pobierzMinistrantow().then(() => {
-            this.parafiaService.WybranyMinistrant(this.acolytheId);
+            this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
+              this.przypisz = false;
+              this.userEmail = null;
+            });
             // this.ui.zmienStan(4, false)
           });
           break;
@@ -163,30 +163,29 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   usun() {
-    // this.ui.pokazModalWyboru("Usuwając dostęp do konta dla ministranta utraci on mozliwość logowania, lecz jego dane pozostaną.\nCzy chcesz kontynuować?").then(wybor => {
-    //     if(wybor)
-    //     {
+    this.ui.wantToContinue('Usuwając dostęp do konta dla ministranta utraci on mozliwość logowania, lecz jego dane pozostaną.')
+    .then(wybor => {
+      if (wybor) {
 
-    // this.ui.zmienStan(4,true)
-    // this.ui.zmienStan(5,false)
-    this.parafiaService.usunKontoMinistanta(this.acolytheId).then(res => {
-      if (res === 1) {
-
-        setTimeout(() => {
-          this.ui.showFeedback('succes', 'Usunięto dostęp do konta', 3);
-        }, 400);
-        // this.ui.zmienStan(4,false)
-        this.powrot();
-      }
-      else {
+        // this.ui.zmienStan(4,true)
         // this.ui.zmienStan(5,false)
-        // this.ui.zmienStan(4,false)
-        this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+        this.parafiaService.usunKontoMinistanta(this.acolytheId).then(res => {
+          if (res === 1) {
+
+            setTimeout(() => {
+              this.ui.showFeedback('succes', 'Usunięto dostęp do konta', 3);
+            }, 400);
+            // this.ui.zmienStan(4,false)
+          }
+          else {
+            // this.ui.zmienStan(5,false)
+            // this.ui.zmienStan(4,false)
+            this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+          }
+        });
       }
     });
   }
-  // })
-  // }
 
   zmianaCheckboxa(index: number, event) {
     this.dni[index] = event;

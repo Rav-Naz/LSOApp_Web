@@ -66,17 +66,18 @@ export class EditEventsComponent implements OnInit {
     if (dzien === this.wybranyDzien) {
       return;
     }
-    // await this.czyKontynuowac(this.zmiana, "Zmienione wydarzenia nie zostaną zapisane.\nCzy chcesz kontynuować?").then((kontynuowac) => {
-    // if (kontynuowac) {
+    this.ui.wantToContinue('Zmienione wydarzenia nie zostaną zapisane.', this.zmiana).then((kontynuowac) => {
+    if (kontynuowac) {
     // this.ui.zmienStan(3,true);
     this.zmiana = false;
     this.wybranyDzien = dzien;
     this.clear();
     this.stworzMozliweDaty();
     this.wydarzeniaService.wydarzeniaWEdycji(this.wybranyDzien);
-    // }
-    // });
+    }
+    });
   }
+
 
   edytujWydarzenie(wyd: Wydarzenie, index: number)
   {
@@ -109,7 +110,6 @@ export class EditEventsComponent implements OnInit {
     if (this.edycja) {
       if (this.wydarzeniaDnia.filter(wydarzenie => new Date(wydarzenie.godzina).getHours() === parseInt(splitted[0])
         && new Date(wydarzenie.godzina).getMinutes() === parseInt(splitted[1]) && wydarzenie.id !== this.wydarzeniaDnia[this.edytowanyIndex].id)[0] === undefined) {
-
         this.wydarzeniaDnia[this.edytowanyIndex].godzina = new Date(2018, 10, 15, parseInt(splitted[0]), parseInt(splitted[1])).toJSON();
         this.wydarzeniaDnia[this.edytowanyIndex].grupa = this.nowyTyp === 2 ? (rankx === null ? -1 : (rankx === 12 ? rankx : rankx - 1)) : null,
         this.wydarzeniaDnia[this.edytowanyIndex].data_dokladna = this.jednorazowe ? this.dataDokladna : null;
@@ -150,14 +150,14 @@ export class EditEventsComponent implements OnInit {
   }
 
   async usun(wydarzenie: Wydarzenie) {
-    // await this.czyKontynuowac(true, "Usunięcie wydarzenia spowoduje utratę przypisanych do niego dyżurów.\nCzy chcesz trwale usunąć wydarzenie z godziny " + new Date(wydarzenie.godzina).toString().slice(16, 21) + "?").then((kontynuowac) => {
-    //     if (kontynuowac) {
+    this.ui.wantToContinue("Usunięcie wydarzenia spowoduje utratę przypisanych do niego dyżurów.\nCzy chcesz trwale usunąć wydarzenie z godziny " + new Date(wydarzenie.godzina).toString().slice(16, 21) + "?").then((kontynuowac) => {
+        if (kontynuowac) {
             this.czyAktualizowane(wydarzenie);
             const index = this.wydarzeniaDnia.indexOf(wydarzenie);
             this.wydarzeniaDnia.splice(index, 1);
             this.zmiana = true;
-        // }
-    // });
+        }
+    });
 }
 
   zapisz() {
@@ -244,7 +244,12 @@ private czyAktualizowane( wydarzenie: Wydarzenie)
 
   powrot()
   {
-    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+    this.ui.wantToContinue('Zmienione wydarzenia nie zostaną zapisane.', this.zmiana).then(decision => {
+      if (decision)
+      {
+        this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+      }
+    });
   }
 
   dzienTygodnia(dzien: number) {
