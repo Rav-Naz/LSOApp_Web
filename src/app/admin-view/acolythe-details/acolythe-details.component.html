@@ -1,11 +1,11 @@
 <div class="container">
     <form #newDetailsForm="ngForm" class="details">
         <div class="user-name">
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}" #name="ngModel"
-                name="name">
+            <input autocomplete="given-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}"
+                #name="ngModel" name="name">
             <label *ngIf="!name.valid && name.touched">To pole jest wypełnione nieprawidłowo</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}" #lastName="ngModel"
-                name="lastName">
+            <input autocomplete="family-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.nazwisko" [ngModelOptions]="{standalone: false}"
+                #lastName="ngModel" name="lastName">
             <label *ngIf="!lastName.valid && lastName.touched">To pole jest wypełnione nieprawidłowo</label>
         </div>
         <div class="user-details">
@@ -69,7 +69,6 @@
                 <label class="description">Prawa administratora</label>
                 <app-checkbox [status]="ministrant.admin" class="checkbox" (checkStatus)="ministrant.admin = !ministrant.admin; zmiana = true"></app-checkbox>
             </div>
-
         </div>
     </form>
     <div class="duties">

@@ -121,10 +121,13 @@
     transform: translateY(2px);
 }
 
+.sort:disabled,
+.delete-message:disabled,
 .btn:disabled {
-    background: linear-gradient(to right bottom, #a0a0a0, #7c7c7c);
+    background: rgb(206, 206, 206);
+    color: rgb(124, 124, 124);
+    border-color: rgb(206, 206, 206);
     cursor: not-allowed;
-    color: #505050;
 }
 
 .message-grid-textfield-header {

@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class PunctationComponent implements OnInit {
 
-  zapisywanie = false;
+  zapisywanie = true;
 
   constructor(private router: Router, private parafiaService: ParafiaService,
     private http: HttpService, private ui: UiService) { }
@@ -36,6 +36,7 @@ export class PunctationComponent implements OnInit {
   ngOnInit(): void {
     this.punktySub = this.parafiaService.ParafiaObs.subscribe((parish) => {
       if (parish) {
+        this.zapisywanie = false;
         this.pktZaObecnoscSluzba = this.poczObecnoscSluzba = parish.punkty_dod_sluzba ? parish.punkty_dod_sluzba.valueOf() : 0;
         this.pktZaNieobecnoscSluzba = this.poczNieobecnoscSluzba = parish.punkty_uj_sluzba ? parish.punkty_uj_sluzba.valueOf() : 0;
         this.pktZaDodatkowa = this.poczDodatkowa = parish.punkty_dodatkowe ? parish.punkty_dodatkowe.valueOf() : 0;
@@ -52,16 +53,13 @@ export class PunctationComponent implements OnInit {
 
     this.zapisywanie = true;
 
-    this.http.aktualizacjaPunktow(this.pktZaObecnoscSluzba, this.pktZaNieobecnoscSluzba, this.pktZaDodatkowa,
+    this.parafiaService.aktualizacjaPunktow(this.pktZaObecnoscSluzba, this.pktZaNieobecnoscSluzba, this.pktZaDodatkowa,
       this.pktZaNabozenstwo, this.pktZaObecnoscZbiorka, this.pktZaNieobecnoscZbiorka).then(res => {
-        const daneParafii: Parafia = JSON.parse(JSON.stringify(res));
-        if (daneParafii.id_parafii) {
-          this.parafiaService.parafia = daneParafii;
-          // this.ui.zmienStan(4, false);
+        if (res === 1) {
           setTimeout(() => {
             this.ui.showFeedback('succes', 'Zapisano punktację, zacznie ona obowiązywać od następnego sprawdzenia obecności', 3.5);
           }, 400);
-          this.anuluj();
+          // this.anuluj();
         }
         else {
           // this.ui.zmienStan(4, false);

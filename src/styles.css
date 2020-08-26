@@ -50,6 +50,14 @@ body {
     background: linear-gradient(to bottom right, #fffb12 35%, #f5c905 65%);
 }
 
+.disabled {
+    background-color: #505050;
+}
+
+.enabled {
+    background-color: rgb(20, 20, 20);
+}
+
 ::-webkit-scrollbar {
     width: 10px;
 }

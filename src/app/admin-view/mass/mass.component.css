@@ -52,6 +52,11 @@
     justify-content: center;
 }
 
+.header:disabled {
+    background-color: rgb(124, 124, 124);
+    color: rgb(206, 206, 206);
+}
+
 .arrow:focus,
 .save:focus,
 .header:focus,
@@ -100,6 +105,16 @@
     grid-template-columns: 1fr;
 }
 
+.activity-container {
+    grid-column: 1;
+    grid-row: 1/4;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .event-name-container {
     grid-row: 1;
     display: flex;
@@ -132,10 +147,12 @@
     justify-self: center;
 }
 
+.arrow:disabled,
 .save:disabled {
     background: rgb(206, 206, 206);
     color: rgb(124, 124, 124);
     border-color: rgb(206, 206, 206);
+    cursor: not-allowed;
 }
 
 .event {

@@ -91,6 +91,25 @@ export class ParafiaService {
     });
   }
 
+  async aktualizacjaPunktow(punkty_dod_sluzba: number,
+    punkty_uj_sluzba: number, punkty_dodatkowe: number,
+    punkty_nabozenstwo: number, punkty_dod_zbiorka: number,
+    punkty_uj_zbiorka: number) {
+    return new Promise<any>(resolve => {
+      this.http.aktualizacjaPunktow(punkty_dod_sluzba, punkty_uj_sluzba, punkty_dodatkowe,
+        punkty_nabozenstwo, punkty_dod_zbiorka, punkty_uj_zbiorka).then(res => {
+          if (res === 1) {
+            this.pobierzParafie().then(res => {
+              resolve(res);
+            });
+          }
+          else {
+            resolve(res);
+          }
+        });
+    });
+  }
+
   async pobierzMinistrantow() { // wykorzystanie: acolythes-messages
     return new Promise<Array<User>>(resolve => {
       this.http.pobierzMinistrantow().then(async res => {

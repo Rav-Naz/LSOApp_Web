@@ -33,10 +33,13 @@ export class EditParishDetailsComponent implements OnInit {
   public dioceses = dioceses;
   public zmiana = false;
 
+  ladowanie = false;
+
   _monastery = 'Wybierz rodzaj';
   _diocese = 'Wybierz diecezję';
 
   ngOnInit() {
+    this.ladowanie = true;
     this.parafiaSub = this.parafiaService.ParafiaObs.subscribe((parish) => {
       if (parish === null || parish === undefined) { return; }
       Object.assign(this.parafia, parish);
@@ -45,6 +48,7 @@ export class EditParishDetailsComponent implements OnInit {
       this._diocese = dioceses[this.parafia.id_diecezji];
       this.lostFocus('1');
       this.lostFocus('2');
+      this.ladowanie = false;
     });
   }
 
@@ -53,17 +57,19 @@ export class EditParishDetailsComponent implements OnInit {
   }
 
   zapisz() {
+    this.ladowanie = true;
     const diocese_id = dioceses.indexOf(this._diocese);
     const monastery_id = monasteries.indexOf(this._monastery);
     this.parafiaService.aktualizujParafie(this.parafia.nazwa_parafii, diocese_id, this.parafia.miasto, monastery_id).then(res => {
       if (res === 1) {
+        this.zmiana = false;
         setTimeout(() => {
-          this.zmiana = false;
           this.ui.showFeedback('succes', 'Dane zostały zaktualizowane', 3);
         }, 400);
       }
       else {
         this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
+        this.ladowanie = true;
       }
       // this.ui.zmienStan(4,false)
     });
@@ -113,6 +119,17 @@ export class EditParishDetailsComponent implements OnInit {
 
   get isDioceseNotNull() {
     return this._diocese !== 'Wybierz diecezję';
+  }
+
+  get isParish()
+  {
+    return this.parafia.id_parafii !== 2;
+  }
+
+  get isDisabled()
+  {
+    // return true
+    return this.ladowanie || !this.isParish;
   }
 
 }

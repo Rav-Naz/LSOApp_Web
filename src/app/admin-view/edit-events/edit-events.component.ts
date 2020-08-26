@@ -24,6 +24,7 @@ export class EditEventsComponent implements OnInit {
   wydarzeniaDnia: Array<Wydarzenie>;
   stareWydarzeniaDnia: Array<Wydarzenie>;
   aktualizujWydarzeniaDnia: Array<Wydarzenie>;
+  ladowanie = false;
 
   noweWydGodz: string = null;
   rangi: Array<string> = ['Wszyscy'];
@@ -44,11 +45,12 @@ export class EditEventsComponent implements OnInit {
       this.stareWydarzeniaDnia = [];
       this.aktualizujWydarzeniaDnia = [];
 
-      if (lista === null || lista === undefined) { return; }
-      if (lista.length === 0) { return; }
+      if (lista === null || lista === undefined) { this.ladowanie = false; return; }
+      if (lista.length === 0) { this.ladowanie = false; return; }
       this.wydarzeniaDnia = [...lista];
       this.stareWydarzeniaDnia = [...lista];
       this.sortuj();
+      this.ladowanie = false;
     });
   }
 
@@ -70,6 +72,7 @@ export class EditEventsComponent implements OnInit {
     if (kontynuowac) {
     // this.ui.zmienStan(3,true);
     this.zmiana = false;
+    this.ladowanie = true;
     this.wybranyDzien = dzien;
     this.clear();
     this.stworzMozliweDaty();
@@ -162,7 +165,7 @@ export class EditEventsComponent implements OnInit {
 
   zapisz() {
     this.zmiana = false;
-    // this.ui.zmienStan(3, true);
+    this.ladowanie = true;
     this.wydarzeniaService.zapiszWydarzenia(this.stareWydarzeniaDnia, this.wydarzeniaDnia, this.aktualizujWydarzeniaDnia, this.wybranyDzien).then(res => {
         if (res === 1) {
             this.wydarzeniaService.dzisiejszeWydarzenia(this.wydarzeniaService.aktywnyDzien, null);
@@ -174,6 +177,7 @@ export class EditEventsComponent implements OnInit {
             this.zmiana = true;
             this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
         }
+        // this.ladowanie = false;
     });
 }
 

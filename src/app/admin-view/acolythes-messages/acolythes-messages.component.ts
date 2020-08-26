@@ -29,29 +29,33 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   sortujPoImieniu = true;
 
-  ladowanie = true;
+  ladowanieMinistrantow = true;
+  ladowanieWiadomosci = true;
 
   limit = 30;
 
   constructor(private wiadosciService: WiadomosciService, public ui: UiService, private parafiaService: ParafiaService,
-    private userService: UserService, private router: Router) { }
+              private userService: UserService, private router: Router) { }
 
   @HostListener('scroll', ['$event'])
 
   ngOnInit(): void {
+    this.ladowanieMinistrantow = true;
+    this.ladowanieWiadomosci = true;
     this.wiadosciService.pobierzWiadomosci(1, this.limit).then((res) => { });
 
     this.wiadomosciSub = this.wiadosciService.Wiadomosci.subscribe(wiadomosci => {
       this.wiadomosci = [];
       if (wiadomosci === null) {
+        // this.ladowanieWiadomosci = false;
         return;
       }
       else {
         this.wiadomosci = [...wiadomosci];
         if (this.ostatniaWiadomosc && this.ostatniaWiadomosc.id !== this.wiadomosci[this.wiadomosci.length - 1].id) {
           this.doladowanie = false;
-
         }
+        this.ladowanieWiadomosci = false;
         this.ostatniaWiadomosc = this.wiadomosci[this.wiadomosci.length - 1];
       }
     });
@@ -60,9 +64,8 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
       this.ministranci = [];
       if (lista !== null) {
         this.ministranci = [...lista].filter(item => item.stopien !== 11);
-        // this.ministranci = this.ministranci.concat(this.ministranci);
         this.sortujListe();
-        // this.ui.zmienStan(1,false);
+        this.ladowanieMinistrantow = false;
       }
     });
 
@@ -87,11 +90,6 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
         return 0;
       }
     });
-    setTimeout(() => {
-
-      // this.ui.zmienStan(1, false)
-
-    }, 200);
   }
 
   zmianaSortu() {
@@ -103,26 +101,26 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
   nowyMinistrant() {
     // this.tabIndexService.nowyOutlet(4, 'ministrant-nowy')
     // this.router.navigateByUrl('/admin-view/(main:new-acolythe)');
-    this.router.navigate(['/admin-view', { outlets: { 'main': ['new-acolythe'] } }]);
+    this.router.navigate(['/admin-view', { outlets: { main: ['new-acolythe'] } }]);
   }
 
   async usunWiadomosc(wiadomosc: Wiadomosc) {
     if (wiadomosc.autor_id !== 0) {
-      this.ui.wantToContinue("Wiadomość zostanie usunięta dla Ciebie i ministrantów.\nCzy chcesz kontynuować?").then((kontynuowac) => {
-      if (kontynuowac) {
-      // this.ui.zmienStan(2, true)
-      this.tresc = '';
-      this.doladowanie = true;
-      this.wiadosciService.usunWiadomosc(wiadomosc, this.wiadomosci.length).then(res => {
-        if (res === 1) {
-          this.ui.showFeedback('succes', 'Usunięto wiadomość', 3);
+      this.ui.wantToContinue('Wiadomość zostanie usunięta dla Ciebie i ministrantów.\nCzy chcesz kontynuować?').then((kontynuowac) => {
+        if (kontynuowac) {
+          this.tresc = '';
+          this.doladowanie = true;
+          this.ladowanieWiadomosci = true;
+          this.wiadosciService.usunWiadomosc(wiadomosc, this.wiadomosci.length).then(res => {
+            if (res === 1) {
+              this.ui.showFeedback('succes', 'Usunięto wiadomość', 3);
+            }
+            else {
+              this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie', 3);
+            }
+            this.ladowanieWiadomosci = false;
+          });
         }
-        else {
-          this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie', 3);
-        }
-        // this.ui.zmienStan(2, false)
-      });
-      }
       });
 
     }
@@ -132,9 +130,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
   }
 
   wyslij() {
-    // this.ui.zmienStan(2, true)
-    // console.log(this.tresc)
-    // return
+    this.ladowanieWiadomosci = true;
     this.wiadosciService.nowaWiadomosc(this.tresc).then(res => {
       switch (res) {
         case 0:
@@ -155,7 +151,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           break;
       }
-      // this.ui.zmienStan(2, false);
+      this.ladowanieWiadomosci = false;
     });
   }
 
@@ -167,18 +163,18 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.ui.wantToContinue("Czy na pewno chcesz usunąć\n" + ministrant.nazwisko + " " + ministrant.imie + "\nz listy ministrantów?").then((kontynuowac) => {
-    if (kontynuowac)
-    {
-    // this.ui.zmienStan(1,true)
-    this.parafiaService.usunMinistranta(ministrant.id_user).then(res => {
+    this.ui.wantToContinue('Czy na pewno chcesz usunąć ' + ministrant.nazwisko + ' ' + ministrant.imie + ' z listy ministrantów?').then((kontynuowac) => {
+      if (kontynuowac) {
+        // this.ui.zmienStan(1,true)
+        this.ladowanieMinistrantow = true;
+        this.parafiaService.usunMinistranta(ministrant.id_user).then(res => {
 
-      // this.wydarzeniaService.dzisiejszeWydarzenia(this.wydarzeniaService.aktywnyDzien, null)
-      setTimeout(() => {
-        this.ui.showFeedback('succes', 'Usunięto ministranta ' + ministrant.nazwisko + ' ' + ministrant.imie, 3);
-      }, 400);
-    });
-    }
+          // this.wydarzeniaService.dzisiejszeWydarzenia(this.wydarzeniaService.aktywnyDzien, null)
+          setTimeout(() => {
+            this.ui.showFeedback('succes', 'Usunięto ministranta ' + ministrant.nazwisko + ' ' + ministrant.imie, 3);
+          }, 400);
+        });
+      }
     });
   }
 

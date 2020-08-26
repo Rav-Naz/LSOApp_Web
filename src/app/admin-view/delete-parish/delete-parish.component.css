@@ -68,8 +68,9 @@
 }
 
 .navigation-button:disabled {
-    background: linear-gradient(to right bottom, #a0a0a0, #7c7c7c);
-    color: #505050;
+    background: rgb(206, 206, 206);
+    color: rgb(124, 124, 124);
+    border-color: rgb(206, 206, 206);
     cursor: not-allowed;
 }
 
@@ -85,6 +86,10 @@
 .confirm {
     grid-column: 3;
     grid-row: 4;
+}
+
+.disabled {
+    background-color: #505050;
 }
 
 .description {
@@ -126,7 +131,7 @@
 .input-object-description {
     grid-row: 1/2;
     grid-column: 1/2;
-    background-color: rgb(20, 20, 20);
+    /* background-color: rgb(20, 20, 20); */
     overflow: auto;
     border: none;
     font-size: 1.4rem;

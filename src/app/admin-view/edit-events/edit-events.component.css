@@ -65,9 +65,10 @@
 
 .navigation-button:disabled,
 .navigation-button-2:disabled {
-    background: linear-gradient(to right bottom, #a0a0a0, #7c7c7c);
+    background: rgb(206, 206, 206);
+    color: rgb(124, 124, 124);
+    border-color: rgb(206, 206, 206);
     cursor: not-allowed;
-    color: #505050;
 }
 
 .navigation-button,
@@ -179,6 +180,17 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    align-items: center;
+}
+
+.activity-indicator {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 

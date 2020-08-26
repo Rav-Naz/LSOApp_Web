@@ -5,9 +5,10 @@
         <label class="description">Aby potwierdzić wykonywaną operację wprowadź swoje hasło:</label>
         <div class="input-object">
             <label class="input-object-title audiowide">Hasło</label>
-            <input required class="input-object-description lexend" placeholder="Wpisz hasło" minlength="6" maxlength="15" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})" type="password" [(ngModel)]="_password" name="password" #password="ngModel">
+            <input autocomplete="current-password" required class="input-object-description lexend" [disabled]="ladowanie" placeholder="Wpisz hasło" minlength="6" maxlength="15" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})" type="password" [(ngModel)]="_password"
+                name="password" #password="ngModel" [ngClass]="{'disabled': ladowanie, 'enabled': !ladowanie}">
         </div>
     </form>
     <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newDeleteForm.valid" (click)="usun()">Usuń</button>
+    <button class="navigation-button confirm audiowide" [disabled]="!newDeleteForm.valid || ladowanie" (click)="usun()">Usuń</button>
 </div>

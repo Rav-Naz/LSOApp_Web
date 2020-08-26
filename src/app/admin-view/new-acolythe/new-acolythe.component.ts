@@ -45,8 +45,8 @@ export class NewAcolytheComponent {
     // this.ui.zmienStan(1,true)
 
     const rankx = this.ranks.indexOf(this._rank);
-
-    this.parafiaService.nowyMinistrant(rankx, this._name, this._lastName, this._email).then(res => {
+    this.parafiaService.nowyMinistrant(rankx, this._name, this._lastName,
+      this._email === '' || this._email === null ? null : this._email).then(res => {
       switch (res) {
         case 0:
           this.zapisywanie = false;

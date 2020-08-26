@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class AdminViewComponent implements OnInit {
 
   constructor(public userService: UserService, public parafiaService: ParafiaService, private router: Router,
-              private ui: UiService, private http: HttpService) { }
+    private ui: UiService, private http: HttpService) { }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -36,30 +36,30 @@ export class AdminViewComponent implements OnInit {
     });
   }
 
-  wyloguj()
-  {
+  wyloguj() {
     this.ui.addLoadingEvent();
     this.http.wyloguj().then((res) => {
-        if (res === 1)
-        {
+      if (res === 1) {
 
-                this.router.navigateByUrl('').then(() => {
-                    setTimeout(() => {
-                        this.ui.showFeedback('succes', 'Pomyślnie wylogowano', 3);
-                        this.ui.removeLoadingEvent();
-                    }, 400);
-                });
-        }
-        else
-        {
+        this.router.navigateByUrl('').then(() => {
+          setTimeout(() => {
+            this.ui.showFeedback('succes', 'Pomyślnie wylogowano', 3);
             this.ui.removeLoadingEvent();
-            this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 2);
-        }
+          }, 400);
+        });
+      }
+      else {
+        this.ui.removeLoadingEvent();
+        this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 2);
+      }
     });
   }
 
   wyzerujPunkty() {
-    // czy nie jest w szczegolach ministranta
+    if (this.router.url.split('/').slice(0, 3).join('/') === '/admin-view/(main:acolythe-details') {
+      this.ui.showFeedback('warning', 'Aby wykonać tą czynność, opuść zakładkę szczegóły ministranta', 5);
+      return;
+    }
     this.ui.wantToContinue('Czy jesteś pewny, że chcesz wyzerować punkty WSZYSTKIM ministrantom w swojej parafii? Ta funkcja jest zalecana przy rozpoczęciu nowego roku liturgicznego.').then((wybor) => {
       if (wybor) {
         this.ui.addLoadingEvent();
@@ -82,7 +82,10 @@ export class AdminViewComponent implements OnInit {
   }
 
   usunDyzury() {
-
+    if (this.router.url.split('/').slice(0, 3).join('/') === '/admin-view/(main:acolythe-details') {
+      this.ui.showFeedback('warning', 'Aby wykonać tą czynność, opuść zakładkę szczegóły ministranta', 5);
+      return;
+    }
     this.ui.wantToContinue('Czy jesteś pewny, że chcesz usunąć WSZYSTKIE dyżury ministrantów w swojej parafii? Ta funkcja jest zalecana przy rozpoczęciu nowego roku liturgicznego.').then((wybor) => {
       if (wybor) {
         this.ui.addLoadingEvent();

@@ -1,7 +1,7 @@
 import { UiService } from './../../services/ui.service';
 import { WydarzeniaService } from '../../services/wydarzenia.service';
 import { ParafiaService } from './../../services/parafia.service';
-import { Component, OnInit, OnDestroy,ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, OnDestroy,ChangeDetectionStrategy, AfterViewInit} from '@angular/core';
 import { rank, months } from '../../models/lists.model';
 import { Subscription } from 'rxjs';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
@@ -58,6 +58,7 @@ export class MassComponent implements OnInit, OnDestroy {
   months = months;
   lesad = false;
   refresh: Subject<any> = new Subject();
+  ladowanie = true;
 
   constructor(private parafiaService: ParafiaService, private wydarzeniaService: WydarzeniaService, private ui: UiService) { }
 
@@ -72,6 +73,8 @@ export class MassComponent implements OnInit, OnDestroy {
 
     this.aktywnyDzien = new Date();
     this.aktywnyDzien.setHours(3);
+
+    this.ladowanie = true;
 
     this.MinistranciSub = this.parafiaService.Ministranci.subscribe(lista => {
       this.wszyscyMinistranci = [];
@@ -103,6 +106,7 @@ export class MassComponent implements OnInit, OnDestroy {
         this.header(this.aktywnyDzien);
         this.ministranciDoWydarzenia = [];
         this.sprawdzane = false;
+        // this.ladowanie = false;
         return;
       }
 
@@ -129,7 +133,7 @@ export class MassComponent implements OnInit, OnDestroy {
       this.header(this.aktywnyDzien, this.aktywneWydarzenie); // Tworzenie nagłówka
       this.odliczenie = setTimeout(async () => {
         this.parafiaService.dyzurDoWydarzenia(this.aktywneWydarzenie.id, this.aktywneWydarzenie.typ); // Pobieranie danych o dyżurach
-      }, this.sprawdzane && this.zmiana ? 0 : 500);
+      }, 500);
     });
 
     this.DyzurySub = this.parafiaService.Dyzury.subscribe(lista => {
@@ -155,6 +159,7 @@ export class MassComponent implements OnInit, OnDestroy {
       if (lista === null) {
         this.zmiana = false;
         // this.ui.zmienStan(0, false);
+        this.ladowanie = false;
         return;
       }
 
@@ -176,13 +181,13 @@ export class MassComponent implements OnInit, OnDestroy {
           this.zmiana = true;
         }
       }
-      console.log(this.noweObecnosci)
+      this.ladowanie = false;
       // this.ui.zmienStan(0, false);
 
     });
     setTimeout(() => {
       this.opoznienie = true;
-    }, 3000);
+    }, 2500);
   }
 
   header(aktywnyDz: Date, wydarzenie?: Wydarzenie) {
@@ -255,6 +260,7 @@ export class MassComponent implements OnInit, OnDestroy {
   zapiszZmiany() {
     // this.ui.zmienStan(0, true)
     // this.ui.zmienStan(1, true)
+    this.ladowanie = true;
     this.parafiaService.zapiszObecnosci(this.noweObecnosci, this.sprawdzane, this.aktywneWydarzenie.typ).then(res => {
       setTimeout(() => {
         this.parafiaService.obecnosciDoWydarzenia(this.aktywneWydarzenie.id, this.aktywnyDzien).then(res => {
@@ -298,13 +304,13 @@ export class MassComponent implements OnInit, OnDestroy {
   async indexZmiana(liczba: number) {
 
     clearTimeout(this.odliczenie);
-    console.log(this.zmiana)
     this.ui.wantToContinue('Dane o obecności dla tego wydarzenia nie zostaną zapisane',
     (this.zmiana && this.sprawdzane)).then((kontynuowac) => {
       if (kontynuowac) {
+      this.ladowanie = true;
     // this.ui.zmienStan(0, true);
 
-    if ((this.index + liczba) < 0 || (this.index + liczba) > (this.dzisiejszeWydarzenia.length - 1)) {
+      if ((this.index + liczba) < 0 || (this.index + liczba) > (this.dzisiejszeWydarzenia.length - 1)) {
           if ((this.index + liczba) < 0) {
             this.cofam = true;
           }
@@ -361,6 +367,7 @@ private async ladujDzien(dzien: Date)
     this.aktywnyDzien = dzien;
 
     // this.ui.zmienStan(0,true)
+    this.ladowanie = true;
     this.specjalne = this.parafiaService.przeszukajKalendarzSpecjalne(this.aktywnyDzien.toJSON().slice(0, 10));
     await this.wydarzeniaService.dzisiejszeWydarzenia(this.specjalne !== null ? 0 : this.aktywnyDzien.getDay(),
      this.aktywnyDzien.toJSON()).then(res => {

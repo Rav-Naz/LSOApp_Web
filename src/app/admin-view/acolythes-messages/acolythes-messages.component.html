@@ -1,20 +1,23 @@
 <div class="container">
     <div class="acolythes">
         <div class="top">
-            <button class="sort audiowide" (click)="zmianaSortu()">
-                <label class="icon grey pointer">&#xe018;</label>
-                <label class="grey pointer">Sortuj: </label>
-                <label class="pointer">{{sortujPoImieniu ? 'Alfabetycznie' : 'Ranking'}}</label>
+            <button class="sort audiowide" [disabled]="ladowanieMinistrantow" (click)="zmianaSortu()">
+                <label class="icon grey pointer" *ngIf="!ladowanieMinistrantow">&#xe018;</label>
+                <wbr class="grey pointer">Sortuj:
+                <wbr class="pointer">{{sortujPoImieniu ? 'Alfabetycznie' : 'Ranking'}}
             </button>
-            <button class="delete-message margin-right-1 icon" (click)="nowyMinistrant()">&#xe072;</button>
+            <button class="delete-message margin-right-1 icon" [disabled]="ladowanieMinistrantow" (click)="nowyMinistrant()">&#xe072;</button>
         </div>
 
-        <div class="acolythe" *ngFor="let acolythe of ministranci; let i = index" [ngClass]="{'even':i%2===0}">
-            <button class="delete-message icon col1" (click)="usunMinistranta(acolythe, i)">&#xe08e;</button>
-            <label class="col2">{{sortujPoImieniu? i+1 : acolythe.ranking}}. {{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
-            <label class="col3 audiowide">{{acolythe.punkty}} pkt</label>
-            <button class="delete-message icon col4" (click)="szczegolyMinistranta(acolythe.id_user, i)">&#xe03b;</button>
-        </div>
+        <ng-container *ngIf="!ladowanieMinistrantow">
+            <div class="acolythe" *ngFor="let acolythe of ministranci; let i = index" [ngClass]="{'even':i%2===0}">
+                <button class="delete-message icon col1" (click)="usunMinistranta(acolythe, i)">&#xe08e;</button>
+                <label class="col2">{{sortujPoImieniu? i+1 : acolythe.ranking}}. {{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
+                <label class="col3 audiowide">{{acolythe.punkty}} pkt</label>
+                <button class="delete-message icon col4" (click)="szczegolyMinistranta(acolythe.id_user, i)">&#xe03b;</button>
+            </div>
+        </ng-container>
+        <app-activity-indicator *ngIf="ladowanieMinistrantow" [style.marginTop]="'10rem'" [size]="7"></app-activity-indicator>
     </div>
 
     <div class="messages lexend" (scroll)="onScroll($event)">
@@ -25,25 +28,28 @@
             </div>
             <div class="message-grid-textfield">
                 <p class="message-grid-textfield-header">Opiekun</p>
-                <textarea required minlength="1" placeholder="Wpisz treść wiadomości" class="message-grid-textfield-input lexend" name="message" #message="ngModel" [(ngModel)]="tresc" [ngModelOptions]="{standalone: false}"></textarea>
-                <button class="btn audiowide" type="submit" (click)="wyslij()" [disabled]="!newMessageForm.valid">Wyślij</button>
+                <textarea [disabled]="ladowanieWiadomosci" required minlength="1" placeholder="Wpisz treść wiadomości" class="message-grid-textfield-input lexend" name="message" #message="ngModel" [(ngModel)]="tresc" [ngModelOptions]="{standalone: false}"></textarea>
+                <button class="btn audiowide" type="submit" (click)="wyslij()" [disabled]="!newMessageForm.valid || ladowanieWiadomosci">Wyślij</button>
             </div>
         </form>
 
-        <div class="message-grid" *ngFor="let message of wiadomosci">
-            <div class="message-grid-date">
-                <p class="message-grid-date-text">{{message.data | date: 'HH:mm'}}</p>
-                <p class="message-grid-date-text">{{message.data | date: 'dd/MM/y'}}</p>
-            </div>
-            <div class="message-grid-textfield">
-                <div class="title-container">
-                    <p class="message-grid-textfield-header">{{message.autor_id === 0 ? 'Administrator' : 'Opiekun'}}</p>
-                    <button class="delete-message icon" *ngIf="message.autor_id !== 0" (click)="usunWiadomosc(message)">&#xe08e;</button>
+        <ng-container *ngIf="!ladowanieWiadomosci">
+            <div class="message-grid" *ngFor="let message of wiadomosci">
+                <div class="message-grid-date">
+                    <p class="message-grid-date-text">{{message.data | date: 'HH:mm'}}</p>
+                    <p class="message-grid-date-text">{{message.data | date: 'dd/MM/y'}}</p>
                 </div>
-                <!-- <textarea placeholder="Wpisz treść wiadomości" class="message-grid-textfield-input lexend"></textarea> -->
-                <label class="message-grid-text">{{message.tresc | uri}}</label>
-                <img [src]="message.linkobrazu" *ngIf="message.linkobrazu" class="message-grid-image">
+                <div class="message-grid-textfield">
+                    <div class="title-container">
+                        <p class="message-grid-textfield-header">{{message.autor_id === 0 ? 'Administrator' : 'Opiekun'}}</p>
+                        <button class="delete-message icon" *ngIf="message.autor_id !== 0" (click)="usunWiadomosc(message)">&#xe08e;</button>
+                    </div>
+                    <!-- <textarea placeholder="Wpisz treść wiadomości" class="message-grid-textfield-input lexend"></textarea> -->
+                    <label class="message-grid-text">{{message.tresc | uri}}</label>
+                    <img [src]="message.linkobrazu" *ngIf="message.linkobrazu" class="message-grid-image">
+                </div>
             </div>
-        </div>
+        </ng-container>
+        <app-activity-indicator *ngIf="ladowanieWiadomosci || !doladowanie" [style.marginTop]="'10rem'" [style.marginLeft]="'10rem'"></app-activity-indicator>
     </div>
 </div>

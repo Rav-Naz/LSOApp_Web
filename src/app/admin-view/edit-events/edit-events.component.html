@@ -3,9 +3,9 @@
         <div class="all-events">
             <label class="title audiowide">Wydarzenia</label>
             <div class="container-white">
+                <label *ngIf="wybranyDzien === undefined">Wybierz dzień</label>
                 <div class="events-grid">
-                    <div class="event-list">
-                        <label *ngIf="wybranyDzien === undefined">Wybierz dzień</label>
+                    <div class="event-list" *ngIf="!ladowanie">
                         <div class="event" *ngFor="let event of wydarzeniaDnia, let i = index" [ngClass]="{'grey': i%2===0,'grey2': i === edytowanyIndex}">
                             <button class="delete-message icon" (click)="usun(event)">&#xe08e;</button>
                             <label class="width-30">{{event.data_dokladna == null ? 'Cykliczne' : event.data_dokladna.toString().slice(0,10)}}</label>
@@ -13,6 +13,9 @@
                             <label class="typ" [ngClass]="{'mass': event.typ === 0,'unction': event.typ === 1,'meeting': event.typ === 2}"></label>
                             <button class="delete-message icon" (click)="edytujWydarzenie(event, i)">&#xe03b;</button>
                         </div>
+                    </div>
+                    <div class="activity-indicator" *ngIf="ladowanie">
+                        <app-activity-indicator></app-activity-indicator>
                     </div>
                     <div class="day-list">
                         <button class="day audiowide" *ngFor="let day of DzienTygodnia" [ngClass]="{wybrany: wybranyDzien === day}" (click)="zmienDzien(day)">
@@ -75,13 +78,13 @@
                 </form>
                 <div class="confirmation-panel-2">
                     <button class="navigation-button-2 back-black audiowide" *ngIf="edycja" (click)="clear()">Anuluj</button>
-                    <button class="navigation-button-2 audiowide" [disabled]="!isTypeNotNull || !isHourNotNull || (jednorazowe ? !isDateNotNull : false) || (nowyTyp === 2 ? !isRankNotNull : false)" (click)="dodaj()">{{edycja ? 'Zapisz' : 'Dodaj'}}</button>
+                    <button class="navigation-button-2 audiowide" [disabled]="!isTypeNotNull || !isHourNotNull || (jednorazowe ? !isDateNotNull : false) || (nowyTyp === 2 ? !isRankNotNull : false) || ladowanie" (click)="dodaj()">{{edycja ? 'Zapisz' : 'Dodaj'}}</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="confirmation-panel">
         <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
-        <button class="navigation-button audiowide" [disabled]="!zmiana" (click)="zapisz()">Zapisz</button>
+        <button class="navigation-button audiowide" [disabled]="!zmiana || ladowanie" (click)="zapisz()">Zapisz</button>
     </div>
 </div>

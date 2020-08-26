@@ -260,9 +260,7 @@ export class HttpService {
     return new Promise<any>(resolve => {
       this.http.post(this.url + '/update_points', { punkty_dod_sluzba, punkty_uj_sluzba, punkty_dodatkowe, punkty_nabozenstwo, punkty_dod_zbiorka, punkty_uj_zbiorka, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
         if (res.hasOwnProperty('insertId')) {
-          this.pobierzParafie().then(res => {
-            resolve(res);
-          });
+          resolve(1);
         }
         else if (res === 'You have not permission to get the data') {
           resolve(404);

@@ -13,16 +13,19 @@ export class DeleteParishComponent {
   constructor(private router: Router, private http: HttpService, private ui: UiService) { }
 
   _password: string;
+  ladowanie = false;
 
   anuluj() {
     this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
   }
 
   usun() {
+    this.ladowanie = true;
     this.ui.addLoadingEvent();
     this.http.usuwanieParafii(this._password).then(res => {
       switch (res) {
         case 0:
+          this.ladowanie = false;
           this.ui.removeLoadingEvent();
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           break;
@@ -39,12 +42,14 @@ export class DeleteParishComponent {
               });
             }
             else {
+              this.ladowanie = false;
               this.ui.removeLoadingEvent();
               this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 2);
             }
           });
           break;
         case 2:
+          this.ladowanie = false;
           this.ui.removeLoadingEvent();
           this.ui.showFeedback('warning', 'Wpisane hasło jest niepoprawne', 3);
           break;
@@ -62,6 +67,7 @@ export class DeleteParishComponent {
 
           break;
         default:
+          this.ladowanie = false;
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           this.ui.removeLoadingEvent();
           break;

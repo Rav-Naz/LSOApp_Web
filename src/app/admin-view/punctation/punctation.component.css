@@ -68,8 +68,9 @@
 }
 
 .navigation-button:disabled {
-    background: linear-gradient(to right bottom, #a0a0a0, #7c7c7c);
-    color: #505050;
+    background: rgb(206, 206, 206);
+    color: rgb(124, 124, 124);
+    border-color: rgb(206, 206, 206);
     cursor: not-allowed;
 }
 
@@ -146,11 +147,32 @@ input[type=range]::-webkit-slider-runnable-track {
     cursor: pointer;
 }
 
+input[type=range]:disabled::-webkit-slider-runnable-track {
+    background: rgba(126, 126, 126, 0.78);
+    border: 0;
+    border-radius: 20.8px;
+    width: 100%;
+    height: 11.4px;
+    cursor: pointer;
+}
+
 input[type=range]::-webkit-slider-thumb {
     margin-top: -7.3px;
     width: 26px;
     height: 26px;
     background: #a51510;
+    border: 0px solid rgba(0, 0, 30, 0);
+    border: 0;
+    border-radius: 50px;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type=range]:disabled::-webkit-slider-thumb {
+    margin-top: -7.3px;
+    width: 26px;
+    height: 26px;
+    background: #6d6d6d;
     border: 0px solid rgba(0, 0, 30, 0);
     border: 0;
     border-radius: 50px;

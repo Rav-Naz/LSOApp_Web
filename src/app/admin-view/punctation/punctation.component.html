@@ -4,35 +4,35 @@
         <div class="points-container underline">
             <label class="points-name">Obecność na służbie</label>
             <label class="points-count">{{pktZaObecnoscSluzba}}</label>
-            <input class="points" type="range" min="0" max="10" [(ngModel)]="pktZaObecnoscSluzba" [ngModelOptions]="{standalone: false}" #presence="ngModel" name="presence">
+            <input [disabled]="zapisywanie" class="points" type="range" min="0" max="10" [(ngModel)]="pktZaObecnoscSluzba" [ngModelOptions]="{standalone: false}" #presence="ngModel" name="presence">
         </div>
         <div class="points-container underline">
             <label class="points-name">Nieobecność na służbie</label>
             <label class="points-count">{{pktZaNieobecnoscSluzba}}</label>
-            <input class="points" type="range" min="-10" max="0" [(ngModel)]="pktZaNieobecnoscSluzba" [ngModelOptions]="{standalone: false}" #absence="ngModel" name="absence">
+            <input [disabled]="zapisywanie" class="points" type="range" min="-10" max="0" [(ngModel)]="pktZaNieobecnoscSluzba" [ngModelOptions]="{standalone: false}" #absence="ngModel" name="absence">
         </div>
         <div class="points-container underline">
             <label class="points-name">Obecność na mszy dod.</label>
             <label class="points-count">{{pktZaDodatkowa}}</label>
-            <input class="points" type="range" min="0" max="10" [(ngModel)]="pktZaDodatkowa" [ngModelOptions]="{standalone: false}" #additional="ngModel" name="additional">
+            <input [disabled]="zapisywanie" class="points" type="range" min="0" max="10" [(ngModel)]="pktZaDodatkowa" [ngModelOptions]="{standalone: false}" #additional="ngModel" name="additional">
         </div>
         <div class="points-container underline">
             <label class="points-name">Obecność na nabożeństwie</label>
             <label class="points-count">{{pktZaNabozenstwo}}</label>
-            <input class="points" type="range" min="0" max="10" [(ngModel)]="pktZaNabozenstwo" [ngModelOptions]="{standalone: false}" #devotion="ngModel" name="devotion">
+            <input [disabled]="zapisywanie" class="points" type="range" min="0" max="10" [(ngModel)]="pktZaNabozenstwo" [ngModelOptions]="{standalone: false}" #devotion="ngModel" name="devotion">
         </div>
         <div class="points-container underline">
             <label class="points-name">Obecność na zbiórce</label>
             <label class="points-count">{{pktZaObecnoscZbiorka}}</label>
-            <input class="points" type="range" min="0" max="10" [(ngModel)]="pktZaObecnoscZbiorka" [ngModelOptions]="{standalone: false}" #meeting_presence="ngModel" name="meeting_presence">
+            <input [disabled]="zapisywanie" class="points" type="range" min="0" max="10" [(ngModel)]="pktZaObecnoscZbiorka" [ngModelOptions]="{standalone: false}" #meeting_presence="ngModel" name="meeting_presence">
         </div>
         <div class="points-container">
             <label class="points-name">Nieobecność na zbiórce</label>
             <label class="points-count">{{pktZaNieobecnoscZbiorka}}</label>
-            <input class="points" type="range" min="-10" max="0" [(ngModel)]="pktZaNieobecnoscZbiorka" [ngModelOptions]="{standalone: false}" #meeting_absence="ngModel" name="meeting_absence">
+            <input [disabled]="zapisywanie" class="points" type="range" min="-10" max="0" [(ngModel)]="pktZaNieobecnoscZbiorka" [ngModelOptions]="{standalone: false}" #meeting_absence="ngModel" name="meeting_absence">
         </div>
     </form>
 
     <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newPunctationForm.valid || !czyZmienione" (click)="zapisz()">Zapisz</button>
+    <button class="navigation-button confirm audiowide" [disabled]="!newPunctationForm.valid || !czyZmienione || zapisywanie" (click)="zapisz()">Zapisz</button>
 </div>
