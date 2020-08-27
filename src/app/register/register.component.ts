@@ -1,7 +1,6 @@
-import { rank } from './../models/lists.model';
 import { HttpService } from './../services/http.service';
 import { UiService } from './../services/ui.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {dioceses, monasteries} from '../models/lists.model';
 
 @Component({
@@ -80,6 +79,18 @@ export class RegisterComponent {
     const diocese_id = dioceses.indexOf(this._diocese);
     const monastery_id = monasteries.indexOf(this._monastery);
     const rankx = this.ranks.indexOf(this._rank) + 9;
+    if (
+      !this.isParishNameValid ||
+      !this.isMonasteryNotNull ||
+      !this.isDioceseNotNull ||
+      !this.isCityValid ||
+      !this.isNameValid ||
+      !this.isLastNameValid ||
+      !this.isEmailValid ||
+      !this.isRankNotNull ||
+      !this.isTermsAccepted) { return; }
+
+    this.ladowanie = true;
     this.httpService.rejestracja(this._parishName, diocese_id, this._city,
       monastery_id, rankx, this._name, this._lastName, this._email/*, this._hasloP*/).then((res) => {
       switch (res) {
@@ -123,6 +134,31 @@ export class RegisterComponent {
 
   get isTermsAccepted() {
     return this._terms;
+  }
+
+  get isParishNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})').test(this._parishName);
+  }
+
+  get isCityValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})').test(this._city);
+  }
+
+  get isNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})').test(this._name);
+  }
+
+  get isLastNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})').test(this._lastName);
+  }
+
+  get isEmailValid()
+  {
+    return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this._email);
   }
 
   changeCheckbox(event)

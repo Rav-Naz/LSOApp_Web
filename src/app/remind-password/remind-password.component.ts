@@ -17,6 +17,11 @@ export class RemindPasswordComponent {
   _email: string;
 
   wyslij() {
+    if (!this.isEmailValid)
+    {
+      return;
+    }
+
     this.ladowanie = true;
 
     this.httpService.przypomnij(this._email).then(res => {
@@ -35,5 +40,11 @@ export class RemindPasswordComponent {
         }
     });
 
-}
+
+  }
+
+  get isEmailValid()
+  {
+    return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this._email);
+  }
 }

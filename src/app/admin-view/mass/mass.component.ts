@@ -238,6 +238,7 @@ export class MassComponent implements OnInit, OnDestroy {
   }
 
   zmienStatusObecnosci(event, id_user: number, dodatkowa: boolean) {
+    if (!this.moznaSprawdzac()) { return; }
     const status = this.noweObecnosci.filter(obecnosc => obecnosc.id_user === id_user)[0];
     if (status !== undefined && !dodatkowa) {
       status.status = event;
@@ -258,8 +259,7 @@ export class MassComponent implements OnInit, OnDestroy {
   }
 
   zapiszZmiany() {
-    // this.ui.zmienStan(0, true)
-    // this.ui.zmienStan(1, true)
+    if (!this.zmiana || this.ladowanie) { return; }
     this.ladowanie = true;
     this.parafiaService.zapiszObecnosci(this.noweObecnosci, this.sprawdzane, this.aktywneWydarzenie.typ).then(res => {
       setTimeout(() => {
@@ -303,6 +303,8 @@ export class MassComponent implements OnInit, OnDestroy {
 
   async indexZmiana(liczba: number) {
 
+    if (!this.opoznienie) { return; }
+
     clearTimeout(this.odliczenie);
     this.ui.wantToContinue('Dane o obecności dla tego wydarzenia nie zostaną zapisane',
     (this.zmiana && this.sprawdzane)).then((kontynuowac) => {
@@ -341,6 +343,7 @@ export class MassComponent implements OnInit, OnDestroy {
   }
 
   naKalendarz(bool: boolean) {
+    if (!this.opoznienie) { return; }
     this.kalendarz = bool;
 }
 

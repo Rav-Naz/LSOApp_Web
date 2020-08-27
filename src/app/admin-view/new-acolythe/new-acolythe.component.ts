@@ -33,16 +33,11 @@ export class NewAcolytheComponent {
       document.getElementById('selection3').style.color = grey;
     }
   }
-
-  get isRankNotNull() {
-    return this._rank !== 'Wybierz stopień';
-  }
-
   zapisz() {
 
-    this.zapisywanie = true;
+    if ( !this.isEmailValid || !this.isLastNameValid || !this.isNameValid || !this.isRankNotNull || this.zapisywanie) { return; }
 
-    // this.ui.zmienStan(1,true)
+    this.zapisywanie = true;
 
     const rankx = this.ranks.indexOf(this._rank);
     this.parafiaService.nowyMinistrant(rankx, this._name, this._lastName,
@@ -69,12 +64,27 @@ export class NewAcolytheComponent {
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           break;
       }
-      // this.ui.zmienStan(1, false);
     });
   }
 
   anuluj()
   {
     this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+  }
+
+  get isRankNotNull() {
+    return this._rank !== 'Wybierz stopień';
+  }
+  get isNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})').test(this._name);
+  }
+  get isLastNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})').test(this._lastName);
+  }
+  get isEmailValid()
+  {
+    return this._email === null || this._email === '' ? true : new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this._email);
   }
 }

@@ -93,12 +93,14 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
   }
 
   zmianaSortu() {
+    if (this.ladowanieMinistrantow) { return; }
     // this.ui.zmienStan(1,true)
     this.sortujPoImieniu = !this.sortujPoImieniu;
     this.sortujListe();
   }
 
   nowyMinistrant() {
+    if (this.ladowanieMinistrantow) { return; }
     // this.tabIndexService.nowyOutlet(4, 'ministrant-nowy')
     // this.router.navigateByUrl('/admin-view/(main:new-acolythe)');
     this.router.navigate(['/admin-view', { outlets: { main: ['new-acolythe'] } }]);
@@ -130,6 +132,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
   }
 
   wyslij() {
+    if (this.tresc.length <= 0 || this.ladowanieWiadomosci) { return; }
     this.ladowanieWiadomosci = true;
     this.wiadosciService.nowaWiadomosc(this.tresc).then(res => {
       switch (res) {

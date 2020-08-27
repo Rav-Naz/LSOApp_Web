@@ -106,8 +106,12 @@ export class EditEventsComponent implements OnInit {
   }
 
   dodaj() {
-    if (!this.isTypeNotNull || !this.isHourNotNull || (this.jednorazowe ? !this.isDateNotNull
-      : false) || (this.nowyTyp === 2 ? !this.isRankNotNull : false)) { return; }
+    if (
+      !this.isTypeNotNull ||
+      !this.isHourNotNull ||
+      (this.jednorazowe ? !this.isDateNotNull : false) ||
+      (this.nowyTyp === 2 ? !this.isRankNotNull : false) ||
+      this.ladowanie) { return; }
     const splitted = this.noweWydGodz.split(':');
     const rankx = this.rangi.indexOf(this.grupa);
     if (this.edycja) {
@@ -164,6 +168,7 @@ export class EditEventsComponent implements OnInit {
 }
 
   zapisz() {
+    if (!this.zmiana || this.ladowanie) { return; }
     this.zmiana = false;
     this.ladowanie = true;
     this.wydarzeniaService.zapiszWydarzenia(this.stareWydarzeniaDnia, this.wydarzeniaDnia, this.aktualizujWydarzeniaDnia, this.wybranyDzien).then(res => {

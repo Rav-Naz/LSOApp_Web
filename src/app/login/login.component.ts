@@ -3,7 +3,7 @@ import { UserService } from './../services/user.service';
 import { User } from './../models/user.model';
 import { UiService } from './../services/ui.service';
 import { HttpService } from './../services/http.service';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -29,6 +29,10 @@ export class LoginComponent implements OnInit {
   }
 
   signIn() {
+    if (!this.isEmailValid || !this.isPassowrdValid)
+    {
+      return;
+    }
     this.ui.addLoadingEvent();
     this.http.logowanie(this._email, this._password).then(res => {
       if (res === 'brak' || res === 'niepoprawne') {
@@ -95,5 +99,15 @@ export class LoginComponent implements OnInit {
         }
       }
     });
+  }
+
+  get isEmailValid()
+  {
+    return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this._email);
+  }
+
+  get isPassowrdValid()
+  {
+    return this._password.length > 5;
   }
 }

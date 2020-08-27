@@ -30,6 +30,8 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   };
   dyzury: Array<Wydarzenie> = [];
   podgladMinistranta: Subscription;
+  ladowanieEmailu = false;
+  ladowanie = false;
 
 
   nazwyDni = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
@@ -54,14 +56,6 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     this.parafiaService.aktualnyMinistrantId = this.acolytheId;
     this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
       if (res === 0) {
-        // this.ui.zmienStan(5,true)
-        // this.ui.zmienStan(1,true)
-        // setTimeout(() => {
-        // this.ui.sesjaWygasla()
-        // this.ui.zmienStan(5,false)
-        // this.ui.zmienStan(1,false)
-        // },1000)
-        // this.tabIndexService.nowyOutlet(4, 'ministranci')
         this.powrot();
         return;
       }
@@ -123,21 +117,21 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   zmienPunkty(punkty: number) {
+    if (this.ministrant.id_user === 0) { return; }
     this.zmiana = true;
     this.ministrant.punkty += punkty;
   }
 
   zapiszEmail() {
-    if (this.isEmailsSame) {
+    if (this.isEmailsSame || !this.isEmailValid || this.ladowanieEmailu) {
       return;
     }
-
-    // this.ui.zmienStan(4,true)
+    this.ladowanieEmailu = true;
 
     this.http.aktywacjaMinistranta(this.userEmail, this.acolytheId).then(res => {
       switch (res) {
         case 0:
-          // this.ui.zmienStan(4,false)
+          this.ladowanieEmailu = false;
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           break;
 
@@ -146,16 +140,16 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
             this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
               this.przypisz = false;
               this.userEmail = null;
+              this.ladowanieEmailu = false;
             });
-            // this.ui.zmienStan(4, false)
           });
           break;
         case 2:
-          // this.ui.zmienStan(4, false)
+          this.ladowanieEmailu = false;
           this.ui.showFeedback('warning', 'Ten adres e-mail jest już przypisany do innego konta', 3);
           break;
         default:
-          // this.ui.zmienStan(4, false)
+          this.ladowanieEmailu = false;
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           break;
       }
@@ -163,23 +157,21 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   usun() {
+    if (this.ministrant.id_user === 0 || this.ladowanieEmailu) { return; }
     this.ui.wantToContinue('Usuwając dostęp do konta dla ministranta utraci on mozliwość logowania, lecz jego dane pozostaną.')
     .then(wybor => {
       if (wybor) {
-
-        // this.ui.zmienStan(4,true)
-        // this.ui.zmienStan(5,false)
+        this.ladowanieEmailu = true;
         this.parafiaService.usunKontoMinistanta(this.acolytheId).then(res => {
           if (res === 1) {
 
             setTimeout(() => {
               this.ui.showFeedback('succes', 'Usunięto dostęp do konta', 3);
+              this.ladowanieEmailu = false;
             }, 400);
-            // this.ui.zmienStan(4,false)
           }
           else {
-            // this.ui.zmienStan(5,false)
-            // this.ui.zmienStan(4,false)
+            this.ladowanieEmailu = false;
             this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           }
         });
@@ -188,11 +180,15 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   zmianaCheckboxa(index: number, event) {
+    console.log(event)
+    if (this.wyborGodziny(index).length === 0) { return; }
     this.dni[index] = event;
     if (event === null) {
       this.zmiana = true;
       this.wydarzeniaMinistranta[index] = null;
       this.setSelectionOption(index, 0);
+    } else if (event === 1) {
+      this.chooseEvent(index);
     }
   }
 
@@ -250,10 +246,13 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   zapisz() {
-    // if (this.isRankNotNull)
-    // {
-    //   return;
-    // }
+    if (
+      !this.zmiana ||
+      !this.isNameValid ||
+      !this.isLastNameValid ||
+      !this.isRankNotNull ||
+      this.ladowanie){ return; }
+    this.ladowanie = true;
     let rankx = this.ranks.indexOf(this._rank);
     if (rankx === 11) { rankx = 12; }
     if (rankx < 0) { return; }
@@ -264,14 +263,12 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
           if (res === 1) {
             setTimeout(() => {
               this.ui.showFeedback('succes', 'Zapisano dyżury', 2);
+              this.ladowanie = false;
+              this.zmiana = false;
             }, 400);
-            // this.ui.zmienStan(5,false)
-            // this.ui.zmienStan(4,false)
-            this.zmiana = false;
           }
           else {
-            // this.ui.zmienStan(4,false)
-            // this.ui.zmienStan(5,false)
+            this.ladowanie = false;
             this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           }
         });
@@ -283,8 +280,6 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
       }
 
     });
-    // this.ui.zmienStan(5, true);
-    // this.ui.zmienStan(4, true);
   }
 
   powrot() {
@@ -295,9 +290,20 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   get isEmailsSame() {
     return this.ministrant.email === this.userEmail;
   }
-
   get isRankNotNull() {
     return this._rank !== 'Wybierz stopień';
+  }
+  get isNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})').test(this.ministrant.imie);
+  }
+  get isLastNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})').test(this.ministrant.nazwisko);
+  }
+  get isEmailValid()
+  {
+    return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this.userEmail);
   }
 
   ngOnDestroy(): void {

@@ -57,6 +57,12 @@ export class EditParishDetailsComponent implements OnInit {
   }
 
   zapisz() {
+    if (!this.isParishNameValid ||
+      !this.isCityValid ||
+      !this.isDioceseNotNull ||
+      !this.isMonasteryNotNull ||
+      !this.zmiana ||
+      this.isDisabled) { return; }
     this.ladowanie = true;
     const diocese_id = dioceses.indexOf(this._diocese);
     const monastery_id = monasteries.indexOf(this._monastery);
@@ -130,6 +136,15 @@ export class EditParishDetailsComponent implements OnInit {
   {
     // return true
     return this.ladowanie || !this.isParish;
+  }
+
+  get isParishNameValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .]{2,30})').test(this.parafia.nazwa_parafii);
+  }
+  get isCityValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{2,30})').test(this.parafia.miasto);
   }
 
 }

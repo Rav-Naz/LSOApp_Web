@@ -40,13 +40,13 @@
                             <input placeholder="Wpisz e-mail ministranta" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="points lexend width-25" [(ngModel)]="userEmail" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email">
                             <label class="alert" *ngIf="email && !email.valid && email.touched">Wpisz poprawny adres e-mail</label>
                             <div class="center">
-                                <button class="email-set audiowide margin-0-1" [disabled]="isEmailsSame || !email.valid" (click)="zapiszEmail()">Zapisz</button>
+                                <button class="email-set audiowide margin-0-1" [disabled]="isEmailsSame || !email.valid || ladowanieEmailu" (click)="zapiszEmail()">Zapisz</button>
                                 <button class="email-set audiowide black-back" (click)="przypisz = false; userEmail = null">Anuluj</button>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="ministrant.email && !przypisz">
                             <label class="detail">{{ministrant.email}}</label>
-                            <button class="email-set audiowide" (click)="usun()" [disabled]="ministrant.id_user === 0">Usuń dostęp do konta</button>
+                            <button class="email-set audiowide" (click)="usun()" [disabled]="ministrant.id_user === 0 || ladowanieEmailu">Usuń dostęp do konta</button>
                         </ng-container>
                         <label class="description" *ngIf="ministrant.email !== null && ministrant.aktywny === 0">Link aktywacyjny został wysłany na podany adres email. Jeśli przez dłuższy czas ministrant nie otrzymał wiadomości, należy sprawdzić zakładkę 'SPAM'.</label>
                     </div>
@@ -88,6 +88,6 @@
     </div>
     <div class="confirmation-panel">
         <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
-        <button class="navigation-button audiowide" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull" (click)="zapisz()">Zapisz</button>
+        <button class="navigation-button audiowide" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull || ladowanie" (click)="zapisz()">Zapisz</button>
     </div>
 </div>

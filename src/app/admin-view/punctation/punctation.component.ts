@@ -3,7 +3,6 @@ import { HttpService } from './../../services/http.service';
 import { ParafiaService } from './../../services/parafia.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Parafia } from 'src/app/models/parafia.model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -49,7 +48,15 @@ export class PunctationComponent implements OnInit {
 
   zapisz() {
 
-    // this.ui.zmienStan(4, true);
+    if (
+      !this.isPktZaObecnoscSluzbaValid ||
+      !this.isPktZaNieobecnoscSluzbaValid ||
+      !this.isPktZaDodatkowaaValid ||
+      !this.isPktZaNabozenstwoValid ||
+      !this.isPktZaObecnoscZbiorkaValid ||
+      !this.isPktZaNieobecnoscZbiorkaValid ||
+      !this.czyZmienione ||
+      this.zapisywanie) { return; }
 
     this.zapisywanie = true;
 
@@ -80,6 +87,31 @@ export class PunctationComponent implements OnInit {
       || (this.pktZaObecnoscZbiorka !== this.poczObecnoscZbiorka)
       || (this.pktZaNieobecnoscZbiorka !== this.poczNieobecnoscZbiorka)
       || (this.pktZaNabozenstwo !== this.poczNabozenstwo)
+  }
+
+  get isPktZaObecnoscSluzbaValid()
+  {
+    return this.pktZaObecnoscSluzba >= 0 && this.pktZaObecnoscSluzba <= 10;
+  }
+  get isPktZaNieobecnoscSluzbaValid()
+  {
+    return this.pktZaNieobecnoscSluzba >= -10 && this.pktZaNieobecnoscSluzba <= 0;
+  }
+  get isPktZaDodatkowaaValid()
+  {
+    return this.pktZaDodatkowa >= 0 && this.pktZaDodatkowa <= 10;
+  }
+  get isPktZaNabozenstwoValid()
+  {
+    return this.pktZaNabozenstwo >= 0 && this.pktZaNabozenstwo <= 10;
+  }
+  get isPktZaObecnoscZbiorkaValid()
+  {
+    return this.pktZaObecnoscZbiorka >= 0 && this.pktZaObecnoscZbiorka <= 10;
+  }
+  get isPktZaNieobecnoscZbiorkaValid()
+  {
+    return this.pktZaNieobecnoscZbiorka >= -10 && this.pktZaNieobecnoscZbiorka <= 0;
   }
 
 }

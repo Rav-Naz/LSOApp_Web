@@ -1,8 +1,7 @@
 import { Router } from '@angular/router';
 import { HttpService } from './../services/http.service';
 import { UiService } from './../services/ui.service';
-import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-give-password',
@@ -19,11 +18,14 @@ export class GivePasswordComponent {
 
   constructor(private ui: UiService, private httpService: HttpService, private router: Router) { }
 
-  get isPasswordSame() {
-    return this._password === this._cofirmPassword ? true : false;
-  }
-
   wyslij() {
+
+    if (
+      !this.isEmailValid ||
+      !this.isCodeValid ||
+      !this.isNewPasswordValid ||
+      !this.isPasswordSame
+      ) { return; }
 
     this.ladowanie = true;
 
@@ -49,6 +51,23 @@ export class GivePasswordComponent {
       this.ladowanie = false;
     });
 
+  }
+
+  get isPasswordSame() {
+    return this._password === this._cofirmPassword ? true : false;
+  }
+
+  get isEmailValid()
+  {
+    return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this._email);
+  }
+  get isCodeValid()
+  {
+    return new RegExp('([0-9]{6})').test(this._code);
+  }
+  get isNewPasswordValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})').test(this._password);
   }
 
 }

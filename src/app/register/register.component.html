@@ -6,7 +6,7 @@
             <label class="input-object-title audiowide">Wezwanie parafii</label>
             <div class="input-object-description parish-name">
                 <label class="pw" id="pw">pw.</label>
-                <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .]{2,30})" class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" [(ngModel)]="_parishName" (ngModelChange)="changeParishName()" [ngModelOptions]="{standalone: false}"
+                <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})" class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" [(ngModel)]="_parishName" (ngModelChange)="changeParishName()" [ngModelOptions]="{standalone: false}"
                     name="parish">
             </div>
             <label class="alert" *ngIf="!parishName.valid && parishName.touched">Wezwanie musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
@@ -32,19 +32,19 @@
 
         <div class="input-object">
             <label class="input-object-title audiowide">Miasto</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{2,30})" class="input-object-description lexend" placeholder="Wpisz miasto" [(ngModel)]="_city" [ngModelOptions]="{standalone: false}" #city="ngModel" name="city">
+            <input autocomplete="address-level1" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})" class="input-object-description lexend" placeholder="Wpisz miasto" [(ngModel)]="_city" [ngModelOptions]="{standalone: false}" #city="ngModel" name="city">
             <label class="alert" *ngIf="!city.valid && city.touched">Miasto musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
         <div class="input-object">
             <label class="input-object-title audiowide">Imię</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje imię" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+            <input autocomplete="name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje imię" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
             <label class="alert" *ngIf="!name.valid && name.touched">Imię musi być krótsze od 20 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
         <div class="input-object">
             <label class="input-object-title audiowide">Nazwisko</label>
-            <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń-]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje nazwisko" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+            <input autocomplete="family-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje nazwisko" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
             <label class="alert" *ngIf="!lastName.valid && lastName.touched">Nazwisko musi być którsze od 20 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
@@ -74,7 +74,7 @@
     </form>
 
     <button class="navigation-button back audiowide" routerLink="/login">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newRegisterForm.valid || !isRankNotNull || !isMonasteryNotNull || !isDioceseNotNull || !isTermsAccepted" (click)="zarejestruj()">Kontynuuj</button>
+    <button class="navigation-button confirm audiowide" [disabled]="!newRegisterForm.valid || !isRankNotNull || !isMonasteryNotNull || !isDioceseNotNull || !isTermsAccepted || ladowanie" (click)="zarejestruj()">Kontynuuj</button>
 </div>
 
 <div class="container" *ngIf="udanaRejP">

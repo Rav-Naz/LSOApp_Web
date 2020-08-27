@@ -20,6 +20,7 @@ export class DeleteParishComponent {
   }
 
   usun() {
+    if (!this.isPassowrdValid || this.ladowanie) { return; }
     this.ladowanie = true;
     this.ui.addLoadingEvent();
     this.http.usuwanieParafii(this._password).then(res => {
@@ -74,6 +75,11 @@ export class DeleteParishComponent {
       }
     });
 
+  }
+
+  get isPassowrdValid()
+  {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})').test(this._password);
   }
 
 }
