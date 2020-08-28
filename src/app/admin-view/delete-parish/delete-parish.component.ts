@@ -16,7 +16,7 @@ export class DeleteParishComponent {
   ladowanie = false;
 
   anuluj() {
-    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+    this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
   }
 
   usun() {

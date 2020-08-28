@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
 
                 this.userService.zmianaOpiekuna(false).then(res => {
                   if (res === 1) {
-                    this.router.navigate(['/menu']);
+                    this.router.navigate(['/acolythe-view']);
                   }
                   else {
                     this.ui.removeLoadingEvent();
@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
         else {
           this.userService.zmianaOpiekuna(false).then(res => {
             if (res === 1) {
-              this.router.navigate(['/menu']);
+              this.router.navigate(['/acolythe-view']);
             }
             else {
               this.ui.removeLoadingEvent();

@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="duties">
+        <div class="welcome">
+            <label class="name">{{'Cześć ' + (user ? user.imie : '') + '!'}}</label>
+            <label class="header">{{ladowanie ? 'Ładowanie dyżurów...' : 'Twoje dyżury:'}}</label>
+        </div>
+        <div class="duties-grid">
+
+            <label class="pas"></label>
+
+            <label class="trojkat"></label>
+
+            <label *ngFor="let dzien of dni, let i = index" [style.grid-row]="rzedy[ktoryRzad(i)]" class="dzien audiowide" [style.opacity]="opacity(i)">{{dzien}}</label>
+
+            <div class="all-day-container" *ngFor="let row of rzedy, let i = index" [style.grid-row]="rzedy[ktoryRzad(i)] === '4/7' ? '4' : rzedy[ktoryRzad(i)]" [style.opacity]="opacity(i)">
+                <div class="event-container lexend" *ngFor="let wydarzenie of wydarzeniaNaDanyDzien(i)">
+                    <label class="typ icon" [ngClass]="{'mass': wydarzenie.typ === 0,'unction': wydarzenie.typ === 1,'meeting': wydarzenie.typ === 2}">{{wydarzenie.status === 0 ? '&#xe08c;': wydarzenie.status === 1 ? '&#xe023;' : ''}}</label>
+                    <label>{{wydarzenie.nazwa}}</label>
+                    <label>{{GodzinaDyzuruNaDanyDzien(wydarzenie.godzina)}}</label>
+                </div>
+            </div>
+
+            <div class="event-container now lexend" *ngIf="aktualneWydarzenie" [style.width]="'90%'">
+                <label class="typ icon" [ngClass]="{'mass': aktualneWydarzenie.typ === 0,'unction': aktualneWydarzenie.typ === 1,'meeting': aktualneWydarzenie.typ === 2}">{{aktualneWydarzenie.status === 0 ? '&#xe08c;': aktualneWydarzenie.status === 1 ? '&#xe023;' : ''}}</label>
+                <label>{{aktualneWydarzenie.nazwa}}</label>
+                <label>{{GodzinaDyzuruNaDanyDzien(aktualneWydarzenie.godzina)}}</label>
+            </div>
+
+            <div class="all-day-container" [style.grid-row]="'6'">
+                <div class="event-container lexend" *ngFor="let wydarzenie of pozniejszeWydarzenia">
+                    <label class="typ icon" [ngClass]="{'mass': wydarzenie.typ === 0,'unction': wydarzenie.typ === 1,'meeting': wydarzenie.typ === 2}">{{wydarzenie.status === 0 ? '&#xe08c;': wydarzenie.status === 1 ? '&#xe023;' : ''}}</label>
+                    <label>{{wydarzenie.nazwa}}</label>
+                    <label>{{GodzinaDyzuruNaDanyDzien(wydarzenie.godzina)}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="messages lexend" (scroll)="onScroll($event)">
+
+    </div>
+</div>

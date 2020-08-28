@@ -256,7 +256,7 @@ private czyAktualizowane( wydarzenie: Wydarzenie)
     this.ui.wantToContinue('Zmienione wydarzenia nie zostaną zapisane.', this.zmiana).then(decision => {
       if (decision)
       {
-        this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+        this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
       }
     });
   }

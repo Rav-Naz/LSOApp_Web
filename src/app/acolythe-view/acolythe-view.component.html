@@ -1,0 +1,55 @@
+<div class="container">
+
+    <div class="title-bar">
+        <div class="points-container audiowide">
+            <label class="points">{{UserRank ? UserRank : '--'}}</label>
+            <label class="description">Miejsce</label>
+        </div>
+        <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
+        <div class="points-container audiowide">
+            <label class="points">{{UserPoints ? UserPoints : '--'}}</label>
+            <label class="description">Punkty</label>
+        </div>
+    </div>
+
+    <router-outlet name="acolythe" class="router"></router-outlet>
+
+    <div class="navigation-panel">
+        <div class="navigation-flex">
+
+            <label class="options-name audiowide" *ngIf="userService.UserImieINazwisko">{{userService.UserImieINazwisko}}</label>
+
+            <div class="navigation-section">
+                <label class="options-name">Aktualności</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]">Dyżury i wiadomości</label>
+                </div>
+            </div>
+
+            <div class="navigation-section">
+                <label class="options-name">Twoje dane</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['user-details']}}]">Dane profilowe</label>
+                </div>
+            </div>
+
+            <div class="navigation-section">
+                <label class="options-name">Konto</label>
+                <div class="navigation-section-options">
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]">Usuń konto</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['change-password']}}]">Zmień hasło</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]">Wyloguj się</label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="navigation-info">
+            <label class="version row1">LSOApp {{userService.wersja}}</label>
+            <label class="navigation-button audiowide row1" (click)="openURL('https://lsoapp.pl/faq/')">FAQ</label>
+            <label class="navigation-button audiowide row2" (click)="openURL('https://lsoapp.pl/#contact')">Kontakt</label>
+            <label class="navigation-button audiowide row3" (click)="openURL('https://lsoapp.pl/polityka-prywatnosci/')">Regulamin i polityka prywatności</label>
+        </div>
+
+    </div>
+</div>

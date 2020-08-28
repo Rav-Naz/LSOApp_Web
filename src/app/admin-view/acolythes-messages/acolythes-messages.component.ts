@@ -101,9 +101,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   nowyMinistrant() {
     if (this.ladowanieMinistrantow) { return; }
-    // this.tabIndexService.nowyOutlet(4, 'ministrant-nowy')
-    // this.router.navigateByUrl('/admin-view/(main:new-acolythe)');
-    this.router.navigate(['/admin-view', { outlets: { main: ['new-acolythe'] } }]);
+    this.router.navigate(['/admin-view', { outlets: { admin: ['new-acolythe'] } }]);
   }
 
   async usunWiadomosc(wiadomosc: Wiadomosc) {
@@ -183,8 +181,7 @@ export class AcolythesMessagesComponent implements OnInit, OnDestroy {
 
   szczegolyMinistranta(id: number) {
     this.parafiaService.aktualnyMinistrantId = id;
-    this.router.navigateByUrl(`/admin-view/(main:acolythe-details/${id})`);
-    // this.router.navigate(['/admin-view', { outlets: {'main': ['acolythe-details']}}]);
+    this.router.navigateByUrl(`/admin-view/(admin:acolythe-details/${id})`);
   }
 
   onScroll(event: any) {

@@ -32,6 +32,11 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { ConfirmComponent } from './shared/confirm/confirm.component';
 import { LoginAsComponent } from './shared/login-as/login-as.component';
 import { ActivityIndicatorComponent } from './shared/activity-indicator/activity-indicator.component';
+import { AcolytheViewComponent } from './acolythe-view/acolythe-view.component';
+import { DutiesMessagesComponent } from './acolythe-view/duties-messages/duties-messages.component';
+import { UserDetailsComponent } from './acolythe-view/user-details/user-details.component';
+import { DeleteAccountComponent } from './acolythe-view/delete-account/delete-account.component';
+import { ChangePasswordComponent } from './acolythe-view/change-password/change-password.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -56,7 +61,12 @@ registerLocaleData(localePl);
     LoadingComponent,
     ConfirmComponent,
     LoginAsComponent,
-    ActivityIndicatorComponent
+    ActivityIndicatorComponent,
+    AcolytheViewComponent,
+    DutiesMessagesComponent,
+    UserDetailsComponent,
+    DeleteAccountComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

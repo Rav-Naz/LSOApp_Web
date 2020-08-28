@@ -284,7 +284,7 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
   powrot() {
     // this.tabIndexService.nowyOutlet(4, 'ministrant-szczegoly');
-    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+    this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
   }
 
   get isEmailsSame() {

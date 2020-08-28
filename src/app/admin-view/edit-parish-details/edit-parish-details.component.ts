@@ -53,7 +53,7 @@ export class EditParishDetailsComponent implements OnInit {
   }
 
   anuluj() {
-    this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+    this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
   }
 
   zapisz() {

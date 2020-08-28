@@ -24,8 +24,12 @@ export class UserService {
     return this._czyOpiekun.asObservable();
   }
 
+  get UserSub() { //Wykorzystanie: dyzury, dane-profilowe
+    return this.userSub.asObservable();
+  }
+
   get UserImieINazwisko() { //Wykorzystanie: dyzury, dane-profilowe
-    return this.user.imie + ' ' + this.user.nazwisko;
+    return this.user ? this.user.imie + ' ' + this.user.nazwisko : null;
   }
 
   get UserDyzurySub() //Wykorzystanie: dyzury
@@ -62,6 +66,27 @@ export class UserService {
   zmienUsera(user: User) {
     this.user = user;
     this.userSub.next(user);
+  }
+
+  async mojeDyzury(id_user: number, stopien: number) { //Wykorzystanie: ministrant-dyzury, ministranci-szczegoly
+    return new Promise<number>(resolve => {
+      this.http.pobierzDyzuryDlaMinistranta(id_user, stopien).then(res => {
+        if (res === null) {
+          resolve(404);
+          return;
+        }
+        this.userDyzurySub.next(res);
+        resolve(1);
+      });
+    });
+  }
+
+  async miejsceWRankignu() {
+    return new Promise<number>((resolve) => {
+      this.http.miejsceWRankingu().then(res => {
+        resolve(res);
+      });
+    });
   }
 
   pobierzUsera() {

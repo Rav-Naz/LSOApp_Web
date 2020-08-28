@@ -22,7 +22,7 @@ export class AdminViewComponent implements OnInit {
     this.userService.pobierzUsera().then(res => {
       this.parafiaService.pobierzParafie().then(res2 => {
         if (this.router.url === '/admin-view') {
-          this.router.navigateByUrl('/admin-view/(main:acolythes-messages)');
+          this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
         }
         setTimeout(() => {
           this.ui.removeLoadingEvent();

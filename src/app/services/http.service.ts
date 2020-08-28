@@ -170,7 +170,7 @@ export class HttpService {
 
   ////////////////// ZAPYTANIA Z JWT //////////////////
 
-  //WYLOGOWANIE
+  // WYLOGOWANIE
   async wyloguj() {
     return new Promise<number>(resolve => {
       this.http.post(this.url + '/logout', { smart: this.smart, id_user: this.id_user, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
@@ -369,6 +369,28 @@ export class HttpService {
     });
   }
 
+  // MIEJSCE W RANKINGU
+  async miejsceWRankingu() {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/user_ranking', { id_user: this.id_user, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res === 'You have not permission to get the data') {
+          resolve(404);
+          return;
+        }
+        const mijesce = JSON.parse(JSON.stringify(res));
+        if (mijesce === null) {
+          resolve(0);
+        }
+        else {
+          resolve(mijesce);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
   // USUWANIE MINISTRANTA
   async usunMinistranta(id_user: number) {
     return new Promise<number>(resolve => {
@@ -549,10 +571,10 @@ export class HttpService {
     });
   }
 
-  //WYGENERUJ RAPORT
+  // WYGENERUJ RAPORT
   async generujRaport(email: string) {
     return new Promise<string>(resolve => {
-      this.http.post(this.url + '/raport_pdf', { id_parafii: this.id_parafii, email: email, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+      this.http.post(this.url + '/raport_pdf', { id_parafii: this.id_parafii, email, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
         resolve(res.toString());
       }, err => {
         console.log(err);
