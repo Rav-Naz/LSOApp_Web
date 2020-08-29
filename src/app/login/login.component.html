@@ -2,7 +2,7 @@
 <div class="container">
     <div class="container-login lexend">
         <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
-        <form #loginForm="ngForm" class="form">
+        <form #loginForm="ngForm" class="form" (keydown)="onEnter($event)">
             <input autocomplete="email" required placeholder="E-mail" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input lexend" name="email" type="email" [(ngModel)]="_email" #emailInput>
             <input required placeholder="Hasło" type="password" class="input lexend" name="password" [(ngModel)]="_password" #passwordInput>
         </form>

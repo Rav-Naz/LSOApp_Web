@@ -11,7 +11,7 @@ import { Dyzur } from './../models/dyzur.model';
 export class UserService {
   constructor(private http: HttpService) { }
 
-  public wersja: string = "2.2.0"; //Wykorzystanie: ustawienia-m, ustawienia-o
+  public wersja = '2.2.0'; // Wykorzystanie: ustawienia-m, ustawienia-o
   private user: User;
 
   userDyzury: Array<Dyzur> = [];
@@ -24,15 +24,15 @@ export class UserService {
     return this._czyOpiekun.asObservable();
   }
 
-  get UserSub() { //Wykorzystanie: dyzury, dane-profilowe
+  get UserSub() { // Wykorzystanie: dyzury, dane-profilowe
     return this.userSub.asObservable();
   }
 
-  get UserImieINazwisko() { //Wykorzystanie: dyzury, dane-profilowe
+  get UserImieINazwisko() { // Wykorzystanie: dyzury, dane-profilowe
     return this.user ? this.user.imie + ' ' + this.user.nazwisko : null;
   }
 
-  get UserDyzurySub() //Wykorzystanie: dyzury
+  get UserDyzurySub() // Wykorzystanie: dyzury
   {
     return this.userDyzurySub.asObservable();
   }
@@ -68,7 +68,7 @@ export class UserService {
     this.userSub.next(user);
   }
 
-  async mojeDyzury(id_user: number, stopien: number) { //Wykorzystanie: ministrant-dyzury, ministranci-szczegoly
+  async mojeDyzury(id_user: number, stopien: number) { // Wykorzystanie: ministrant-dyzury, ministranci-szczegoly
     return new Promise<number>(resolve => {
       this.http.pobierzDyzuryDlaMinistranta(id_user, stopien).then(res => {
         if (res === null) {
@@ -89,6 +89,22 @@ export class UserService {
     });
   }
 
+  async zmienDane(telefon: string, ulica: string, kod: string, miasto: string) { // Wykorzystanie: dane-profilowe
+    return new Promise<number>((resolve) => {
+      this.http.aktualizacjaDanychMinistranta(ulica, kod, miasto, telefon).then(res => {
+        if (res === 0 || res === 404) {
+          resolve(res);
+        }
+        else {
+          this.http.pobierzMinistranta(res).then(user => {
+            this.userSub.next(user);
+            resolve(1);
+          });
+        }
+      });
+    });
+  }
+
   pobierzUsera() {
     return new Promise<number>((resolve) => {
       this.http.pobierzMinistranta(-1).then(user => {
@@ -96,5 +112,22 @@ export class UserService {
         resolve(1);
       });
     });
+  }
+
+  async zmienHaslo(aktualne_haslo:string,nowe_haslo: string) { //Wykorzystanie: dane-profilowe
+    return new Promise<number>((resolve) => {
+        this.http.zmienHaslo(aktualne_haslo, nowe_haslo).then(res => {
+            resolve(res);
+        });
+    });
+}
+
+  async usunKonto(haslo: string)
+  {
+      return new Promise<number>((resolve) => {
+          this.http.usunKontoUsera(this.user.admin, haslo).then(res => {
+              resolve(res);
+          });
+      });
   }
 }

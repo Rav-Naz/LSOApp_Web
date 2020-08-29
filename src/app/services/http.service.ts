@@ -510,6 +510,26 @@ export class HttpService {
     });
   }
 
+  // AKTUALIZACJA DANYCH MINISTRANTA
+  async aktualizacjaDanychMinistranta(ulica: string, kod_pocztowy: string, miasto: string, telefon: string) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/update_user_data', { ulica, kod_pocztowy, miasto, telefon, id_user: this.id_user, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res.hasOwnProperty('insertId')) {
+          resolve(this.id_user);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
   // POBIERANIE DANYCH O MINISTRANCIE
   async pobierzMinistranta(id_user: number) {
     return new Promise<User>(resolve => {
@@ -536,6 +556,58 @@ export class HttpService {
         else {
           resolve(JSON.parse(JSON.stringify(res)));
         }
+      });
+    });
+  }
+
+  // ZMIANA HASŁA
+  async zmienHaslo(aktualne_haslo: string, nowe_haslo: string) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/change_password', { aktualne_haslo: sha512.sha512.hmac('mSf', aktualne_haslo), nowe_haslo: sha512.sha512.hmac('mSf', nowe_haslo), id_user: this.id_user, id_parafii: this.id_parafii, smart: this.smart, jwt: this.JWT }, { headers: this.headers }).subscribe(res => {
+        if (res === 'zakonczono') {
+          resolve(1);
+        }
+        else if (res === 'niepoprawne') {
+          resolve(2);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
+      });
+    });
+  }
+
+  // USUWANIE KONTA USERA
+  async usunKontoUsera(admin: number, haslo: string) {
+    return new Promise<number>(resolve => {
+
+      this.http.post(this.url + '/delete_user_account', {
+        id_user: this.id_user, id_parafii: this.id_parafii, admin,
+        haslo: sha512.sha512.hmac('mSf', haslo), smart: this.smart, jwt: this.JWT
+      }, { headers: this.headers }).subscribe(res => {
+        if (res === 'zakonczono') {
+          resolve(1);
+        }
+        else if (res === 'jeden') {
+          resolve(2);
+        }
+        else if (res === 'niepoprawne') {
+          resolve(3);
+        }
+        else if (res === 'You have not permission to get the data') {
+          resolve(404);
+        }
+        else {
+          resolve(0);
+        }
+      }, err => {
+        resolve(0);
       });
     });
   }

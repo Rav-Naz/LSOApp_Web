@@ -2,7 +2,7 @@ import { monasteries, dioceses } from './../../models/lists.model';
 import { Parafia } from 'src/app/models/parafia.model';
 import { ParafiaService } from './../../services/parafia.service';
 import { Subscription } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { UiService } from 'src/app/services/ui.service';
 
@@ -11,7 +11,7 @@ import { UiService } from 'src/app/services/ui.service';
   templateUrl: './edit-parish-details.component.html',
   styleUrls: ['./edit-parish-details.component.css']
 })
-export class EditParishDetailsComponent implements OnInit {
+export class EditParishDetailsComponent implements OnInit, OnDestroy{
 
   constructor(private router: Router, private parafiaService: ParafiaService, private ui: UiService) { }
 
@@ -146,5 +146,7 @@ export class EditParishDetailsComponent implements OnInit {
   {
     return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{2,30})').test(this.parafia.miasto);
   }
-
+  ngOnDestroy(): void {
+    this.parafiaSub.unsubscribe();
+  }
 }

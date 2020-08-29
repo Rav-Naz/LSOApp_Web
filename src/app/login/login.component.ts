@@ -101,6 +101,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  onEnter(event)
+  {
+    if (event.key === 'Enter') { this.signIn(); }
+  }
+
+
   get isEmailValid()
   {
     return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this._email);

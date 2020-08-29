@@ -1,12 +1,12 @@
 <div class="container">
 
     <div class="title-bar">
-        <div class="points-container audiowide">
+        <div class="points-container audiowide" *ngIf="userService.UserStopien !== 11">
             <label class="points">{{UserRank ? UserRank : '--'}}</label>
             <label class="description">Miejsce</label>
         </div>
         <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
-        <div class="points-container audiowide">
+        <div class="points-container audiowide" *ngIf="userService.UserStopien !== 11">
             <label class="points">{{UserPoints ? UserPoints : '--'}}</label>
             <label class="description">Punkty</label>
         </div>
@@ -17,7 +17,7 @@
     <div class="navigation-panel">
         <div class="navigation-flex">
 
-            <label class="options-name audiowide" *ngIf="userService.UserImieINazwisko">{{userService.UserImieINazwisko}}</label>
+            <label class="options-name audiowide" *ngIf="userService.UserImieINazwisko">{{ (userService.UserStopien === 11 ? 'ks. ' : '')  + userService.UserImieINazwisko}}</label>
 
             <div class="navigation-section">
                 <label class="options-name">Aktualności</label>
@@ -38,7 +38,8 @@
                 <div class="navigation-section-options">
                     <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]">Usuń konto</label>
                     <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['change-password']}}]">Zmień hasło</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]">Wyloguj się</label>
+                    <label class="navigation-button audiowide" (click)="switchAccount()" *ngIf="userService.UserPerm === 1">Przełącz na widok opiekuna</label>
+                    <label class="navigation-button audiowide" (click)="wyloguj()">Wyloguj się</label>
                 </div>
             </div>
 

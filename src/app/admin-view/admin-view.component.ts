@@ -55,8 +55,14 @@ export class AdminViewComponent implements OnInit {
     });
   }
 
+  switchAccout()
+  {
+    this.ui.addLoadingEvent();
+    this.router.navigateByUrl('/acolythe-view');
+  }
+
   wyzerujPunkty() {
-    if (this.router.url.split('/').slice(0, 3).join('/') === '/admin-view/(main:acolythe-details') {
+    if (this.router.url.split('/').slice(0, 3).join('/') === '/admin-view/(admin:acolythe-details') {
       this.ui.showFeedback('warning', 'Aby wykonać tą czynność, opuść zakładkę szczegóły ministranta', 5);
       return;
     }
@@ -82,7 +88,7 @@ export class AdminViewComponent implements OnInit {
   }
 
   usunDyzury() {
-    if (this.router.url.split('/').slice(0, 3).join('/') === '/admin-view/(main:acolythe-details') {
+    if (this.router.url.split('/').slice(0, 3).join('/') === '/admin-view/(admin:acolythe-details') {
       this.ui.showFeedback('warning', 'Aby wykonać tą czynność, opuść zakładkę szczegóły ministranta', 5);
       return;
     }

@@ -1,3 +1,4 @@
+import { WiadomosciService } from './../../services/wiadomosci.service';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { UiService } from 'src/app/services/ui.service';
@@ -5,6 +6,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { User } from 'src/app/models/user.model';
 import { Subscription } from 'rxjs';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
+import { Wiadomosc } from 'src/app/models/wiadomosci.model';
 
 @Component({
   selector: 'app-duties-messages',
@@ -13,7 +15,8 @@ import { Wydarzenie } from 'src/app/models/wydarzenie.model';
 })
 export class DutiesMessagesComponent implements OnInit {
 
-  constructor(private userService: UserService, public ui: UiService, public http: HttpService) { }
+  constructor(public userService: UserService, public ui: UiService,
+    public http: HttpService, private wiadosciService: WiadomosciService) { }
 
   user: User;
   userSub: Subscription;
@@ -28,6 +31,13 @@ export class DutiesMessagesComponent implements OnInit {
   wydarzeniaWgDni: Array<Array<Wydarzenie>> = [[], [], [], [], [], [], []];
   aktualneWydarzenie: Wydarzenie = null;
   pozniejszeWydarzenia: Array<Wydarzenie> = [];
+
+  wiadomosci: Array<Wiadomosc> = [];
+  wiadomosciSub: Subscription;
+
+  doladowanie: boolean = false;
+  limit: number = 30;
+  ostatniaWiadomosc: Wiadomosc;
 
   ngOnInit(): void {
     this.userSub = this.userService.UserSub.subscribe(user => {
@@ -86,13 +96,28 @@ export class DutiesMessagesComponent implements OnInit {
         }
       }
     });
+
+    this.wiadomosciSub = this.wiadosciService.Wiadomosci.subscribe(wiadomosci => {
+      this.wiadomosci = [];
+      if (wiadomosci === null) {
+        return;
+      }
+      else {
+        this.wiadomosci = [...wiadomosci];
+        if (this.ostatniaWiadomosc && this.ostatniaWiadomosc.id !== this.wiadomosci[this.wiadomosci.length - 1].id) {
+          this.doladowanie = false;
+        }
+        this.ostatniaWiadomosc = this.wiadomosci[this.wiadomosci.length - 1];
+      }
+    });
+    this.wiadosciService.pobierzWiadomosci(0, this.limit);
   }
 
   onScroll(event: any) {
-    // if ((event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight * 0.75) && !this.doladowanie) {
-    //   this.doladowanie = true;
-    //   this.wiadosciService.pobierzWiadomosci(1, this.wiadomosci.length + this.limit);
-    // }
+    if ((event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight * 0.75) && !this.doladowanie) {
+      this.doladowanie = true;
+      this.wiadosciService.pobierzWiadomosci(0, this.wiadomosci.length + this.limit);
+    }
   }
 
   GodzinaDyzuruNaDanyDzien(godzina: string) {
@@ -104,7 +129,7 @@ export class DutiesMessagesComponent implements OnInit {
   }
 
   opacity(index: number) {
-    return 3 / (Math.pow(Math.abs(3 - this.ktoryRzad(index)), 3.3) + 3);
+    return 3 / (Math.pow(Math.abs(3 - this.ktoryRzad(index)), 3) + 3);
   }
 
   wydarzeniaNaDanyDzien(dzien: number) {

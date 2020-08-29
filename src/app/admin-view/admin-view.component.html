@@ -42,6 +42,7 @@
                 <div class="navigation-section-options">
                     <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['delete-parish']}}]">Usuń konto</label>
                     <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['edit-parish-details']}}]">Zmień dane parafii</label>
+                    <label class="navigation-button audiowide" (click)="switchAccout()">Przełącz na widok ministranta</label>
                     <label class="navigation-button audiowide" (click)="wyloguj()">Wyloguj się</label>
                 </div>
             </div>

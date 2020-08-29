@@ -1,1 +1,14 @@
-<p>delete-account works!</p>
+<div class="container">
+    <label class="title audiowide">Usuń parafię</label>
+    <form #newDeleteForm="ngForm" class="container-white">
+        <label class="description">Czy na pewno chcesz usunąć swoje konto? Twoje imię i nazwisko wciąż będzię widoczne w widoku opiekuna.</label>
+        <label class="description">Aby potwierdzić wykonywaną operację wprowadź swoje hasło:</label>
+        <div class="input-object">
+            <label class="input-object-title audiowide">Hasło</label>
+            <input autocomplete="current-password" required class="input-object-description lexend" [disabled]="ladowanie" placeholder="Wpisz hasło" minlength="6" maxlength="15" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})" type="password" [(ngModel)]="_password"
+                name="password" #password="ngModel" [ngClass]="{'disabled': ladowanie, 'enabled': !ladowanie}">
+        </div>
+    </form>
+    <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
+    <button class="navigation-button confirm audiowide" [disabled]="!newDeleteForm.valid || ladowanie" (click)="usun()">Usuń</button>
+</div>
