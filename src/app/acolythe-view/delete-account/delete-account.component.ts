@@ -20,14 +20,16 @@ export class DeleteAccountComponent {
   }
 
   usun() {
+    if (this._password === null || this._password === undefined) { return; }
     this.ladowanie = true;
+    this.ui.addLoadingEvent();
     this.userService.usunKonto(this._password).then(res => {
       switch (res) {
         case 1:
           this.router.navigateByUrl('').then(() => {
             setTimeout(() => {
               this.ui.showFeedback('succes', 'Konto zostało usunięte pomyślnie. Dziękujemy za skorzystanie z aplikacji :)', 3);
-            }, 400);
+            }, 100);
           });
           break;
         case 2:
@@ -44,6 +46,7 @@ export class DeleteAccountComponent {
           this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
           break;
       }
+      this.ui.removeLoadingEvent();
       this.ladowanie = false;
     });
   }

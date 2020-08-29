@@ -19,15 +19,12 @@ export class ChangePasswordComponent {
   constructor(private router: Router, private ui: UiService,
     private userService: UserService) { }
 
-  get isDisabled() {
-    return this.ladowanie;
-  }
-
   anuluj() {
     this.router.navigateByUrl('/acolythe-view/(acolythe:duties-messages)');
   }
 
   zapisz() {
+    if (!this.isNewPasswordValid || !this.isPasswordSame || this.isDisabled) { return; }
     this.ladowanie = true;
     this.userService.zmienHaslo(this._currentPassword, this._newPassword).then(res => {
       switch (res) {
@@ -50,9 +47,14 @@ export class ChangePasswordComponent {
       this.ladowanie = false;
     });
   }
-
+  get isDisabled() {
+    return this.ladowanie;
+  }
   get isPasswordSame() {
     return this._newPasswordRepeat === this._newPassword;
+  }
+  get isNewPasswordValid() {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})').test(this._newPassword);
   }
 
 

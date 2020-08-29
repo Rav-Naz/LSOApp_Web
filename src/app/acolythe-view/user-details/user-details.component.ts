@@ -32,6 +32,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     powiadomienia: 0
   };
   zmiana = false;
+  ladowanie = false;
 
   constructor(private router: Router, private userService: UserService, private ui: UiService) { }
 
@@ -40,10 +41,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       if (user === null || user === undefined) { return; }
       this.user = user;
     });
-  }
-
-  get isDisabled() {
-    return this.user.id_user === 1;
   }
 
   anuluj() {
@@ -55,6 +52,16 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   zapisz() {
+
+    if (
+      !this.isNumberValid ||
+      !this.isStreetValid ||
+      !this.isPostalCodeValid ||
+      !this.isCityValid ||
+      this.isDisabled ||
+      !this.zmiana
+    ) { return; }
+    this.ladowanie = true;
     this.userService.zmienDane(this.user.telefon, this.user.ulica, this.user.kod_pocztowy, this.user.miasto).then(res => {
       if (res === 1) {
         setTimeout(() => {
@@ -66,7 +73,24 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
         this.ui.showFeedback('error', 'Sprawdź swoje połączenie z internetem i spróbuj ponownie ', 3);
       }
       this.zmiana = false;
+      this.ladowanie = true;
     });
+  }
+
+  get isDisabled() {
+    return this.user.id_user === 1 || this.ladowanie;
+  }
+  get isNumberValid() {
+    return new RegExp('^[0-9]{9}$').test(this.user.telefon);
+  }
+  get isStreetValid() {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -0123456789/]{3,30})').test(this.user.ulica);
+  }
+  get isPostalCodeValid() {
+    return new RegExp('^[0-9]{2}-[0-9]{3}$').test(this.user.kod_pocztowy);
+  }
+  get isCityValid() {
+    return new RegExp('([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -0123456789/]{3,20})').test(this.user.miasto);
   }
 
   ngOnDestroy(): void {

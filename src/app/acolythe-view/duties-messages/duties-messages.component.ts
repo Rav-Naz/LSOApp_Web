@@ -25,7 +25,8 @@ export class DutiesMessagesComponent implements OnInit {
   dyzury: Array<Wydarzenie> = [];
   dyzurySub: Subscription;
   powiadomieniaSub: Subscription;
-  ladowanie = false;
+  ladowanieWiadomosci = false;
+  ladowanieDyzurow = false;
   dni = ['NIE', 'PON', 'WTO', 'ŚR', 'CZW', 'PIA', 'SOB'];
   rzedy: Array<string> = ['1', '2', '3', '4/7', '7', '8', '9'];
   wydarzeniaWgDni: Array<Array<Wydarzenie>> = [[], [], [], [], [], [], []];
@@ -40,6 +41,8 @@ export class DutiesMessagesComponent implements OnInit {
   ostatniaWiadomosc: Wiadomosc;
 
   ngOnInit(): void {
+    this.ladowanieDyzurow = true;
+    this.ladowanieWiadomosci = true;
     this.userSub = this.userService.UserSub.subscribe(user => {
       this.user = user;
       if (this.user === null || this.user === undefined) { return; }
@@ -47,9 +50,6 @@ export class DutiesMessagesComponent implements OnInit {
         if (res === 404) {
           this.ui.showFeedback('warning', 'Twoja sesja wygasła. Zaloguj się ponownie aby móc kontynuować', 2);
         }
-        setTimeout(() => {
-          // this.ladowanie = false;
-        }, 500);
       });
     });
 
@@ -61,6 +61,7 @@ export class DutiesMessagesComponent implements OnInit {
       if (dyzury !== undefined && dyzury !== null) {
 
         if (dyzury.length === 0) {
+          this.ladowanieDyzurow = false;
           return;
         }
 
@@ -94,12 +95,14 @@ export class DutiesMessagesComponent implements OnInit {
 
           this.wydarzeniaWgDni[index] = dzisiejsze.slice(0, 3);
         }
+        this.ladowanieDyzurow = false;
       }
     });
 
     this.wiadomosciSub = this.wiadosciService.Wiadomosci.subscribe(wiadomosci => {
       this.wiadomosci = [];
       if (wiadomosci === null) {
+        this.ladowanieWiadomosci = false;
         return;
       }
       else {
@@ -108,6 +111,7 @@ export class DutiesMessagesComponent implements OnInit {
           this.doladowanie = false;
         }
         this.ostatniaWiadomosc = this.wiadomosci[this.wiadomosci.length - 1];
+        this.ladowanieWiadomosci = false;
       }
     });
     this.wiadosciService.pobierzWiadomosci(0, this.limit);
