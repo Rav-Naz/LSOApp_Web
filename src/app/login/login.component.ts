@@ -1,9 +1,9 @@
+import { AuthService } from './../services/auth.service';
 import { LoginAsComponent } from './../shared/login-as/login-as.component';
 import { UserService } from './../services/user.service';
-import { User } from './../models/user.model';
 import { UiService } from './../services/ui.service';
 import { HttpService } from './../services/http.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,22 +11,16 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   public _email: string = null;
   public _password: string = null;
 
   @ViewChild(LoginAsComponent) loginAs: LoginAsComponent;
 
-  constructor(private http: HttpService, private ui: UiService, private userService: UserService, private router: Router) { }
-
-  ngOnInit(): void {
-    // this._email = localStorage.getItem('email');
-    // this._haslo = localStorage.getItem('pass');
-    // setTimeout(() => {
-    //   this.passwordInput.nativeElement.focus();
-    // }, 1000);
-  }
+  constructor(private http: HttpService, private ui: UiService,
+              private userService: UserService, private router: Router,
+              private authService: AuthService) { }
 
   signIn() {
     if (!this.isEmailValid || !this.isPassowrdValid)
@@ -34,7 +28,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.ui.addLoadingEvent();
-    this.http.logowanie(this._email, this._password).then(res => {
+    this.authService.login(this._email, this._password).then(res => {
       if (res === 'brak' || res === 'niepoprawne') {
         this.ui.showFeedback('warning', 'Niepoprawny adres e-mail i/lub hasło', 3);
         this.ui.removeLoadingEvent();
@@ -48,10 +42,8 @@ export class LoginComponent implements OnInit {
         this.ui.removeLoadingEvent();
       }
       else {
-        let user: User = JSON.parse(JSON.stringify(res));
-        // this.userService.zmienUsera(user);
 
-        if (user.admin === 1) {
+        if (res === '1') {
           this.ui.removeLoadingEvent();
           this.loginAs.awaitToDecision().then(result => {
             this.ui.addLoadingEvent();

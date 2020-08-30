@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as sha512 from 'js-sha512';
@@ -13,10 +14,10 @@ export class HttpService {
 
   private url = 'https://baza.lsoapp.smarthost.pl/2.2.0';
   private smart = '4ad5a86f50b778a2050c51335e97d234';
-  private JWT: string = null;
 
-  private id_parafii: number = null;
-  private id_user: number = null;
+  public JWT: string = null;
+  public id_parafii: number = null;
+  public id_user: number = null;
 
   private os = 'Web';
 
@@ -26,34 +27,8 @@ export class HttpService {
     'Access-Control-Allow-Origin': 'http://localhost:4200'
   });
 
-  nadajId_Parafii(id_parafii: number) {
-    this.id_parafii = id_parafii;
-    localStorage.setItem('id_parafii', id_parafii.toString());
-  }
-
-  nadajId_User(id_user: number) {
-    this.id_user = id_user;
-    localStorage.setItem('id_user', id_user.toString());
-  }
-
-  nadajJWT(JWT: string) {
-    this.JWT = JWT;
-    localStorage.setItem('JWT', JWT.toString());
-  }
-
   constructor(private http: HttpClient) {
-    const id_par = parseInt(localStorage.getItem('id_parafii'));
-    const id_use = parseInt(localStorage.getItem('id_user'));
-    const JWT = localStorage.getItem('JWT');
-    if (id_par !== null) {
-      this.id_parafii = id_par;
-    }
-    if (id_use !== null) {
-      this.id_user = id_use;
-    }
-    if (JWT !== null) {
-      this.JWT = JWT;
-    }
+
   }
 
   ////////////////// ZAPYTANIA BEZ JWT //////////////////
@@ -74,10 +49,7 @@ export class HttpService {
             resolve('niepoprawne');
           }
           else if (res[0].hasOwnProperty('id_parafii')) {
-            this.nadajJWT(res[1]);
-            this.nadajId_User(res[0].id_user);
-            this.nadajId_Parafii(res[0].id_parafii);
-            resolve(JSON.parse(JSON.stringify(res[0])));
+            resolve(JSON.stringify(res));
           }
           else {
             resolve('blad');

@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { HttpService } from 'src/app/services/http.service';
 import { Router } from '@angular/router';
 import { UserService } from './../services/user.service';
@@ -14,7 +15,8 @@ import { User } from '../models/user.model';
 export class AcolytheViewComponent implements OnInit {
 
   constructor(private ui: UiService, public userService: UserService,
-              private router: Router, private http: HttpService) { }
+              private router: Router, private http: HttpService,
+              private authService: AuthService) { }
 
   user: User;
   userSub: Subscription;
@@ -42,21 +44,7 @@ export class AcolytheViewComponent implements OnInit {
 
   wyloguj() {
     this.ui.addLoadingEvent();
-    this.http.wyloguj().then((res) => {
-      if (res === 1) {
-
-        this.router.navigateByUrl('').then(() => {
-          setTimeout(() => {
-            this.ui.showFeedback('succes', 'Pomyślnie wylogowano', 3);
-            this.ui.removeLoadingEvent();
-          }, 400);
-        });
-      }
-      else {
-        this.ui.removeLoadingEvent();
-        this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 2);
-      }
-    });
+    this.authService.logout();
   }
 
   switchAccount() {

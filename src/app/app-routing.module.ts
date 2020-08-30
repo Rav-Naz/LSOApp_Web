@@ -1,3 +1,5 @@
+import { AdminGuard } from './services/admin-guard.service';
+import { AuthGuard } from './services/auth-guard.service';
 import { UserDetailsComponent } from './acolythe-view/user-details/user-details.component';
 import { ChangePasswordComponent } from './acolythe-view/change-password/change-password.component';
 import { DutiesMessagesComponent } from './acolythe-view/duties-messages/duties-messages.component';
@@ -20,12 +22,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { DeleteAccountComponent } from './acolythe-view/delete-account/delete-account.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: '', redirectTo: '/acolythe-view', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'remind-password', component: RemindPasswordComponent},
   {path: 'give-password', component: GivePasswordComponent},
-  {path: 'admin-view', component: AdminViewComponent, children: [
+  {path: 'admin-view', component: AdminViewComponent, canActivate: [AuthGuard, AdminGuard], children: [
     {path: 'mass', component: MassComponent, outlet: 'admin'},
     {path: 'acolythes-messages', component: AcolythesMessagesComponent, outlet: 'admin'},
     {path: 'new-acolythe', component: NewAcolytheComponent, outlet: 'admin'},
@@ -36,7 +38,7 @@ const routes: Routes = [
     {path: 'edit-parish-details', component: EditParishDetailsComponent, outlet: 'admin'}
     // {path: '**', redirectTo: '/mass'},
   ]},
-  {path: 'acolythe-view', component: AcolytheViewComponent, children: [
+  {path: 'acolythe-view', component: AcolytheViewComponent, canActivate: [AuthGuard], children: [
     {path: 'duties-messages', component: DutiesMessagesComponent, outlet: 'acolythe'},
     {path: 'change-password', component: ChangePasswordComponent, outlet: 'acolythe'},
     {path: 'delete-account', component: DeleteAccountComponent, outlet: 'acolythe'},

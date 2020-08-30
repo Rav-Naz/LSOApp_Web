@@ -1,3 +1,5 @@
+import { AdminGuard } from './services/admin-guard.service';
+import { AuthGuard } from './services/auth-guard.service';
 import { RegisterComponent } from './register/register.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
@@ -78,7 +80,9 @@ registerLocaleData(localePl);
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: "pl-PL" }
+    { provide: LOCALE_ID, useValue: "pl-PL" },
+    AuthGuard,
+    AdminGuard
   ],
   bootstrap: [AppComponent]
 })

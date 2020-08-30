@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { HttpService } from './../services/http.service';
 import { UiService } from 'src/app/services/ui.service';
 import { ParafiaService } from './../services/parafia.service';
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 export class AdminViewComponent implements OnInit {
 
   constructor(public userService: UserService, public parafiaService: ParafiaService, private router: Router,
-    private ui: UiService, private http: HttpService) { }
+              private ui: UiService, private http: HttpService, private authService: AuthService) { }
 
   ngOnInit(): void {
     setTimeout(() => {
@@ -38,21 +39,7 @@ export class AdminViewComponent implements OnInit {
 
   wyloguj() {
     this.ui.addLoadingEvent();
-    this.http.wyloguj().then((res) => {
-      if (res === 1) {
-
-        this.router.navigateByUrl('').then(() => {
-          setTimeout(() => {
-            this.ui.showFeedback('succes', 'Pomyślnie wylogowano', 3);
-            this.ui.removeLoadingEvent();
-          }, 400);
-        });
-      }
-      else {
-        this.ui.removeLoadingEvent();
-        this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 2);
-      }
-    });
+    this.authService.logout();
   }
 
   switchAccout()

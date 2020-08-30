@@ -3,7 +3,6 @@ import { Parafia } from './../models/parafia.model';
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { User } from '../models/user.model';
-import { Dyzur } from '../models/dyzur.model';
 import { BehaviorSubject } from 'rxjs';
 import { Wydarzenie } from '../models/wydarzenie.model';
 
