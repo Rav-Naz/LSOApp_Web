@@ -12,14 +12,14 @@ export class AuthService {
   public JWT: string = null;
   public userDetails: Array<string> = null;
 
-  constructor(private http: HttpService, private router: Router, private ui: UiService) {
-    this.userDetails = JSON.parse(localStorage.getItem('user'));
-    this.SetDetails(this.userDetails);
+  constructor(private http: HttpService, private router: Router, private ui: UiService) {;
+    this.SetDetails(JSON.parse(localStorage.getItem('user')));
   }
 
   // 0 - id_parafii, 1 - id_user, 2 - admin, 3 - JWT
   SetDetails(list: Array<string>) {
     localStorage.setItem('user', JSON.stringify(list));
+    this.userDetails = list;
     this.http.id_parafii = list !== null ? parseInt(list[0]) : null;
     this.http.id_user = list !== null ? parseInt(list[1]) : null;
     this.http.JWT = list !== null ? list[3] : null;
@@ -33,7 +33,9 @@ export class AuthService {
           const response = JSON.parse(res);
           const user: User = response[0];
           this.SetDetails([user.id_parafii.toString(), user.id_user.toString(), user.admin.toString(), response[1]]);
-          resolve(user.admin.toString());
+          setTimeout(() => {
+            resolve(user.admin.toString());
+          }, 200);
         }
         else
         {

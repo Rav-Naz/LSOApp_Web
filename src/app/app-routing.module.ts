@@ -1,3 +1,4 @@
+import { AcolythesComponent } from './admin-view/acolythes-messages/acolythes/acolythes.component';
 import { AdminGuard } from './services/admin-guard.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { UserDetailsComponent } from './acolythe-view/user-details/user-details.component';
@@ -20,6 +21,9 @@ import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DeleteAccountComponent } from './acolythe-view/delete-account/delete-account.component';
+import { MessagesComponent } from './acolythe-view/duties-messages/messages/messages.component';
+import { DutiesComponent } from './acolythe-view/duties-messages/duties/duties.component';
+import { MessagesAdminComponent } from './admin-view/acolythes-messages/messages-admin/messages-admin.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/acolythe-view', pathMatch: 'full'},
@@ -30,6 +34,8 @@ const routes: Routes = [
   {path: 'admin-view', component: AdminViewComponent, canActivate: [AuthGuard, AdminGuard], children: [
     {path: 'mass', component: MassComponent, outlet: 'admin'},
     {path: 'acolythes-messages', component: AcolythesMessagesComponent, outlet: 'admin'},
+    {path: 'messages', component: MessagesAdminComponent, outlet: 'admin'},
+    {path: 'acolythes', component: AcolythesComponent, outlet: 'admin'},
     {path: 'new-acolythe', component: NewAcolytheComponent, outlet: 'admin'},
     {path: 'punctation', component: PunctationComponent, outlet: 'admin'},
     {path: 'acolythe-details/:id', component: AcolytheDetailsComponent, outlet: 'admin'},
@@ -40,6 +46,8 @@ const routes: Routes = [
   ]},
   {path: 'acolythe-view', component: AcolytheViewComponent, canActivate: [AuthGuard], children: [
     {path: 'duties-messages', component: DutiesMessagesComponent, outlet: 'acolythe'},
+    {path: 'duties', component: DutiesComponent, outlet: 'acolythe'},
+    {path: 'messages', component: MessagesComponent, outlet: 'acolythe'},
     {path: 'change-password', component: ChangePasswordComponent, outlet: 'acolythe'},
     {path: 'delete-account', component: DeleteAccountComponent, outlet: 'acolythe'},
     {path: 'user-details', component: UserDetailsComponent, outlet: 'acolythe'},

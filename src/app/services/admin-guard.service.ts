@@ -19,7 +19,7 @@ export class AdminGuard implements CanActivate {
     {
       this.ui.showFeedback('error', 'Nie masz wystarczających uprawnień', 3);
       this.ui.resetLoadingEvents();
-      this.router.navigateByUrl('/login');
+      this.router.navigateByUrl('/acolythe-view/(acolythe:duties-messages)');
       return false;
     }
   }

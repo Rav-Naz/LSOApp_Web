@@ -56,6 +56,7 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     this.parafiaService.aktualnyMinistrantId = this.acolytheId;
     this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
       if (res === 0) {
+        this.ui.showFeedback('error', 'Nie masz uprawnień do odczytu danych tego ministrant', 3);
         this.powrot();
         return;
       }

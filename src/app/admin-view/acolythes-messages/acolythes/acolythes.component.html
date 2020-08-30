@@ -1,0 +1,20 @@
+<div class="acolythes">
+    <div class="top">
+        <button class="sort audiowide" [disabled]="ladowanieMinistrantow" (click)="zmianaSortu()">
+          <label class="icon grey pointer" *ngIf="!ladowanieMinistrantow">&#xe018;</label>
+          <wbr class="grey pointer">Sortuj:
+          <wbr class="pointer">{{sortujPoImieniu ? 'Alfabetycznie' : 'Ranking'}}
+      </button>
+        <button class="delete-message margin-right-1 icon" [disabled]="ladowanieMinistrantow" (click)="nowyMinistrant()">&#xe072;</button>
+    </div>
+
+    <ng-container *ngIf="!ladowanieMinistrantow">
+        <div class="acolythe" *ngFor="let acolythe of ministranci; let i = index" [ngClass]="{'even':i%2===0}">
+            <button class="delete-message icon col1" (click)="usunMinistranta(acolythe, i)">&#xe08e;</button>
+            <label class="col2">{{sortujPoImieniu? i+1 : acolythe.ranking}}. {{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
+            <label class="col3 audiowide">{{acolythe.punkty}} pkt</label>
+            <button class="delete-message icon col4" (click)="szczegolyMinistranta(acolythe.id_user, i)">&#xe03b;</button>
+        </div>
+    </ng-container>
+    <app-activity-indicator *ngIf="ladowanieMinistrantow" [style.marginTop]="'10rem'" [size]="7"></app-activity-indicator>
+</div>

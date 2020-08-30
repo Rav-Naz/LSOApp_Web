@@ -14,7 +14,6 @@ import { LoginComponent } from './login/login.component';
 import { GivePasswordComponent } from './give-password/give-password.component';
 import { RemindPasswordComponent } from './remind-password/remind-password.component';
 import { AdminViewComponent } from './admin-view/admin-view.component';
-import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
 import { MassComponent } from './admin-view/mass/mass.component';
 import { UriPipe } from './pipes/uri.pipe';
 import { CheckboxStatusComponent } from './shared/checkbox-status/checkbox-status.component';
@@ -39,6 +38,11 @@ import { DutiesMessagesComponent } from './acolythe-view/duties-messages/duties-
 import { UserDetailsComponent } from './acolythe-view/user-details/user-details.component';
 import { DeleteAccountComponent } from './acolythe-view/delete-account/delete-account.component';
 import { ChangePasswordComponent } from './acolythe-view/change-password/change-password.component';
+import { DutiesComponent } from './acolythe-view/duties-messages/duties/duties.component';
+import { MessagesComponent } from './acolythe-view/duties-messages/messages/messages.component';
+import { AcolythesComponent } from './admin-view/acolythes-messages/acolythes/acolythes.component';
+import { MessagesAdminComponent } from './admin-view/acolythes-messages/messages-admin/messages-admin.component';
+import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
 registerLocaleData(localePl);
 
 @NgModule({
@@ -68,7 +72,11 @@ registerLocaleData(localePl);
     DutiesMessagesComponent,
     UserDetailsComponent,
     DeleteAccountComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    DutiesComponent,
+    MessagesComponent,
+    AcolythesComponent,
+    MessagesAdminComponent
   ],
   imports: [
     BrowserModule,

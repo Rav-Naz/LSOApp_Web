@@ -2,7 +2,6 @@ import { AuthService } from './../services/auth.service';
 import { LoginAsComponent } from './../shared/login-as/login-as.component';
 import { UserService } from './../services/user.service';
 import { UiService } from './../services/ui.service';
-import { HttpService } from './../services/http.service';
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -18,9 +17,8 @@ export class LoginComponent {
 
   @ViewChild(LoginAsComponent) loginAs: LoginAsComponent;
 
-  constructor(private http: HttpService, private ui: UiService,
-              private userService: UserService, private router: Router,
-              private authService: AuthService) { }
+  constructor(private ui: UiService, private userService: UserService,
+              private router: Router, private authService: AuthService) { }
 
   signIn() {
     if (!this.isEmailValid || !this.isPassowrdValid)
@@ -106,6 +104,6 @@ export class LoginComponent {
 
   get isPassowrdValid()
   {
-    return this._password.length > 5;
+    return this._password.length > 1;
   }
 }
