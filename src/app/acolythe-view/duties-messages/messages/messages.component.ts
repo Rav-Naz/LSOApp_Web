@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Wiadomosc } from 'src/app/models/wiadomosci.model';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
@@ -11,7 +11,7 @@ import { WiadomosciService } from 'src/app/services/wiadomosci.service';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css']
 })
-export class MessagesComponent implements OnInit {
+export class MessagesComponent implements OnInit, OnDestroy {
 
   ladowanieWiadomosci = false;
 
@@ -23,7 +23,7 @@ export class MessagesComponent implements OnInit {
   ostatniaWiadomosc: Wiadomosc;
 
   constructor(public userService: UserService, public ui: UiService,
-    public http: HttpService, private wiadosciService: WiadomosciService) { }
+              public http: HttpService, private wiadosciService: WiadomosciService) { }
 
 
   ngOnInit(): void {
@@ -52,5 +52,10 @@ export class MessagesComponent implements OnInit {
       this.doladowanie = true;
       this.wiadosciService.pobierzWiadomosci(0, this.wiadomosci.length + this.limit);
     }
+  }
+
+  ngOnDestroy()
+  {
+    this.wiadomosciSub.unsubscribe();
   }
 }

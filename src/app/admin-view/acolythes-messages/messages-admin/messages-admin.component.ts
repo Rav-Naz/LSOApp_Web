@@ -1,18 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Wiadomosc } from 'src/app/models/wiadomosci.model';
 import { Subscription } from 'rxjs';
 import { WiadomosciService } from 'src/app/services/wiadomosci.service';
 import { UiService } from 'src/app/services/ui.service';
-import { ParafiaService } from 'src/app/services/parafia.service';
-import { UserService } from 'src/app/services/user.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-messages-admin',
   templateUrl: './messages-admin.component.html',
   styleUrls: ['./messages-admin.component.css']
 })
-export class MessagesAdminComponent implements OnInit {
+export class MessagesAdminComponent implements OnInit, OnDestroy {
 
   public dateNow: Date;
   public clock;
@@ -26,8 +23,7 @@ export class MessagesAdminComponent implements OnInit {
 
   limit = 30;
 
-  constructor(private wiadosciService: WiadomosciService, public ui: UiService, private parafiaService: ParafiaService,
-              private userService: UserService, private router: Router) { }
+  constructor(private wiadosciService: WiadomosciService, public ui: UiService) { }
 
   ngOnInit(): void {
 
@@ -117,4 +113,8 @@ export class MessagesAdminComponent implements OnInit {
     }
   }
 
+  ngOnDestroy()
+  {
+    this.wiadomosciSub.unsubscribe();
+  }
 }

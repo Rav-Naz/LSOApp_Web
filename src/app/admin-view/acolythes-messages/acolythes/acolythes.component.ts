@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Wiadomosc } from 'src/app/models/wiadomosci.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/models/user.model';
-import { WiadomosciService } from 'src/app/services/wiadomosci.service';
 import { UiService } from 'src/app/services/ui.service';
 import { ParafiaService } from 'src/app/services/parafia.service';
 import { UserService } from 'src/app/services/user.service';
@@ -14,7 +12,7 @@ import { sortPolskich } from 'src/assets/sortPolskich';
   templateUrl: './acolythes.component.html',
   styleUrls: ['./acolythes.component.css']
 })
-export class AcolythesComponent implements OnInit {
+export class AcolythesComponent implements OnInit, OnDestroy {
 
   ministranci: Array<User> = [];
 
@@ -26,7 +24,7 @@ export class AcolythesComponent implements OnInit {
 
   limit = 30;
 
-  constructor(private wiadosciService: WiadomosciService, public ui: UiService, private parafiaService: ParafiaService,
+  constructor(public ui: UiService, private parafiaService: ParafiaService,
               private userService: UserService, private router: Router) { }
 
 
@@ -98,5 +96,10 @@ export class AcolythesComponent implements OnInit {
   szczegolyMinistranta(id: number) {
     this.parafiaService.aktualnyMinistrantId = id;
     this.router.navigateByUrl(`/admin-view/(admin:acolythe-details/${id})`);
+  }
+
+  ngOnDestroy()
+  {
+    this.miniSub.unsubscribe();
   }
 }

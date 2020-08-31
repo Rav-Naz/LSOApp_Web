@@ -1,6 +1,7 @@
 import { ConfirmComponent } from './shared/confirm/confirm.component';
 import { UiService } from 'src/app/services/ui.service';
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { fromEvent } from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild(ConfirmComponent) confirm: ConfirmComponent;
 
   ngAfterViewInit(): void {
+    this.ui.windowSizeObs = fromEvent(window, 'resize');
     this.ui.setConfirmComponent(this.confirm);
   }
 }

@@ -6,6 +6,7 @@ import { UiService } from './../services/ui.service';
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '../models/user.model';
+import { WindowSize } from '../models/window_size.model';
 
 @Component({
   selector: 'app-acolythe-view',
@@ -18,6 +19,8 @@ export class AcolytheViewComponent implements OnInit {
               private router: Router, private http: HttpService,
               private authService: AuthService) { }
 
+  private windowSizeSubscription$: Subscription;
+  public windowSize: WindowSize = { height: 1080, width: 1920};
   user: User;
   userSub: Subscription;
   public miejsce: number;
@@ -26,6 +29,10 @@ export class AcolytheViewComponent implements OnInit {
     setTimeout(() => {
       this.ui.addLoadingEvent();
     }, 10);
+    this.windowSizeSubscription$ = this.ui.windowSizeObs.subscribe(size => {
+      this.windowSize = {height: size.currentTarget.innerHeight, width: size.currentTarget.innerWidth};
+      console.log(this.windowSize)
+    });
     this.userSub = this.userService.UserSub.subscribe(user => {
       this.user = user;
       this.userService.miejsceWRankignu().then(res => {

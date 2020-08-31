@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { UiService } from 'src/app/services/ui.service';
 import { HttpService } from 'src/app/services/http.service';
-import { WiadomosciService } from 'src/app/services/wiadomosci.service';
 import { User } from 'src/app/models/user.model';
 import { Subscription } from 'rxjs';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
-import { Wiadomosc } from 'src/app/models/wiadomosci.model';
 
 @Component({
   selector: 'app-duties',
   templateUrl: './duties.component.html',
   styleUrls: ['./duties.component.css']
 })
-export class DutiesComponent implements OnInit {
+export class DutiesComponent implements OnInit, OnDestroy {
 
   constructor(public userService: UserService, public ui: UiService,
-    public http: HttpService) { }
+              public http: HttpService) { }
 
   user: User;
   userSub: Subscription;
@@ -104,5 +102,10 @@ export class DutiesComponent implements OnInit {
 
   wydarzeniaNaDanyDzien(dzien: number) {
     return this.wydarzeniaWgDni[dzien];
+  }
+
+  ngOnDestroy()
+  {
+    this.dyzurySub.unsubscribe();
   }
 }

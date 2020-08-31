@@ -1,12 +1,4 @@
-import { WiadomosciService } from './../../services/wiadomosci.service';
-import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { UiService } from 'src/app/services/ui.service';
-import { HttpService } from 'src/app/services/http.service';
-import { User } from 'src/app/models/user.model';
-import { Subscription } from 'rxjs';
-import { Wydarzenie } from 'src/app/models/wydarzenie.model';
-import { Wiadomosc } from 'src/app/models/wiadomosci.model';
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-duties-messages',

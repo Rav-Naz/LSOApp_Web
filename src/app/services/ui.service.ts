@@ -1,6 +1,7 @@
 import { ConfirmComponent } from './../shared/confirm/confirm.component';
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class UiService {
   private loading: Array<boolean> = [];
 
   confirmComponent: ConfirmComponent;
+  windowSizeObs: Observable<any>;
 
 
   constructor(private toasterService: ToastrService) { }
