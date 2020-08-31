@@ -18,6 +18,24 @@
     width: 40%;
 }
 
+@media only screen and (max-width: 1200px) {
+    .container-login {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .container-login {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .container-login {
+        width: 90%;
+    }
+}
+
 .container-nav {
     display: flex;
     flex-direction: row;
@@ -118,4 +136,10 @@ input:active {
     justify-content: center;
     width: 85%;
     margin: 0;
+}
+
+@media only screen and (max-width: 600px) {
+    .form {
+        width: 90%;
+    }
 }
