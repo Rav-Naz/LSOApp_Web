@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 export class UiService {
 
   private loading: Array<boolean> = [];
+  public showLeftComponent = true;
 
   confirmComponent: ConfirmComponent;
   windowSizeObs: Observable<any>;

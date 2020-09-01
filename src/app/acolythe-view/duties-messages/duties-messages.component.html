@@ -1,4 +1,4 @@
 <div class="container">
-    <app-duties></app-duties>
-    <app-messages></app-messages>
+    <app-duties *ngIf="(isMobile && ui.showLeftComponent) || !isMobile"></app-duties>
+    <app-messages *ngIf="(isMobile && !ui.showLeftComponent) || !isMobile"></app-messages>
 </div>

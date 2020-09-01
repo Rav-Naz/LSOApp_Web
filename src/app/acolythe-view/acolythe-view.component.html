@@ -1,20 +1,25 @@
 <div class="container">
 
     <div class="title-bar">
-        <div class="points-container audiowide" *ngIf="userService.UserStopien !== 11">
-            <label class="points">{{UserRank ? UserRank : '--'}}</label>
-            <label class="description">Miejsce</label>
+        <div class="title-bar-center">
+            <div class="points-container audiowide" *ngIf="userService.UserStopien !== 11">
+                <label class="points">{{UserRank ? UserRank : '--'}}</label>
+                <label class="description">Miejsce</label>
+            </div>
+            <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
+            <div class="points-container audiowide" *ngIf="userService.UserStopien !== 11">
+                <label class="points">{{UserPoints ? UserPoints : '--'}}</label>
+                <label class="description">Punkty</label>
+            </div>
         </div>
-        <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
-        <div class="points-container audiowide" *ngIf="userService.UserStopien !== 11">
-            <label class="points">{{UserPoints ? UserPoints : '--'}}</label>
-            <label class="description">Punkty</label>
-        </div>
+        <button class="menu-button icon" *ngIf="isNavigation" (click)="navigationMenu = !navigationMenu"> {{navigationMenu ? '&#xe08c;' : '&#xe017;'}}</button>
     </div>
 
-    <router-outlet name="acolythe" class="router"></router-outlet>
+    <div class="router">
+        <router-outlet name="acolythe"></router-outlet>
+    </div>
 
-    <div class="navigation-panel">
+    <div class="navigation-panel" *ngIf="(navigationMenu && isNavigation) || !isNavigation">
         <div class="navigation-flex">
 
             <label class="options-name audiowide" *ngIf="userService.UserImieINazwisko">{{ (userService.UserStopien === 11 ? 'ks. ' : '')  + userService.UserImieINazwisko}}</label>
@@ -22,22 +27,24 @@
             <div class="navigation-section">
                 <label class="options-name">Aktualności</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]">Dyżury i wiadomości</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="navigationMenu = false;" *ngIf="!isMobile">Dyżury i wiadomości</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="ui.showLeftComponent = true; navigationMenu = false;" *ngIf="isMobile">Dyżury</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="ui.showLeftComponent = false; navigationMenu = false;" *ngIf="isMobile">Wiadomości</label>
                 </div>
             </div>
 
             <div class="navigation-section">
                 <label class="options-name">Twoje dane</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['user-details']}}]">Dane profilowe</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['user-details']}}]" (click)="navigationMenu = false;">Dane profilowe</label>
                 </div>
             </div>
 
             <div class="navigation-section">
                 <label class="options-name">Konto</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]">Usuń konto</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['change-password']}}]">Zmień hasło</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]" (click)="navigationMenu = false;">Usuń konto</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['change-password']}}]" (click)="navigationMenu = false;">Zmień hasło</label>
                     <label class="navigation-button audiowide" (click)="switchAccount()" *ngIf="userService.UserPerm === 1">Przełącz na widok opiekuna</label>
                     <label class="navigation-button audiowide" (click)="wyloguj()">Wyloguj się</label>
                 </div>

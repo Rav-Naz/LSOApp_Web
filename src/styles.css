@@ -8,30 +8,30 @@
 }
 
 html {
-    font-size: 65%;
+    font-size: 63%;
 }
 
-@media only screen and (max-width: 1800px) {
+@media only screen and (max-width: 1450px) {
     html {
-        font-size: 62.5%;
+        font-size: 62%;
     }
 }
 
 @media only screen and (max-width: 1200px) {
     html {
-        font-size: 57.5%;
+        font-size: 57%;
     }
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 850px) {
     html {
-        font-size: 52.5%;
+        font-size: 52%;
     }
 }
 
 @media only screen and (max-width: 600px) {
     html {
-        font-size: 47.5%;
+        font-size: 47%;
     }
 }
 

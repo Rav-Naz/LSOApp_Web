@@ -101,12 +101,11 @@ export class MassComponent implements OnInit, OnDestroy {
       }
 
       if (this.dzisiejszeWydarzenia.length === 0) {
-        // this.ui.zmienStan(0, false);
         this.zmiana = false;
         this.header(this.aktywnyDzien);
         this.ministranciDoWydarzenia = [];
         this.sprawdzane = false;
-        // this.ladowanie = false;
+        // this.ladowanie = false; ????
         return;
       }
 
@@ -182,7 +181,6 @@ export class MassComponent implements OnInit, OnDestroy {
         }
       }
       this.ladowanie = false;
-      // this.ui.zmienStan(0, false);
 
     });
     setTimeout(() => {
