@@ -25,7 +25,7 @@
                 </div>
                 <!-- <div class="acolythes" *ngIf="lesad"> -->
                 <div class="acolythes" *ngIf="ministranciDoWydarzenia.length !== 0 && dzisiejszeWydarzenia.length !== 0 && aktywneWydarzenie.typ !== 1">
-                    <div class="acolythe" *ngFor="let acolythe of ministranciDoWydarzenia; let i = index" [ngClass]="{'grey': i%2 === 0}">
+                    <div class="acolythe" *ngFor="let acolythe of ministranciDoWydarzenia; let i = index" [ngClass]="{'grey': isGrey(i)}">
                         <app-checkbox-status class="checkbox-status" (checkStatus)="zmienStatusObecnosci($event, acolythe.id_user, false)" *ngIf="moznaSprawdzac() && czyJestNaLiscie(acolythe)" [status]="aktualnyStatus(acolythe)"></app-checkbox-status>
                         <label class="col-2" [ngClass]="{'col-1-2': !moznaSprawdzac()}">{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
                     </div>
@@ -35,7 +35,7 @@
                     <label class="title-name click" (click)="zmienPokazDodatkowa()">SŁUŻBA DODATKOWA {{aktywneWydarzenie.typ === 1 ? '' : pokazDodatkowa ? '-' : '+'}}</label>
                 </div>
                 <div class="acolythes" *ngIf="aktywneWydarzenie.typ === 1 ? true : pokazDodatkowa && wszyscyAktualniMinistranci.length > 0 && aktywneWydarzenie.typ !== 2">
-                    <div class="acolythe" *ngFor="let acolythe of wszyscyAktualniMinistranci; let i = index" [ngClass]="{'grey': i%2 === 0}">
+                    <div class="acolythe" *ngFor="let acolythe of wszyscyAktualniMinistranci; let i = index" [ngClass]="{'grey': isGrey(i)}">
                         <app-checkbox-status class="checkbox-status" *ngIf="moznaSprawdzac()" (checkStatus)="zmienStatusObecnosci($event, acolythe.id_user,true)" [trzyStany]="false" [status]="aktualnyStatus(acolythe)"></app-checkbox-status>
                         <label class="col-2" [ngClass]="{'col-1-2': !moznaSprawdzac()}">{{acolythe.nazwisko + ' ' + acolythe.imie}}</label>
                     </div>

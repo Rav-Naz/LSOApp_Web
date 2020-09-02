@@ -1,3 +1,4 @@
+<app-promotion *ngIf="isPromotion" (clickClosed)="close()"></app-promotion>
 <app-confirm></app-confirm>
 <app-loading *ngIf="ui.isLoading"></app-loading>
 <router-outlet></router-outlet>

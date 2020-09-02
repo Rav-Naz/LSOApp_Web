@@ -198,6 +198,18 @@
     /* grid-template-rows: repeat(auto-fit, 4rem); */
 }
 
+@media only screen and (max-width: 850px) {
+    .acolythes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .acolythes {
+        grid-template-columns: 1fr;
+    }
+}
+
 .acolythe {
     color: white;
     width: 100%;
@@ -234,6 +246,12 @@
     align-items: center;
     background-color: black;
     border-radius: 2rem;
+}
+
+@media only screen and (max-width: 850px) {
+    .calendar-container {
+        width: 100%;
+    }
 }
 
 .calendar {
@@ -273,6 +291,12 @@
     border-color: rgb(245, 245, 245);
     border-width: .2rem;
     border-style: solid;
+}
+
+@media only screen and (max-width: 850px) {
+    .back {
+        width: 50%;
+    }
 }
 
 .col-2 {

@@ -1,4 +1,4 @@
 <div class="container">
-    <app-acolythes></app-acolythes>
-    <app-messages-admin></app-messages-admin>
+    <app-acolythes *ngIf="(isMobile && ui.showLeftComponent) || !isMobile"></app-acolythes>
+    <app-messages-admin *ngIf="(isMobile && !ui.showLeftComponent) || !isMobile"></app-messages-admin>
 </div>

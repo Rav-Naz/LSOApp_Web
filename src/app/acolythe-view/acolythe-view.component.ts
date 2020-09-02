@@ -14,15 +14,15 @@ import { WindowSize } from '../models/window_size.model';
 })
 export class AcolytheViewComponent implements OnInit, OnDestroy {
 
-  constructor(public ui: UiService, public userService: UserService,
-              private router: Router, private authService: AuthService) { }
-
   private windowSizeSubscription$: Subscription;
   public windowSize: WindowSize = { height: 1080, width: 1920};
   user: User;
   userSub: Subscription;
   public miejsce: number;
   public navigationMenu = false;
+
+  constructor(public ui: UiService, public userService: UserService,
+              private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     setTimeout(() => {

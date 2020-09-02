@@ -1,3 +1,4 @@
+import { ParafiaService } from './../../../services/parafia.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { UiService } from 'src/app/services/ui.service';

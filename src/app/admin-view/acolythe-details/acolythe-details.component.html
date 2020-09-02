@@ -1,5 +1,5 @@
 <div class="container">
-    <form #newDetailsForm="ngForm" class="details">
+    <form #newDetailsForm="ngForm" class="details" [style.visibility]="!isMobile || (isMobile && main) ? 'visible' : 'hidden'">
         <div class="user-name">
             <input autocomplete="given-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}"
                 #name="ngModel" name="name">
@@ -64,6 +64,15 @@
                 </div>
             </div>
 
+            <!-- Dyżury (dla mobliek) -->
+            <div class="detail-box" *ngIf="isMobile">
+                <label class="description">Dyżury</label>
+                <div class="flex-column">
+                    <label class="detail" *ngFor="let event of eventsForMobile()">{{nazwyDni[event.dzien_tygodnia] + ' '}}{{event.godzina | date: 'HH:mm'}}</label>
+                    <button class="email-set audiowide" (click)="this.hideCheckboxes = false; main = false" [disabled]="ministrant.id_user === 0">Edytuj</button>
+                </div>
+            </div>
+
             <!-- Admin -->
             <div class="detail-box" *ngIf="this.ministrant.id_user !== userService.UserID && this.ministrant.aktywny === 1">
                 <label class="description">Prawa administratora</label>
@@ -71,12 +80,12 @@
             </div>
         </div>
     </form>
-    <div class="duties">
+    <div class="duties" [style.visibility]="!isMobile || (isMobile && !main) ? 'visible' : 'collapse'">
         <div class="container-duty">
             <label class="title audiowide">Dyżury</label>
             <div class="container-white">
                 <form class="weekday-container" *ngFor="let weekday of nazwyDni, let i = index">
-                    <app-checkbox-status [disabled]="wyborGodziny(i).length === 0" class="checkbox-status" [czarny]="true" [status]="dni[i] ? 1 : 2" [trzyStany]="false" (checkStatus)="zmianaCheckboxa(i,$event)"></app-checkbox-status>
+                    <app-checkbox-status *ngIf="(isMobile && !hideCheckboxes) || !isMobile" [disabled]="wyborGodziny(i).length === 0" class="checkbox-status" [czarny]="true" [status]="dni[i] ? 1 : 2" [trzyStany]="false" (checkStatus)="zmianaCheckboxa(i,$event)"></app-checkbox-status>
                     <label class="day-name">{{weekday}}</label>
                     <select class="points lexend width-8" [id]="'selection'+i" [disabled]="!dni[i]" name="dayx" (change)="chooseEvent(i)">
                       <option class="lexend" *ngIf="!dni[i]">--:--</option>
@@ -87,7 +96,7 @@
         </div>
     </div>
     <div class="confirmation-panel">
-        <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
-        <button class="navigation-button audiowide" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull || ladowanie" (click)="zapisz()">Zapisz</button>
+        <button class="navigation-button back audiowide" (click)="powrot()">{{(isMobile && main) || !isMobile ? 'Anuluj' : 'Wróć'}}</button>
+        <button class="navigation-button audiowide" *ngIf="(isMobile && main) || !isMobile" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull || ladowanie" (click)="zapisz()">Zapisz</button>
     </div>
 </div>

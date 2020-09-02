@@ -17,6 +17,7 @@ export class AdminViewComponent implements OnInit, OnDestroy {
 
   private windowSizeSubscription$: Subscription;
   public windowSize: WindowSize = { height: 1080, width: 1920};
+  public navigationMenu = false;
 
   constructor(public userService: UserService, public parafiaService: ParafiaService, private router: Router,
               private ui: UiService, private http: HttpService, private authService: AuthService) { }
@@ -25,7 +26,9 @@ export class AdminViewComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.ui.addLoadingEvent();
     }, 10);
+    this.windowSize = {height: window.innerHeight, width: window.innerWidth };
     this.windowSizeSubscription$ = this.ui.windowSizeObs.subscribe(size => {
+      if (!size) { return; }
       this.windowSize = {height: size.currentTarget.innerHeight, width: size.currentTarget.innerWidth};
     });
     this.userService.pobierzUsera().then(res => {
@@ -127,6 +130,16 @@ export class AdminViewComponent implements OnInit, OnDestroy {
 
   openURL(url: string) {
     window.open(url, '_blank');
+  }
+
+  get isMobile()
+  {
+    return this.windowSize.width <= 850;
+  }
+
+  get isNavigation()
+  {
+    return this.windowSize.width <= 1200;
   }
 
   ngOnDestroy()

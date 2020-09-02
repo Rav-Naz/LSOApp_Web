@@ -1,12 +1,17 @@
 <div class="container">
 
     <div class="title-bar">
-        <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
+        <div class="title-bar-center">
+            <img src="../../assets/img/logo.png" class="img" alt="LSOApp">
+        </div>
+        <button class="menu-button icon" *ngIf="isNavigation" (click)="navigationMenu = !navigationMenu"> {{navigationMenu ? '&#xe08c;' : '&#xe017;'}}</button>
     </div>
 
-    <router-outlet name="admin" class="router"></router-outlet>
+    <div class="router">
+        <router-outlet name="admin"></router-outlet>
+    </div>
 
-    <div class="navigation-panel">
+    <div class="navigation-panel" *ngIf="(navigationMenu && isNavigation) || !isNavigation">
         <div class="navigation-flex">
 
             <label class="options-name audiowide" *ngIf="parafiaService.nazwaParafii">p. pw. {{parafiaService.nazwaParafii}}</label>
@@ -14,16 +19,18 @@
             <div class="navigation-section">
                 <label class="options-name">Zarządzanie</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['mass']}}]">Sprawdź obecność</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['acolythes-messages']}}]">Ministranci i wiadomości</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['new-acolythe']}}]">Dodaj ministranta</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['mass']}}]" (click)="navigationMenu = false;">Sprawdź obecność</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['acolythes-messages']}}]" (click)="navigationMenu = false;" *ngIf="!isMobile">Ministranci i wiadomości</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['acolythes-messages']}}]" (click)="ui.showLeftComponent = true; navigationMenu = false;" *ngIf="isMobile">Ministranci</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['acolythes-messages']}}]" (click)="ui.showLeftComponent = false; navigationMenu = false;" *ngIf="isMobile">Wiadomości</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['new-acolythe']}}]" (click)="navigationMenu = false;">Dodaj ministranta</label>
                 </div>
             </div>
 
             <div class="navigation-section">
                 <label class="options-name">Punkty</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['punctation']}}]">Zmień punktację</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['punctation']}}]" (click)="navigationMenu = false;">Zmień punktację</label>
                     <label class="navigation-button audiowide" (click)="wyzerujPunkty()">Wyzeruj punkty</label>
                     <label class="navigation-button audiowide" (click)="generujRaport()">Generuj raport</label>
                 </div>
@@ -32,7 +39,7 @@
             <div class="navigation-section">
                 <label class="options-name">Wydarzenia</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['edit-events']}}]">Edytuj wydarzenia</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['edit-events']}}]" (click)="navigationMenu = false;">Edytuj wydarzenia</label>
                     <label class="navigation-button audiowide" (click)="usunDyzury()">Usuń wszystkie dyżury</label>
                 </div>
             </div>
@@ -40,8 +47,8 @@
             <div class="navigation-section">
                 <label class="options-name">Konto parafii</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['delete-parish']}}]">Usuń konto</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['edit-parish-details']}}]">Zmień dane parafii</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['delete-parish']}}]" (click)="navigationMenu = false;">Usuń konto</label>
+                    <label class="navigation-button audiowide" [routerLink]="['/admin-view', { outlets: {'admin': ['edit-parish-details']}}]" (click)="navigationMenu = false;">Zmień dane parafii</label>
                     <label class="navigation-button audiowide" (click)="switchAccout()">Przełącz na widok ministranta</label>
                     <label class="navigation-button audiowide" (click)="wyloguj()">Wyloguj się</label>
                 </div>

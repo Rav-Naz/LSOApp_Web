@@ -1,18 +1,19 @@
 import { rank } from './../../models/lists.model';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DzienTyg } from '../../models/dzien_tygodnia.model';
 import { WydarzeniaService } from 'src/app/services/wydarzenia.service';
 import { UiService } from 'src/app/services/ui.service';
 import { Subscription } from 'rxjs';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
+import { WindowSize } from 'src/app/models/window_size.model';
 
 @Component({
   selector: 'app-edit-events',
   templateUrl: './edit-events.component.html',
   styleUrls: ['./edit-events.component.css']
 })
-export class EditEventsComponent implements OnInit {
+export class EditEventsComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               private wydarzeniaService: WydarzeniaService, public ui: UiService) { }
@@ -25,6 +26,9 @@ export class EditEventsComponent implements OnInit {
   stareWydarzeniaDnia: Array<Wydarzenie>;
   aktualizujWydarzeniaDnia: Array<Wydarzenie>;
   ladowanie = false;
+  private windowSizeSubscription$: Subscription;
+  public windowSize: WindowSize = { height: 1080, width: 1920};
+  public main = true;
 
   noweWydGodz: string = null;
   rangi: Array<string> = ['Wszyscy'];
@@ -40,6 +44,12 @@ export class EditEventsComponent implements OnInit {
   ngOnInit(): void {
     this.wydarzeniaService.setWydarzeniaEdycja(null);
     this.rangi = this.rangi.concat(rank);
+    this.windowSize = {height: window.innerHeight, width: window.innerWidth };
+    this.windowSizeSubscription$ = this.ui.windowSizeObs.subscribe(size => {
+      if (!size) { return; }
+      this.windowSize = {height: size.currentTarget.innerHeight, width: size.currentTarget.innerWidth};
+      // if (this.main && this.windowSize.width < 850) { this.hideCheckboxes = true; }
+    });
     this.wydarzeniaSub = this.wydarzeniaService.WydarzeniaEdycjaSub.subscribe((lista) => {
       this.wydarzeniaDnia = [];
       this.stareWydarzeniaDnia = [];
@@ -85,15 +95,16 @@ export class EditEventsComponent implements OnInit {
   edytujWydarzenie(wyd: Wydarzenie, index: number)
   {
     this.edycja = true;
+    this.main = false;
     this.edytowanyIndex = index;
     this.stworzMozliweDaty();
     this.nowyTyp = wyd.typ;
     this.noweWydGodz = new Date(wyd.godzina).toTimeString().slice(0, 5);
-    this.lostFocus('1');
     this.jednorazowe = wyd.data_dokladna ? true : false;
     this.dataDokladna = wyd.data_dokladna;
     this.grupa = wyd.grupa !== null ? this.rangi[wyd.grupa === 12 ? wyd.grupa : wyd.grupa + 1] : null;
     setTimeout(() => {
+      this.lostFocus('1');
       if (this.dataDokladna !== null)
       {
         this.lostFocus('3');
@@ -112,8 +123,10 @@ export class EditEventsComponent implements OnInit {
       (this.jednorazowe ? !this.isDateNotNull : false) ||
       (this.nowyTyp === 2 ? !this.isRankNotNull : false) ||
       this.ladowanie) { return; }
+
     const splitted = this.noweWydGodz.split(':');
     const rankx = this.rangi.indexOf(this.grupa);
+
     if (this.edycja) {
       if (this.wydarzeniaDnia.filter(wydarzenie => new Date(wydarzenie.godzina).getHours() === parseInt(splitted[0])
         && new Date(wydarzenie.godzina).getMinutes() === parseInt(splitted[1]) && wydarzenie.id !== this.wydarzeniaDnia[this.edytowanyIndex].id)[0] === undefined) {
@@ -122,6 +135,7 @@ export class EditEventsComponent implements OnInit {
         this.wydarzeniaDnia[this.edytowanyIndex].data_dokladna = this.jednorazowe ? this.dataDokladna : null;
         this.aktualizujWydarzeniaDnia.push(this.wydarzeniaDnia[this.edytowanyIndex]);
         this.zmiana = true;
+        this.main = true;
         setTimeout(() => {
           this.sortuj();
           this.clear();
@@ -145,6 +159,7 @@ export class EditEventsComponent implements OnInit {
           data_dokladna: this.jednorazowe ? this.dataDokladna : null
         });
         this.zmiana = true;
+        this.main = true;
         setTimeout(() => {
           this.sortuj();
           this.clear();
@@ -253,12 +268,19 @@ private czyAktualizowane( wydarzenie: Wydarzenie)
 
   powrot()
   {
-    this.ui.wantToContinue('Zmienione wydarzenia nie zostaną zapisane.', this.zmiana).then(decision => {
-      if (decision)
-      {
-        this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
-      }
-    });
+    if (!this.isMobile || (this.isMobile && this.main)) {
+      this.ui.wantToContinue('Zmienione wydarzenia nie zostaną zapisane.', this.zmiana).then(decision => {
+        if (decision)
+        {
+          this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
+        }
+      });
+    }
+    else
+    {
+      this.main = true;
+      this.clear();
+    }
   }
 
   dzienTygodnia(dzien: number) {
@@ -279,5 +301,16 @@ private czyAktualizowane( wydarzenie: Wydarzenie)
 
   get isTypeNotNull() {
     return this.nowyTyp !== null;
+  }
+
+  get isMobile()
+  {
+    return this.windowSize.width <= 850;
+  }
+
+
+  ngOnDestroy(): void {
+    this.wydarzeniaSub.unsubscribe();
+    this.windowSizeSubscription$.unsubscribe();
   }
 }

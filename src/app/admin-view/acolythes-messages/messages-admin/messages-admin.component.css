@@ -47,12 +47,42 @@
     background: linear-gradient(to left, transparent 85%, rgb(10, 10, 10) 100%);
 }
 
+@media only screen and (max-width: 850px) {
+    .messages {
+        background: transparent;
+    }
+}
+
 .message-grid {
     display: grid;
     padding: 2rem 10rem;
     grid-template-rows: 4rem auto;
     grid-template-columns: 8rem 1fr;
     width: 100%;
+}
+
+@media only screen and (max-width: 1500px) {
+    .message-grid {
+        padding: 2rem 4rem;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .message-grid {
+        padding: 2rem 3rem;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .message-grid {
+        padding: 2rem 6rem;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .message-grid {
+        padding: 2rem 2rem;
+    }
 }
 
 .message-grid-textfield {

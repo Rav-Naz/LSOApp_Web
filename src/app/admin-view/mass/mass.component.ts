@@ -13,6 +13,7 @@ import { sortPolskich } from 'src/assets/sortPolskich';
 // import { Component,  } from '@angular/core';
 import { Subject } from 'rxjs';
 import { CalendarView } from 'angular-calendar';
+import { WindowSize } from 'src/app/models/window_size.model';
 
 @Component({
   selector: 'app-mass',
@@ -60,11 +61,20 @@ export class MassComponent implements OnInit, OnDestroy {
   refresh: Subject<any> = new Subject();
   ladowanie = true;
 
+  private windowSizeSubscription$: Subscription;
+  public windowSize: WindowSize = { height: 1080, width: 1920};
+
   constructor(private parafiaService: ParafiaService, private wydarzeniaService: WydarzeniaService, private ui: UiService) { }
 
 
   ngOnInit(): void {
     this.cofam = false;
+
+    this.windowSize = {height: window.innerHeight, width: window.innerWidth };
+    this.windowSizeSubscription$ = this.ui.windowSizeObs.subscribe(size => {
+      if (!size) { return; }
+      this.windowSize = {height: size.currentTarget.innerHeight, width: size.currentTarget.innerWidth};
+    });
 
     this.dzis = this.viewDate = new Date();
     this.interval = setInterval(() => {
@@ -449,11 +459,16 @@ czyMoznaDoPrzodu()
     return true;
 }
 
+isGrey(index: number)
+{
+  return this.windowSize.width >= 600 && this.windowSize.width <= 850 ? (index % 4 === 1 || index % 4 === 2) : index % 2 === 0 ;
+}
   ngOnDestroy() {
     this.DyzurySub.unsubscribe();
     this.MinistranciSub.unsubscribe();
     this.ObecSub.unsubscribe();
     this.WydarzeniaSub.unsubscribe();
+    this.windowSizeSubscription$.unsubscribe();
   }
 
 }

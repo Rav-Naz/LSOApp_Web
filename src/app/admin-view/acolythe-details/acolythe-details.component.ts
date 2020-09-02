@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Wydarzenie } from 'src/app/models/wydarzenie.model';
 import { User } from 'src/app/models/user.model';
+import { WindowSize } from 'src/app/models/window_size.model';
 
 @Component({
   selector: 'app-acolythe-details',
@@ -32,6 +33,11 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   podgladMinistranta: Subscription;
   ladowanieEmailu = false;
   ladowanie = false;
+  private windowSizeSubscription$: Subscription;
+  public windowSize: WindowSize = { height: 1080, width: 1920};
+  public main = true;
+  public hideCheckboxes = false;
+
 
 
   nazwyDni = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
@@ -52,6 +58,12 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.parafiaService.SetDyzuryMinistranta(null);
     this.parafiaService.SetPodgladMinistranta(null);
+    this.windowSize = {height: window.innerHeight, width: window.innerWidth };
+    this.windowSizeSubscription$ = this.ui.windowSizeObs.subscribe(size => {
+      if (!size) { return; }
+      this.windowSize = {height: size.currentTarget.innerHeight, width: size.currentTarget.innerWidth};
+      if (this.main && this.windowSize.width < 850) { this.hideCheckboxes = true; }
+    });
     this.acolytheId = this.route.snapshot.paramMap.get('id');
     this.parafiaService.aktualnyMinistrantId = this.acolytheId;
     this.parafiaService.WybranyMinistrant(this.acolytheId).then(res => {
@@ -181,7 +193,6 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   }
 
   zmianaCheckboxa(index: number, event) {
-    console.log(event)
     if (this.wyborGodziny(index).length === 0) { return; }
     this.dni[index] = event;
     if (event === null) {
@@ -246,6 +257,19 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  eventsForMobile()
+  {
+    return this.stareWydarzeniaMinistranta.filter(event => event !== null).sort((a,b) => {
+      if (a.dzien_tygodnia > b.dzien_tygodnia) {
+        return 1;
+      }
+      if (a.dzien_tygodnia < b.dzien_tygodnia) {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
   zapisz() {
     if (
       !this.zmiana ||
@@ -285,7 +309,15 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
   powrot() {
     // this.tabIndexService.nowyOutlet(4, 'ministrant-szczegoly');
-    this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
+    if (this.isMobile && !this.main )
+    {
+      this.hideCheckboxes = true;
+      this.main = true;
+    }
+    else
+    {
+      this.router.navigateByUrl('/admin-view/(admin:acolythes-messages)');
+    }
   }
 
   get isEmailsSame() {
@@ -307,9 +339,15 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this.userEmail);
   }
 
+  get isMobile()
+  {
+    return this.windowSize.width <= 850;
+  }
+
   ngOnDestroy(): void {
     this.podgladMinistranta.unsubscribe();
     this.dyzurSub.unsubscribe();
     this.wydarzeniaSub.unsubscribe();
+    this.windowSizeSubscription$.unsubscribe();
   }
 }

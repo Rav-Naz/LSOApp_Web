@@ -2,8 +2,8 @@
     <div class="top">
         <button class="sort audiowide" [disabled]="ladowanieMinistrantow" (click)="zmianaSortu()">
           <label class="icon grey pointer" *ngIf="!ladowanieMinistrantow">&#xe018;</label>
-          <wbr class="grey pointer">Sortuj:
-          <wbr class="pointer">{{sortujPoImieniu ? 'Alfabetycznie' : 'Ranking'}}
+          <a class="grey pointer">Sortuj:</a>
+          <a class="pointer">{{sortujPoImieniu ? 'Alfabetycznie' : 'Ranking'}}</a>
       </button>
         <button class="delete-message margin-right-1 icon" [disabled]="ladowanieMinistrantow" (click)="nowyMinistrant()">&#xe072;</button>
     </div>

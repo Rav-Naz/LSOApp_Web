@@ -21,7 +21,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import localePl from '@angular/common/locales/pl';
-import {registerLocaleData} from '@angular/common';
+import {registerLocaleData, CommonModule} from '@angular/common';
 import { CheckboxComponent } from './shared/checkbox/checkbox.component';
 import { NewAcolytheComponent } from './admin-view/new-acolythe/new-acolythe.component';
 import { PunctationComponent } from './admin-view/punctation/punctation.component';
@@ -43,6 +43,8 @@ import { MessagesComponent } from './acolythe-view/duties-messages/messages/mess
 import { AcolythesComponent } from './admin-view/acolythes-messages/acolythes/acolythes.component';
 import { MessagesAdminComponent } from './admin-view/acolythes-messages/messages-admin/messages-admin.component';
 import { AcolythesMessagesComponent } from './admin-view/acolythes-messages/acolythes-messages.component';
+import { PromotionComponent } from './shared/promotion/promotion.component';
+
 registerLocaleData(localePl);
 
 @NgModule({
@@ -76,9 +78,11 @@ registerLocaleData(localePl);
     DutiesComponent,
     MessagesComponent,
     AcolythesComponent,
-    MessagesAdminComponent
+    MessagesAdminComponent,
+    PromotionComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
