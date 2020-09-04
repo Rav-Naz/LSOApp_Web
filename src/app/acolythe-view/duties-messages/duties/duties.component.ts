@@ -1,4 +1,4 @@
-import { ParafiaService } from './../../../services/parafia.service';
+import { ParafiaService } from 'src/app/services/parafia.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { UiService } from 'src/app/services/ui.service';
@@ -15,7 +15,7 @@ import { Wydarzenie } from 'src/app/models/wydarzenie.model';
 export class DutiesComponent implements OnInit, OnDestroy {
 
   constructor(public userService: UserService, public ui: UiService,
-              public http: HttpService) { }
+              public http: HttpService, public parafiaService: ParafiaService) { }
 
   user: User;
   userSub: Subscription;
@@ -35,17 +35,19 @@ export class DutiesComponent implements OnInit, OnDestroy {
     this.userSub = this.userService.UserSub.subscribe(user => {
       this.user = user;
       if (this.user === null || this.user === undefined) { return; }
-      this.userService.mojeDyzury(this.user.id_user, this.user.stopien).then(res => {
-        if (res === 404) {
-          this.ui.showFeedback('warning', 'Twoja sesja wygasła. Zaloguj się ponownie aby móc kontynuować', 2);
-        }
+      this.parafiaService.pobierzSpecjalneWydarzenia().then(() => {
+        this.userService.mojeDyzury(this.user.id_user, this.user.stopien).then(res => {
+          if (res === 404) {
+            this.ui.showFeedback('warning', 'Twoja sesja wygasła. Zaloguj się ponownie aby móc kontynuować', 2);
+          }
+        });
       });
     });
 
     this.dyzurySub = this.userService.UserDyzurySub.subscribe(dyzury => {
 
       this.teraz = new Date();
-      this.teraz.setHours(3);
+      this.teraz.setHours(2);
 
       if (dyzury !== undefined && dyzury !== null) {
 
@@ -56,37 +58,63 @@ export class DutiesComponent implements OnInit, OnDestroy {
 
         this.dyzury = dyzury;
 
-        for (let index = 0; index < this.wydarzeniaWgDni.length; index++) {
+        for (let index = 0; index < 7; index++) {
 
-          const przedzialPoczatek = new Date();
-          const przedzialKoniec = new Date();
-          przedzialPoczatek.setFullYear(2018, 10, 15);
-          przedzialKoniec.setFullYear(2018, 10, 15);
-          przedzialPoczatek.setMinutes(przedzialPoczatek.getMinutes() - 45);
-          przedzialKoniec.setMinutes(przedzialKoniec.getMinutes() + 45);
+          const dzien = new Date();
+          dzien.setDate(dzien.getDate() - 3 + this.ktoryRzad(index));
+          dzien.setHours(3, 0, 0, 0);
+          const specjalne = this.parafiaService.przeszukajKalendarzSpecjalne(dzien.toJSON().slice(0, 10));
 
-          let dzisiejsze = this.dyzury.filter(dyzur => dyzur.dzien_tygodnia === index);
+          let dzisiejsze = [];
 
-          dzisiejsze.sort((wyd1, wyd2) => {
-            if (wyd1.godzina > wyd2.godzina) { return 1; }
-            if (wyd1.godzina < wyd2.godzina) { return -1; }
-            return 0;
-          });
-
-          if (index === this.teraz.getDay()) {
-            const pozniejsze = dzisiejsze.filter(dyzur => new Date(dyzur.godzina) >= przedzialPoczatek);
-            if (pozniejsze.length > 0) {
-              dzisiejsze = dzisiejsze.slice(0, dzisiejsze.indexOf(pozniejsze[0]));
-              this.aktualneWydarzenie = new Date(pozniejsze[0].godzina) <= przedzialKoniec ? pozniejsze.shift() : null;
-            }
-            this.pozniejszeWydarzenia = pozniejsze.slice(0, 3);
+          if (specjalne === null)
+          {
+            dzisiejsze = this.dyzury.filter(dyzur => dyzur.dzien_tygodnia === index);
+            this.kontynuacja(dzisiejsze, index);
           }
-
-          this.wydarzeniaWgDni[index] = dzisiejsze.slice(0, 3);
+          else
+          {
+            this.dni[index] = 'ŚWI';
+            this.userService.mojeSpecjalneWydarzenie(this.user.id_user, this.user.stopien,
+            dzien.toJSON().slice(0, 10)).then(res =>
+            {
+              dzisiejsze = res;
+              dzisiejsze.forEach(event => event.nazwa = specjalne);
+              this.kontynuacja(dzisiejsze, index);
+            });
+          }
         }
         this.ladowanieDyzurow = false;
       }
     });
+  }
+
+  kontynuacja(dzisiejsze: Array<any>, index: number)
+  {
+    dzisiejsze.sort((wyd1, wyd2) => {
+      if (wyd1.godzina > wyd2.godzina) { return 1; }
+      if (wyd1.godzina < wyd2.godzina) { return -1; }
+      return 0;
+    });
+
+    if (index === this.teraz.getDay()) {
+
+      const przedzialPoczatek = new Date();
+      const przedzialKoniec = new Date();
+      przedzialPoczatek.setFullYear(2018, 10, 15);
+      przedzialKoniec.setFullYear(2018, 10, 15);
+      przedzialPoczatek.setMinutes(przedzialPoczatek.getMinutes() - 45);
+      przedzialKoniec.setMinutes(przedzialKoniec.getMinutes() + 45);
+
+      const pozniejsze = dzisiejsze.filter(dyzur => new Date(dyzur.godzina) >= przedzialPoczatek);
+      if (pozniejsze.length > 0) {
+        dzisiejsze = dzisiejsze.slice(0, dzisiejsze.indexOf(pozniejsze[0]));
+        this.aktualneWydarzenie = new Date(pozniejsze[0].godzina) <= przedzialKoniec ? pozniejsze.shift() : null;
+      }
+      this.pozniejszeWydarzenia = pozniejsze.slice(0, 3);
+    }
+
+    this.wydarzeniaWgDni[index] = dzisiejsze.slice(0, 3);
   }
 
   GodzinaDyzuruNaDanyDzien(godzina: string) {

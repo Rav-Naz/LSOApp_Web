@@ -112,19 +112,24 @@ export class AdminViewComponent implements OnInit, OnDestroy {
   }
 
   generujRaport() {
-    new Promise((resolve, reject) => {
-      this.ui.showFeedback('loading', 'Trwa przygotowywanie raportu', 10);
-      this.http.generujRaport(this.userService.UserEmail).then(res => {
-        if (res === 'Wysłano') {
-          resolve();
-        }
-        else {
-          this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 3);
-        }
-      });
+    this.ui.wantToContinue('Raport zostanie wysłany na twój adres email.').then(kontynuuj => {
+      if (kontynuuj)
+      {
+        new Promise((resolve, reject) => {
+          this.ui.showFeedback('loading', 'Trwa przygotowywanie raportu', 10);
+          this.http.generujRaport(this.userService.UserEmail).then(res => {
+            if (res === 'Wysłano') {
+              resolve();
+            }
+            else {
+              this.ui.showFeedback('error', 'Wystąpił nieoczekiwany błąd', 3);
+            }
+          });
 
-    }).then(() => {
-      this.ui.showFeedback('succes', `Raport został wysłany na Twój adres email`, 6);
+        }).then(() => {
+          this.ui.showFeedback('succes', `Raport został wysłany na Twój adres email`, 6);
+        });
+      }
     });
   }
 

@@ -81,6 +81,19 @@ export class UserService {
     });
   }
 
+  async mojeSpecjalneWydarzenie(id_user: number, stopien: number, data_dokladna: string) { // Wykorzystanie: ministrant-dyzury, ministranci-szczegoly
+    return new Promise<any[]>(resolve => {
+
+      this.http.pobierzSpecjalneDyzuryDlaMinistranta(id_user, stopien, data_dokladna).then(res => {
+        if (res === null) {
+          resolve([]);
+          return;
+        }
+        resolve(res);
+      });
+    });
+  }
+
   async miejsceWRankignu() {
     return new Promise<number>((resolve) => {
       this.http.miejsceWRankingu().then(res => {
