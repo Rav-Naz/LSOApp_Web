@@ -39,7 +39,9 @@ export class NewAcolytheComponent {
 
     this.zapisywanie = true;
 
-    const rankx = this.ranks.indexOf(this._rank);
+    let rankx = this.ranks.indexOf(this._rank);
+    if (rankx === 11) { rankx = 12; }
+    if (rankx < 0) { return; }
     this.parafiaService.nowyMinistrant(rankx, this._name, this._lastName,
       this._email === '' || this._email === null ? null : this._email).then(res => {
       switch (res) {
