@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 })
 export class NewAcolytheComponent {
 
-  public ranks = rank;
+  public ranks = [...rank];
 
   public _name: string = null;
   public _lastName: string = null;
@@ -18,7 +18,10 @@ export class NewAcolytheComponent {
   public _rank = 'Wybierz stopień';
   public zapisywanie = false;
 
-  constructor(private parafiaService: ParafiaService, private ui: UiService, private router: Router) { }
+  constructor(private parafiaService: ParafiaService, private ui: UiService, private router: Router) {
+    this.ranks.push('Opiekun');
+    this.ranks[11] = 'Ksiądz';
+  }
 
   getFocus(name: string) {
     document.getElementById(`selection${name}`).style.color = '#ffffff';
@@ -40,7 +43,7 @@ export class NewAcolytheComponent {
     this.zapisywanie = true;
 
     let rankx = this.ranks.indexOf(this._rank);
-    if (rankx === 11) { rankx = 12; }
+    // if (rankx === 11) { rankx = 12; }
     if (rankx < 0) { return; }
     this.parafiaService.nowyMinistrant(rankx, this._name, this._lastName,
       this._email === '' || this._email === null ? null : this._email).then(res => {

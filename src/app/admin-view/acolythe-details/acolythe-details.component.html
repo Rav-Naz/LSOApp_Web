@@ -1,5 +1,5 @@
 <div class="container">
-    <form #newDetailsForm="ngForm" class="details" [style.visibility]="!isMobile || (isMobile && main) ? 'visible' : 'hidden'">
+    <form #newDetailsForm="ngForm" class="details" [style.visibility]="!isMobile || (isMobile && main) ? 'visible' : 'hidden'" [style.grid-column]="isPreist ? '1/3' : '1'" [style.width]="isPreist ? '50%' : '100%'" [style.justify-self]="'center'">
         <div class="user-name">
             <input autocomplete="given-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" min="1" max="20" class="input audiowide" (change)="zmiana = true" [disabled]="ministrant.id_user === 0" [(ngModel)]="ministrant.imie" [ngModelOptions]="{standalone: false}"
                 #name="ngModel" name="name">
@@ -65,7 +65,7 @@
             </div>
 
             <!-- Dyżury (dla mobliek) -->
-            <div class="detail-box" *ngIf="isMobile">
+            <div class="detail-box" *ngIf="isMobile && ministrant.stopien !== 11">
                 <label class="description">Dyżury</label>
                 <div class="flex-column">
                     <label class="detail" *ngFor="let event of eventsForMobile()">{{nazwyDni[event.dzien_tygodnia] + ' '}}{{event.godzina | date: 'HH:mm'}}</label>
@@ -80,7 +80,7 @@
             </div>
         </div>
     </form>
-    <div class="duties" [style.visibility]="!isMobile || (isMobile && !main) ? 'visible' : 'collapse'">
+    <div class="duties" [style.visibility]="((!isMobile || (isMobile && !main)) && ministrant.stopien !== 11) ? 'visible' : 'collapse'">
         <div class="container-duty">
             <label class="title audiowide">Dyżury</label>
             <div class="container-white">

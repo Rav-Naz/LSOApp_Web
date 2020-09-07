@@ -34,7 +34,7 @@ export class AcolythesComponent implements OnInit, OnDestroy {
     this.miniSub = this.parafiaService.Ministranci.subscribe(lista => {
       this.ministranci = [];
       if (lista !== null) {
-        this.ministranci = [...lista].filter(item => item.stopien !== 11);
+        this.ministranci = [...lista];
         this.sortujListe();
         this.ladowanieMinistrantow = false;
       }
@@ -60,7 +60,7 @@ export class AcolythesComponent implements OnInit, OnDestroy {
 
   zmianaSortu() {
     if (this.ladowanieMinistrantow) { return; }
-    // this.ui.zmienStan(1,true)
+
     this.sortujPoImieniu = !this.sortujPoImieniu;
     this.sortujListe();
   }

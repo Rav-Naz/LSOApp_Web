@@ -96,6 +96,15 @@ export class LoginComponent {
     if (event.key === 'Enter') { this.signIn(); }
   }
 
+  toRegister()
+  {
+    this.ui.wantToContinue('Konto parafii może założyć tylko upoważniona osoba w parafii.').then(want => {
+      if (want) {
+        this.router.navigateByUrl('/register')
+      }
+    })
+  }
+
 
   get isEmailValid()
   {

@@ -22,10 +22,10 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   zmiana = false;
   public _rank = 'Wybierz stopień';
   public przypisz = false;
-  ranks = rank;
+  ranks = [...rank];
   public userEmail: string = null;
   ministrant: User = {
-    id_user: 0, id_diecezji: 0, id_parafii: 0, punkty: 0, stopien: 0,
+    id_user: 0, id_diecezji: 0, id_parafii: 0, punkty: 0, stopien: 11,
     imie: '', nazwisko: '', ulica: null, kod_pocztowy: null, miasto: null, email: null,
     telefon: null, aktywny: 0, admin: 0, ranking: 0
   };
@@ -53,7 +53,10 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, private parafiaService: ParafiaService,
               private router: Router, private ui: UiService, private http: HttpService, public userService: UserService,
-              private wydarzeniaService: WydarzeniaService) { }
+              private wydarzeniaService: WydarzeniaService) {
+                this.ranks.push('Opiekun');
+                this.ranks[11] = 'Ksiądz';
+              }
 
   ngOnInit(): void {
     this.parafiaService.SetDyzuryMinistranta(null);
@@ -78,7 +81,7 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
     this.podgladMinistranta = this.parafiaService.PodgladMinistranta.subscribe(min => {
       if (min !== undefined && min !== null) {
         this.ministrant = min;
-        this._rank = min.stopien === 12 ? this.ranks[11] : this.ranks[min.stopien];
+        this._rank = this.ranks[min.stopien];
       }
     });
 
@@ -279,7 +282,7 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
       this.ladowanie){ return; }
     this.ladowanie = true;
     let rankx = this.ranks.indexOf(this._rank);
-    if (rankx === 11) { rankx = 12; }
+    // if (rankx === 11) { rankx = 12; }
     if (rankx < 0) { return; }
     this.ministrant.stopien = rankx;
     this.parafiaService.updateMinistranta(this.ministrant).then(res => {
@@ -338,10 +341,13 @@ export class AcolytheDetailsComponent implements OnInit, OnDestroy {
   {
     return new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$').test(this.userEmail);
   }
-
   get isMobile()
   {
     return this.windowSize.width <= 850;
+  }
+  get isPreist()
+  {
+    return this.ranks.indexOf(this._rank) === 11;
   }
 
   ngOnDestroy(): void {

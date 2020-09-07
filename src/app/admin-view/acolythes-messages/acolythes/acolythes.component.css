@@ -148,6 +148,11 @@
     cursor: not-allowed;
 }
 
+.bold {
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+
 .col1 {
     grid-column: 1;
     justify-self: left;
