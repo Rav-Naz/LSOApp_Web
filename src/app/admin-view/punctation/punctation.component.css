@@ -1,4 +1,4 @@
-.container {
+.container-s {
     background-color: transparent;
 }
 
@@ -14,6 +14,8 @@
     grid-column: 1;
     justify-self: center;
     align-self: center;
+    text-align: left;
+    width: 100%;
 }
 
 .points-count {
