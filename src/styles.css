@@ -420,12 +420,12 @@ input:active {
     align-items: center;
 }
 
-.navigation-button:focus,
+.navigation-button-menu:focus,
 .menu-button:focus {
     outline: none;
 }
 
-.navigation-button:active,
+.navigation-button-menu:active,
 .menu-button:active {
     transform: translateY(2px);
 }
