@@ -1,14 +1,14 @@
-<div class="container">
-    <label class="title audiowide">Usuń parafię</label>
-    <form #newDeleteForm="ngForm" class="container-white">
+<div class="container-s">
+    <label class="title-s audiowide">Usuń parafię</label>
+    <form #newDeleteForm="ngForm" class="container-s-white">
         <label class="description">Czy na pewno chcesz usunąć konto swojej parafii? Wszystkie dane zostaną utracone a Twoi podopieczni utracą możliwość logowania na swoje konta.</label>
         <label class="description">Aby potwierdzić wykonywaną operację wprowadź swoje hasło:</label>
-        <div class="input-object">
-            <label class="input-object-title audiowide">Hasło</label>
-            <input autocomplete="current-password" required class="input-object-description lexend" [disabled]="ladowanie" placeholder="Wpisz hasło" minlength="6" maxlength="15" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})" type="password" [(ngModel)]="_password"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Hasło</label>
+            <input autocomplete="current-password" required class="input-object-s-description lexend" [disabled]="ladowanie" placeholder="Wpisz hasło" minlength="6" maxlength="15" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń0-9+*@#$&^~?_]{6,15})" type="password" [(ngModel)]="_password"
                 name="password" #password="ngModel" [ngClass]="{'disabled': ladowanie, 'enabled': !ladowanie}">
         </div>
     </form>
-    <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newDeleteForm.valid || ladowanie" (click)="usun()">Usuń</button>
+    <button class="navigation-button-s back-s audiowide" (click)="anuluj()">Anuluj</button>
+    <button class="navigation-button-s confirm-s audiowide" [disabled]="!newDeleteForm.valid || ladowanie" (click)="usun()">Usuń</button>
 </div>

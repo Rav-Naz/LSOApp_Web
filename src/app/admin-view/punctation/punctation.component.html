@@ -1,6 +1,6 @@
-<div class="container">
-    <label class="title audiowide">Punktacja</label>
-    <form #newPunctationForm="ngForm" class="container-white">
+<div class="container-s">
+    <label class="title-s audiowide">Punktacja</label>
+    <form #newPunctationForm="ngForm" class="container-s-white">
         <div class="points-container underline">
             <label class="points-name">Obecność na służbie</label>
             <label class="points-count">{{pktZaObecnoscSluzba}}</label>
@@ -33,6 +33,6 @@
         </div>
     </form>
 
-    <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newPunctationForm.valid || !czyZmienione || zapisywanie" (click)="zapisz()">Zapisz</button>
+    <button class="navigation-button-s back-s audiowide" (click)="anuluj()">Anuluj</button>
+    <button class="navigation-button-s confirm-s audiowide" [disabled]="!newPunctationForm.valid || !czyZmienione || zapisywanie" (click)="zapisz()">Zapisz</button>
 </div>

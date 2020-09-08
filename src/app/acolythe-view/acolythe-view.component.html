@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-main">
 
     <div class="title-bar">
         <div class="title-bar-center">
@@ -27,26 +27,26 @@
             <div class="navigation-section">
                 <label class="options-name">Aktualności</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="navigationMenu = false;" *ngIf="!isMobile">Dyżury i wiadomości</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="ui.showLeftComponent = true; navigationMenu = false;" *ngIf="isMobile">Dyżury</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="ui.showLeftComponent = false; navigationMenu = false;" *ngIf="isMobile">Wiadomości</label>
+                    <label class="navigation-button-menu audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="navigationMenu = false;" *ngIf="!isMobile">Dyżury i wiadomości</label>
+                    <label class="navigation-button-menu audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="ui.showLeftComponent = true; navigationMenu = false;" *ngIf="isMobile">Dyżury</label>
+                    <label class="navigation-button-menu audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['duties-messages']}}]" (click)="ui.showLeftComponent = false; navigationMenu = false;" *ngIf="isMobile">Wiadomości</label>
                 </div>
             </div>
 
             <div class="navigation-section">
                 <label class="options-name">Twoje dane</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['user-details']}}]" (click)="navigationMenu = false;">Dane profilowe</label>
+                    <label class="navigation-button-menu audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['user-details']}}]" (click)="navigationMenu = false;">Dane profilowe</label>
                 </div>
             </div>
 
             <div class="navigation-section">
                 <label class="options-name">Konto</label>
                 <div class="navigation-section-options">
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]" (click)="navigationMenu = false;">Usuń konto</label>
-                    <label class="navigation-button audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['change-password']}}]" (click)="navigationMenu = false;">Zmień hasło</label>
-                    <label class="navigation-button audiowide" (click)="switchAccount()" *ngIf="userService.UserPerm === 1">Przełącz na widok opiekuna</label>
-                    <label class="navigation-button audiowide" (click)="wyloguj()">Wyloguj się</label>
+                    <label class="navigation-button-menu audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['delete-account']}}]" (click)="navigationMenu = false;">Usuń konto</label>
+                    <label class="navigation-button-menu audiowide" [routerLink]="['/acolythe-view', { outlets: {'acolythe': ['change-password']}}]" (click)="navigationMenu = false;">Zmień hasło</label>
+                    <label class="navigation-button-menu audiowide" (click)="switchAccount()" *ngIf="userService.UserPerm === 1">Przełącz na widok opiekuna</label>
+                    <label class="navigation-button-menu audiowide" (click)="wyloguj()">Wyloguj się</label>
                 </div>
             </div>
 
@@ -54,9 +54,9 @@
 
         <div class="navigation-info">
             <label class="version row1">LSOApp {{userService.wersja}}</label>
-            <label class="navigation-button audiowide row1" (click)="openURL('https://lsoapp.pl/faq/')">FAQ</label>
-            <label class="navigation-button audiowide row2" (click)="openURL('https://lsoapp.pl/#contact')">Kontakt</label>
-            <label class="navigation-button audiowide row3" (click)="openURL('https://lsoapp.pl/polityka-prywatnosci/')">Regulamin i polityka prywatności</label>
+            <label class="navigation-button-menu audiowide row1" (click)="openURL('https://lsoapp.pl/faq/')">FAQ</label>
+            <label class="navigation-button-menu audiowide row2" (click)="openURL('https://lsoapp.pl/#contact')">Kontakt</label>
+            <label class="navigation-button-menu audiowide row3" (click)="openURL('https://lsoapp.pl/polityka-prywatnosci/')">Regulamin i polityka prywatności</label>
         </div>
 
     </div>

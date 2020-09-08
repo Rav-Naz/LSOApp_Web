@@ -77,16 +77,6 @@
     }
 }
 
-.activity-container {
-    grid-column: 3;
-    grid-row: 1/10;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .all-day-container {
     display: flex;
     flex-direction: column;

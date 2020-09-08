@@ -299,22 +299,10 @@
     }
 }
 
-.container-white {
-    width: 100%;
-    height: 100%;
-    background-color: rgb(245, 245, 245);
-    grid-row: 2/4;
+.container-s-white {
     grid-column: 1;
-    border-radius: 2rem;
-    /* margin: 0 2rem; */
     padding: 0 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-around;
-    color: black;
-    font-size: 1.6rem;
-    overflow-y: auto;
 }
 
 .day-name {
@@ -328,20 +316,8 @@
     }
 }
 
-.title {
-    background: linear-gradient(to right bottom, #e71e25, #a5151a);
-    border-radius: 1rem;
-    grid-row: 1/3;
+.title-s {
     grid-column: 1;
-    height: 100%;
-    width: 50%;
-    font-size: 1.6rem;
-    vertical-align: middle;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    justify-self: center;
-    z-index: 2;
 }
 
 .weekday-container {
@@ -365,29 +341,10 @@
     align-items: center;
 }
 
-.navigation-button,
-.navigation-button:link,
-.navigation-button:visited {
-    color: white;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: .8rem;
-    display: inline-block;
-    background: linear-gradient(to right bottom, #e71e25, #a5151a);
-    border-radius: 1rem;
-    transition: all .2s;
-    font-size: 1.5rem;
-    margin: 2rem;
+.navigation-button-s,
+.navigation-button-s:link,
+.navigation-button-s:visited {
     width: 21.8%;
-    border: none;
-    cursor: pointer;
-}
-
-.back {
-    background: transparent;
-    border-color: rgb(245, 245, 245);
-    border-width: .2rem;
-    border-style: solid;
 }
 
 .black-back {

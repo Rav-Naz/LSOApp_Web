@@ -82,8 +82,8 @@
     </form>
     <div class="duties" [style.visibility]="((!isMobile || (isMobile && !main)) && ministrant.stopien !== 11) ? 'visible' : 'collapse'">
         <div class="container-duty">
-            <label class="title audiowide">Dyżury</label>
-            <div class="container-white">
+            <label class="title-s audiowide">Dyżury</label>
+            <div class="container-s-white">
                 <form class="weekday-container" *ngFor="let weekday of nazwyDni, let i = index">
                     <app-checkbox-status *ngIf="(isMobile && !hideCheckboxes) || !isMobile" [disabled]="wyborGodziny(i).length === 0" class="checkbox-status" [czarny]="true" [status]="dni[i] ? 1 : 2" [trzyStany]="false" (checkStatus)="zmianaCheckboxa(i,$event)"></app-checkbox-status>
                     <label class="day-name">{{weekday}}</label>
@@ -96,7 +96,7 @@
         </div>
     </div>
     <div class="confirmation-panel">
-        <button class="navigation-button back audiowide" (click)="powrot()">{{(isMobile && main) || !isMobile ? 'Anuluj' : 'Wróć'}}</button>
-        <button class="navigation-button audiowide" *ngIf="(isMobile && main) || !isMobile" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull || ladowanie" (click)="zapisz()">Zapisz</button>
+        <button class="navigation-button-s back-s audiowide" (click)="powrot()">{{(isMobile && main) || !isMobile ? 'Anuluj' : 'Wróć'}}</button>
+        <button class="navigation-button-s audiowide" *ngIf="(isMobile && main) || !isMobile" [disabled]="!zmiana || !newDetailsForm.valid || !isRankNotNull || ladowanie" (click)="zapisz()">Zapisz</button>
     </div>
 </div>

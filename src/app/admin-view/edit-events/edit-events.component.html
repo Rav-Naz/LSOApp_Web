@@ -1,8 +1,8 @@
 <div class="container">
     <div class="flex-row">
         <div class="all-events" *ngIf="!isMobile || (isMobile && main)">
-            <label class="title audiowide">Wydarzenia</label>
-            <div class="container-white">
+            <label class="title-s audiowide">Wydarzenia</label>
+            <div class="container-s-white">
                 <label *ngIf="wybranyDzien === undefined">Wybierz dzień</label>
                 <div class="events-grid">
                     <div class="event-list" *ngIf="!ladowanie && wybranyDzien !== undefined">
@@ -30,8 +30,8 @@
         </div>
 
         <div class="all-events not-main" *ngIf="wybranyDzien !== undefined && (!isMobile || (isMobile && !main))">
-            <label class="title audiowide">{{edycja ? 'Edytuj' : 'Dodaj nowe'}}</label>
-            <div class="container-white">
+            <label class="title-s audiowide">{{edycja ? 'Edytuj' : 'Dodaj nowe'}}</label>
+            <div class="container-s-white">
                 <form class="new-event">
                     <div class="new-event-type">
                         <label class="audiowide col-1-2">Typ wydarzenia</label>
@@ -52,7 +52,7 @@
                     <div class="option-container">
                         <label class="typ-choose-label audiowide">Godzina</label>
                         <input required type="time" class="select lexend" placeholder="--:--" (focus)="getFocus('1')" (blur)="lostFocus('1')" id="selection1" [(ngModel)]="noweWydGodz" [ngModelOptions]="{standalone: false}" #hour="ngModel" name="hourx">
-                        <label class="alert" *ngIf="!hour.valid && hour.touched">Wybierz godzinę</label>
+                        <label class="alert" *ngIf="!hour.valid && hour.touched">Wpisz godzinę</label>
                     </div>
 
                     <div class="option-container" *ngIf="nowyTyp === 2">
@@ -87,8 +87,8 @@
         </div>
     </div>
     <div class="confirmation-panel">
-        <button class="navigation-button back audiowide" (click)="powrot()">Anuluj</button>
-        <button class="navigation-button audiowide" *ngIf="!isMobile || (isMobile && main)" [disabled]="!zmiana || ladowanie" (click)="zapisz()">Zapisz</button>
-        <button class="navigation-button audiowide" *ngIf="isMobile && !main" [disabled]="!isTypeNotNull || !isHourNotNull || (jednorazowe ? !isDateNotNull : false) || (nowyTyp === 2 ? !isRankNotNull : false) || ladowanie" (click)="dodaj()">{{edycja ? 'Zapisz' : 'Dodaj'}}</button>
+        <button class="navigation-button-s back-s audiowide" (click)="powrot()">Anuluj</button>
+        <button class="navigation-button-s audiowide" *ngIf="!isMobile || (isMobile && main)" [disabled]="!zmiana || ladowanie" (click)="zapisz()">Zapisz</button>
+        <button class="navigation-button-s audiowide" *ngIf="isMobile && !main" [disabled]="!isTypeNotNull || !isHourNotNull || (jednorazowe ? !isDateNotNull : false) || (nowyTyp === 2 ? !isRankNotNull : false) || ladowanie" (click)="dodaj()">{{edycja ? 'Zapisz' : 'Dodaj'}}</button>
     </div>
 </div>

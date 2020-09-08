@@ -1,66 +1,66 @@
-<div class="container" *ngIf="!udanaRejP">
-    <label class="title audiowide">Rejestracja parafii</label>
-    <form #newRegisterForm="ngForm" class="container-white">
+<div class="container-s" *ngIf="!udanaRejP">
+    <label class="title-s audiowide">Rejestracja parafii</label>
+    <form #newRegisterForm="ngForm" class="container-s-white">
 
-        <div class="input-object offset-20">
-            <label class="input-object-title audiowide">Wezwanie parafii</label>
-            <div class="input-object-description parish-name">
+        <div class="input-object-s offset-20">
+            <label class="input-object-s-title audiowide">Wezwanie parafii</label>
+            <div class="input-object-s-description parish-name">
                 <label class="pw" id="pw">pw.</label>
                 <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})" class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" [(ngModel)]="_parishName" (ngModelChange)="changeParishName()" [ngModelOptions]="{standalone: false}"
                     name="parish">
             </div>
-            <label class="alert" *ngIf="!parishName.valid && parishName.touched">Wezwanie musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
+            <label class="alert-s" *ngIf="!parishName.valid && parishName.touched">Wezwanie musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Rodzaj parafii</label>
-            <select class="input-object-description lexend select" (focus)="getFocus('1')" (blur)="lostFocus('1')" id="selection1" [(ngModel)]="_monastery" [ngModelOptions]="{standalone: true}" #monastery="ngModel">
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Rodzaj parafii</label>
+            <select class="input-object-s-description lexend select" (focus)="getFocus('1')" (blur)="lostFocus('1')" id="selection1" [(ngModel)]="_monastery" [ngModelOptions]="{standalone: true}" #monastery="ngModel">
         <option class="lexend">Wybierz rodzaj parafii</option>
         <option *ngFor="let monastery of monasteries" [value]="monastery" class="lexend">{{monastery}}</option>
       </select>
-            <label class="alert" *ngIf="monastery.touched && !isMonasteryNotNull">Wybierz rodzaj parafii</label>
+            <label class="alert-s" *ngIf="monastery.touched && !isMonasteryNotNull">Wybierz rodzaj parafii</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Diecezja</label>
-            <select class="input-object-description lexend select" (focus)="getFocus('2')" (blur)="lostFocus('2')" id="selection2" [(ngModel)]="_diocese" [ngModelOptions]="{standalone: true}" #diocese="ngModel">
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Diecezja</label>
+            <select class="input-object-s-description lexend select" (focus)="getFocus('2')" (blur)="lostFocus('2')" id="selection2" [(ngModel)]="_diocese" [ngModelOptions]="{standalone: true}" #diocese="ngModel">
         <option class="lexend">Wybierz diecezję</option>
         <option *ngFor="let diocese of dioceses" [value]="diocese" class="lexend">{{diocese}}</option>
       </select>
-            <label class="alert" *ngIf="diocese.touched && !isDioceseNotNull">Wybierz rodzaj parafii</label>
+            <label class="alert-s" *ngIf="diocese.touched && !isDioceseNotNull">Wybierz rodzaj parafii</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Miasto</label>
-            <input autocomplete="address-level1" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})" class="input-object-description lexend" placeholder="Wpisz miasto" [(ngModel)]="_city" [ngModelOptions]="{standalone: false}" #city="ngModel" name="city">
-            <label class="alert" *ngIf="!city.valid && city.touched">Miasto musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Miasto</label>
+            <input autocomplete="address-level1" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .-]{2,30})" class="input-object-s-description lexend" placeholder="Wpisz miasto" [(ngModel)]="_city" [ngModelOptions]="{standalone: false}" #city="ngModel" name="city">
+            <label class="alert-s" *ngIf="!city.valid && city.touched">Miasto musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Imię</label>
-            <input autocomplete="name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje imię" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
-            <label class="alert" *ngIf="!name.valid && name.touched">Imię musi być krótsze od 20 znaków oraz składać się z polskiego alfabetu</label>
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Imię</label>
+            <input autocomplete="name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" class="input-object-s-description lexend" placeholder="Wpisz swoje imię" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name">
+            <label class="alert-s" *ngIf="!name.valid && name.touched">Imię musi być krótsze od 20 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Nazwisko</label>
-            <input autocomplete="family-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" class="input-object-description lexend" placeholder="Wpisz swoje nazwisko" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
-            <label class="alert" *ngIf="!lastName.valid && lastName.touched">Nazwisko musi być którsze od 20 znaków oraz składać się z polskiego alfabetu</label>
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Nazwisko</label>
+            <input autocomplete="family-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{1,20})" class="input-object-s-description lexend" placeholder="Wpisz swoje nazwisko" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel" name="lastName">
+            <label class="alert-s" *ngIf="!lastName.valid && lastName.touched">Nazwisko musi być którsze od 20 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Stopień</label>
-            <select class="input-object-description lexend select" (focus)="getFocus('3')" (blur)="lostFocus('3')" id="selection3" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel">
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Stopień</label>
+            <select class="input-object-s-description lexend select" (focus)="getFocus('3')" (blur)="lostFocus('3')" id="selection3" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel">
         <option class="lexend">Wybierz stopień</option>
         <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
       </select>
-            <label class="alert" *ngIf="rank.touched && !isRankNotNull">Wybierz stopień</label>
+            <label class="alert-s" *ngIf="rank.touched && !isRankNotNull">Wybierz stopień</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">E-Mail</label>
-            <input required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input-object-description lexend" placeholder="Wpisz swój e-mail" [(ngModel)]="_email" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email">
-            <label class="alert" *ngIf="!email.valid && email.touched">Wpisz poprawny adres e-mail</label>
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">E-Mail</label>
+            <input required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input-object-s-description lexend" placeholder="Wpisz swój e-mail" [(ngModel)]="_email" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email">
+            <label class="alert-s" *ngIf="!email.valid && email.touched">Wpisz poprawny adres e-mail</label>
         </div>
 
         <div class="checkbox-container">
@@ -73,13 +73,13 @@
 
     </form>
 
-    <button class="navigation-button back audiowide" routerLink="/login">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newRegisterForm.valid || !isRankNotNull || !isMonasteryNotNull || !isDioceseNotNull || !isTermsAccepted || ladowanie" (click)="zarejestruj()">Kontynuuj</button>
+    <button class="navigation-button-s back-s audiowide" routerLink="/login">Anuluj</button>
+    <button class="navigation-button-s confirm-s audiowide" [disabled]="!newRegisterForm.valid || !isRankNotNull || !isMonasteryNotNull || !isDioceseNotNull || !isTermsAccepted || ladowanie" (click)="zarejestruj()">Kontynuuj</button>
 </div>
 
-<div class="container" *ngIf="udanaRejP">
-    <label class="title audiowide">Potwierdzenie rejestracji</label>
-    <div class="container-white">
+<div class="container-s" *ngIf="udanaRejP">
+    <label class="title-s audiowide">Potwierdzenie rejestracji</label>
+    <div class="container-s-white">
         <label class="audiowide">Dziękujemy za rejestrację!</label>
         <label>Na poniższy adres e-mail wysłaliśmy link aktywacyjny</label>
         <label>{{_email}}</label>

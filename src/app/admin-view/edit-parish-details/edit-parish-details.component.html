@@ -1,45 +1,45 @@
-<div class="container">
-    <label class="title audiowide">Zmień dane</label>
-    <form #newDetailsForm="ngForm" class="container-white">
+<div class="container-s">
+    <label class="title-s audiowide">Zmień dane</label>
+    <form #newDetailsForm="ngForm" class="container-s-white">
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Wezwanie parafii</label>
-            <div class="input-object-description parish-name" [ngClass]="{'disabled': isDisabled, 'enabled': !isDisabled}">
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Wezwanie parafii</label>
+            <div class="input-object-s-description parish-name" [ngClass]="{'disabled': isDisabled, 'enabled': !isDisabled}">
                 <label class="pw" id="pw">pw.</label>
                 <input required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń .]{2,30})" class="parish-name-input lexend" placeholder="np. Świętej Rodziny" #parishName="ngModel" (change)="this.zmiana = true" [(ngModel)]="parafia.nazwa_parafii" (ngModelChange)="changeParishName()"
                     [ngModelOptions]="{standalone: false}" name="parish" [disabled]="isDisabled">
             </div>
-            <label class="alert" *ngIf="!parishName.valid && parishName.touched && !isDisabled">Wezwanie musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
+            <label class="alert-s" *ngIf="!parishName.valid && parishName.touched && !isDisabled">Wezwanie musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Rodzaj</label>
-            <select class="input-object-description enabled lexend select" (focus)="getFocus('1')" (blur)="lostFocus('1')" (change)="this.zmiana = true" id="selection1" [(ngModel)]="_monastery" [ngModelOptions]="{standalone: false}" name="monastery" #monastery="ngModel"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Rodzaj</label>
+            <select class="input-object-s-description enabled lexend select" (focus)="getFocus('1')" (blur)="lostFocus('1')" (change)="this.zmiana = true" id="selection1" [(ngModel)]="_monastery" [ngModelOptions]="{standalone: false}" name="monastery" #monastery="ngModel"
                 [disabled]="isDisabled">
             <option class="lexend">Wybierz rodzaj</option>
             <option *ngFor="let monastery of monasteries" [value]="monastery" class="lexend">{{monastery}}</option>
           </select>
-            <label class="alert" *ngIf="monastery.touched && !isMonasteryNotNull && !isDisabled">Wybierz rodzaj</label>
+            <label class="alert-s" *ngIf="monastery.touched && !isMonasteryNotNull && !isDisabled">Wybierz rodzaj</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Diecezja</label>
-            <select class="input-object-description enabled lexend select" (focus)="getFocus('2')" (blur)="lostFocus('2')" (change)="this.zmiana = true" id="selection2" [(ngModel)]="_diocese" [ngModelOptions]="{standalone: true}" name="diocese" #diocese="ngModel"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Diecezja</label>
+            <select class="input-object-s-description enabled lexend select" (focus)="getFocus('2')" (blur)="lostFocus('2')" (change)="this.zmiana = true" id="selection2" [(ngModel)]="_diocese" [ngModelOptions]="{standalone: true}" name="diocese" #diocese="ngModel"
                 [disabled]="isDisabled">
             <option class="lexend">Wybierz diecezję</option>
             <option *ngFor="let diocese of dioceses" [value]="diocese" class="lexend">{{diocese}}</option>
           </select>
-            <label class="alert" *ngIf="diocese.touched && !isDioceseNotNull && !isDisabled">Wybierz diecezję</label>
+            <label class="alert-s" *ngIf="diocese.touched && !isDioceseNotNull && !isDisabled">Wybierz diecezję</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Miasto</label>
-            <input autocomplete="address-level1" required class="input-object-description lexend" placeholder="Wpisz miasto" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{2,30})" [(ngModel)]="parafia.miasto" [ngModelOptions]="{standalone: true}" name="city" #city="ngModel"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Miasto</label>
+            <input autocomplete="address-level1" required class="input-object-s-description lexend" placeholder="Wpisz miasto" pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń -]{2,30})" [(ngModel)]="parafia.miasto" [ngModelOptions]="{standalone: true}" name="city" #city="ngModel"
                 (change)="this.zmiana = true" [ngClass]="{'disabled': isDisabled, 'enabled': !isDisabled}" [disabled]="isDisabled">
-            <label class="alert" *ngIf="!city.valid && city.touched && !isDisabled">Miasto musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
+            <label class="alert-s" *ngIf="!city.valid && city.touched && !isDisabled">Miasto musi mieć od 2 do 30 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
     </form>
-    <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newDetailsForm.valid || !isDioceseNotNull || !isMonasteryNotNull || !zmiana || isDisabled" (click)="zapisz()">Zapisz</button>
+    <button class="navigation-button-s back-s audiowide" (click)="anuluj()">Anuluj</button>
+    <button class="navigation-button-s confirm-s audiowide" [disabled]="!newDetailsForm.valid || !isDioceseNotNull || !isMonasteryNotNull || !zmiana || isDisabled" (click)="zapisz()">Zapisz</button>
 </div>

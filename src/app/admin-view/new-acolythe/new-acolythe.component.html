@@ -1,40 +1,40 @@
-<div class="container">
-    <label class="title audiowide">Dodaj ministranta</label>
-    <form #newAcolytheForm="ngForm" class="container-white">
+<div class="container-s">
+    <label class="title-s audiowide">Dodaj ministranta</label>
+    <form #newAcolytheForm="ngForm" class="container-s-white">
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Imię</label>
-            <input autocomplete="given-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" class="input-object-description lexend" placeholder="Wpisz imię ministranta" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Imię</label>
+            <input autocomplete="given-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń ]{1,20})" class="input-object-s-description lexend" placeholder="Wpisz imię ministranta" [(ngModel)]="_name" [ngModelOptions]="{standalone: false}" #name="ngModel" name="name"
                 [ngClass]="{'disabled': zapisywanie, 'enabled': !zapisywanie}" [disabled]="zapisywanie">
-            <label class="alert" *ngIf="!name.valid && name.touched && !zapisywanie">Imię musi być krótsze od 20 znaków oraz składać się z polskiego alfabetu</label>
+            <label class="alert-s" *ngIf="!name.valid && name.touched && !zapisywanie">Imię musi być krótsze od 20 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Nazwisko</label>
-            <input autocomplete="family-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń-]{1,20})" class="input-object-description lexend" placeholder="Wpisz nazwisko ministranta" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Nazwisko</label>
+            <input autocomplete="family-name" required pattern="([A-ZĘÓĄŚŁŻŹĆŃa-zęóąśłżźćń-]{1,20})" class="input-object-s-description lexend" placeholder="Wpisz nazwisko ministranta" [(ngModel)]="_lastName" [ngModelOptions]="{standalone: false}" #lastName="ngModel"
                 name="lastName" [ngClass]="{'disabled': zapisywanie, 'enabled': !zapisywanie}" [disabled]="zapisywanie">
-            <label class="alert" *ngIf="!lastName.valid && lastName.touched && !zapisywanie">Nazwisko musi być którsze od 20 znaków oraz składać się z polskiego alfabetu</label>
+            <label class="alert-s" *ngIf="!lastName.valid && lastName.touched && !zapisywanie">Nazwisko musi być którsze od 20 znaków oraz składać się z polskiego alfabetu</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">Stopień</label>
-            <select class="input-object-description enabled lexend select" (focus)="getFocus('3')" (blur)="lostFocus()" id="selection3" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" [ngClass]="{'select-disabled': zapisywanie, 'enabled': !zapisywanie}"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">Stopień</label>
+            <select class="input-object-s-description enabled lexend select" (focus)="getFocus('3')" (blur)="lostFocus()" id="selection3" [(ngModel)]="_rank" [ngModelOptions]="{standalone: true}" #rank="ngModel" [ngClass]="{'select-disabled': zapisywanie, 'enabled': !zapisywanie}"
                 [disabled]="zapisywanie">
           <option class="lexend">Wybierz stopień</option>
           <option *ngFor="let rank of ranks" [value]="rank" class="lexend">{{rank}}</option>
         </select>
-            <label class="alert" *ngIf="rank.touched && !isRankNotNull && !zapisywanie">Wybierz stopień</label>
+            <label class="alert-s" *ngIf="rank.touched && !isRankNotNull && !zapisywanie">Wybierz stopień</label>
         </div>
 
-        <div class="input-object">
-            <label class="input-object-title audiowide">E-Mail</label>
-            <input autocomplete="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input-object-description lexend" placeholder="Wpisz swój e-mail" [(ngModel)]="_email" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email" [ngClass]="{'disabled': zapisywanie, 'enabled': !zapisywanie}"
+        <div class="input-object-s">
+            <label class="input-object-s-title audiowide">E-Mail</label>
+            <input autocomplete="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="input-object-s-description lexend" placeholder="Wpisz swój e-mail" [(ngModel)]="_email" [ngModelOptions]="{standalone: false}" #email="ngModel" name="email" [ngClass]="{'disabled': zapisywanie, 'enabled': !zapisywanie}"
                 [disabled]="zapisywanie">
-            <label class="alert" *ngIf="!email.valid && email.touched && !zapisywanie">Wpisz poprawny adres e-mail</label>
+            <label class="alert-s" *ngIf="!email.valid && email.touched && !zapisywanie">Wpisz poprawny adres e-mail</label>
         </div>
 
     </form>
 
-    <button class="navigation-button back audiowide" (click)="anuluj()">Anuluj</button>
-    <button class="navigation-button confirm audiowide" [disabled]="!newAcolytheForm.valid || !isRankNotNull || zapisywanie" (click)="zapisz()">Dodaj</button>
+    <button class="navigation-button-s back-s audiowide" (click)="anuluj()">Anuluj</button>
+    <button class="navigation-button-s confirm-s audiowide" [disabled]="!newAcolytheForm.valid || !isRankNotNull || zapisywanie" (click)="zapisz()">Dodaj</button>
 </div>

@@ -1,6 +1,6 @@
 <!-- widok dnia -->
 <div class="container" *ngIf="!kalendarz">
-    <div class="navigation-panel">
+    <div class="navigation-panel-mass">
         <button class="arrow icon" [disabled]="!opoznienie" (click)="indexZmiana(-1)">&#xe002;</button>
         <button class="header lexend" [disabled]="!opoznienie" (click)="naKalendarz(true)">
           <label class="icon space" *ngIf="opoznienie">&#xe01f;</label>
@@ -50,7 +50,7 @@
 </div>
 <!-- widok kalendarza -->
 <div class="container" *ngIf="kalendarz">
-    <div class="navigation-panel">
+    <div class="navigation-panel-mass">
         <button class="arrow icon" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate">&#xe002;</button>
         <button class="header lexend" (click)="naKalendarz(false)">
           <label class="icon space">&#xe0e7;</label>
@@ -61,5 +61,5 @@
     <div class="calendar-container">
         <mwl-calendar-month-view [locale]="'pl'" [viewDate]="viewDate" [refresh]="refresh" class="calendar" (dayClicked)="wybranyDzien($event.day)"></mwl-calendar-month-view>
     </div>
-    <button class="navigation-button back audiowide" mwlCalendarToday [(viewDate)]="viewDate">Centruj</button>
+    <button class="navigation-button-s back-s audiowide" mwlCalendarToday [(viewDate)]="viewDate">Centruj</button>
 </div>
